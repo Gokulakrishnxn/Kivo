@@ -137,8 +137,9 @@ violation of any of these is a security vulnerability** — see [SECURITY.md](SE
 ## Getting started
 
 > [!WARNING]
-> Kivo is pre-release and unsigned. It builds and runs, but it has not been
-> notarised, there is no installer yet, and the model has to be fetched by hand.
+> Kivo is pre-release. It builds, runs and transcribes, but it is not yet signed
+> with a Developer ID — so on any Mac other than the one that built it, macOS will
+> refuse to open it until you right-click → Open. See [docs/SIGNING.md](docs/SIGNING.md).
 
 ### Build it
 
@@ -151,6 +152,11 @@ pnpm tauri build
 
 You need **Rust** (stable), **Node 20+**, **pnpm**, and Xcode Command Line Tools.
 On macOS the bundle lands in `src-tauri/target/release/bundle/macos/Kivo.app`.
+Give it an ad-hoc signature so it validates locally — no certificate needed:
+
+```bash
+./scripts/sign-macos.sh
+```
 
 For development with hot reload:
 

@@ -75,3 +75,14 @@ src-tauri/target/
 src-tauri/gen/
 dist/
 src-tauri/frameworks/
+
+# ---- Signing material — never commit any of this ----
+*.p12
+*.cer
+*.certSigningRequest
+*.provisionprofile
+*.mobileprovision
+*.keychain
+*.keychain-db
+notarize.json
+AuthKey_*.p8

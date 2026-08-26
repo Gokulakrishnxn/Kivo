@@ -1,0 +1,121 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to build (must already exist)"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+    name: macOS (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: aarch64
+            runner: macos-14
+            target: aarch64-apple-darwin
+          - arch: x86_64
+            runner: macos-13
+            target: x86_64-apple-darwin
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Signing is skipped entirely when the secrets are absent, so a fork can
+      # still build a working unsigned app without any Apple account.
+      - name: Detect signing credentials
+        id: creds
+        env:
+          CERT: ${{ secrets.APPLE_CERTIFICATE }}
+        run: |
+          if [ -n "$CERT" ]; then
+            echo "signing=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "signing=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No Apple credentials configured — producing an UNSIGNED build. See docs/SIGNING.md."
+          fi
+
+      - name: Import the Developer ID certificate
+        if: steps.creds.outputs.signing == 'true'
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+        run: |
+          # A throwaway keychain, unlocked only for this job.
+          KEYCHAIN="$RUNNER_TEMP/kivo-signing.keychain-db"
+          PASSWORD="$(openssl rand -base64 24)"
+          security create-keychain -p "$PASSWORD" "$KEYCHAIN"
+          security set-keychain-settings -lut 900 "$KEYCHAIN"
+          security unlock-keychain -p "$PASSWORD" "$KEYCHAIN"
+
+          echo -n "$APPLE_CERTIFICATE" | base64 --decode -o "$RUNNER_TEMP/cert.p12"
+          security import "$RUNNER_TEMP/cert.p12" -k "$KEYCHAIN" \
+            -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: \
+            -s -k "$PASSWORD" "$KEYCHAIN" > /dev/null
+          security list-keychain -d user -s "$KEYCHAIN" login.keychain-db
+          rm -f "$RUNNER_TEMP/cert.p12"
+
+          security find-identity -v -p codesigning "$KEYCHAIN"
+
+      - name: Build, sign and notarise
+        env:
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: pnpm tauri build --target ${{ matrix.target }} --bundles app,dmg
+
+      - name: Verify the artefact
+        run: |
+          APP="src-tauri/target/${{ matrix.target }}/release/bundle/macos/Kivo.app"
+          codesign --verify --deep --strict --verbose=2 "$APP"
+          if [ "${{ steps.creds.outputs.signing }}" = "true" ]; then
+            spctl --assess --type execute --verbose=2 "$APP"
+          else
+            echo "Unsigned build — skipping Gatekeeper assessment."
+          fi
+
+      - name: Rename for the release
+        run: |
+          DMG="$(find src-tauri/target/${{ matrix.target }}/release/bundle/dmg -name '*.dmg' | head -1)"
+          [ -n "$DMG" ] || { echo "no dmg produced" >&2; exit 1; }
+          mv "$DMG" "Kivo-${{ matrix.arch }}.dmg"
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          files: Kivo-${{ matrix.arch }}.dmg
+          draft: true
+          fail_on_unmatched_files: true

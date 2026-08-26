@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- The microphone. Paired with NSMicrophoneUsageDescription in Info.plist. -->
+  <key>com.apple.security.device.audio-input</key>
+  <true/>
+
+  <!-- WKWebView JITs JavaScript. Without these two the settings window is
+       blank under the hardened runtime, which notarisation requires. -->
+  <key>com.apple.security.cs.allow-jit</key>
+  <true/>
+  <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+  <true/>
+
+  <!-- Kivo loads ONNX Runtime and sherpa-onnx from Contents/Frameworks. Those
+       dylibs are signed with the same identity by the deep signing pass, so
+       library validation stays ON — this is deliberately absent:
+         com.apple.security.cs.disable-library-validation
+       If a build fails to load them, sign the frameworks rather than adding it. -->
+
+  <!-- NOT sandboxed, and it cannot be. Kivo's whole job is to read a global
+       hotkey and inject text into other applications, which the App Sandbox
+       exists to prevent. That rules out the Mac App Store; Developer ID
+       distribution is the only route. -->
+</dict>
+</plist>

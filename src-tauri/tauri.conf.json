@@ -69,7 +69,9 @@
         "frameworks/libonnxruntime.1.17.1.dylib",
         "frameworks/libsherpa-onnx-c-api.dylib",
         "frameworks/libsherpa-onnx-cxx-api.dylib"
-      ]
+      ],
+      "entitlements": "Entitlements.plist",
+      "hardenedRuntime": true
     }
   }
 }
