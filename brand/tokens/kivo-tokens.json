@@ -1,95 +1,85 @@
 {
   "$schema": "https://design-tokens.github.io/community-group/format/",
-  "$description": "Kivo design tokens. Strictly monochrome: emphasis comes from inversion and weight, never hue.",
-  "color": {
-    "paper": { "$value": "#FFFFFF", "$type": "color" },
-    "ink": {
-      "50":  { "$value": "#F7F7F7", "$type": "color" },
-      "100": { "$value": "#EFEFEF", "$type": "color" },
-      "200": { "$value": "#E2E2E2", "$type": "color" },
-      "300": { "$value": "#CBCBCB", "$type": "color" },
-      "400": { "$value": "#A6A6A6", "$type": "color" },
-      "500": { "$value": "#7C7C7C", "$type": "color" },
-      "600": { "$value": "#5C5C5C", "$type": "color" },
-      "700": { "$value": "#404040", "$type": "color" },
-      "800": { "$value": "#292929", "$type": "color" },
-      "900": { "$value": "#171717", "$type": "color" },
-      "950": { "$value": "#0A0A0A", "$type": "color" }
-    }
+  "$description": "Kivo design tokens. A storybook spread on cream parchment: quiet chrome, inset hairlines instead of shadows, bright flat accents used as punctuation.",
+  "surface": {
+    "canvas": { "$value": "#FBFAF9", "$type": "color" },
+    "stone":  { "$value": "#F2F0ED", "$type": "color" },
+    "sand":   { "$value": "#F6F4EF", "$type": "color" },
+    "white":  { "$value": "#FFFFFF", "$type": "color" },
+    "ink":    { "$value": "#121212", "$type": "color" },
+    "black":  { "$value": "#000000", "$type": "color" }
   },
-  "semantic": {
-    "light": {
-      "bg":             { "$value": "{color.paper}" },
-      "bgSubtle":       { "$value": "{color.ink.50}" },
-      "bgInset":        { "$value": "{color.ink.100}" },
-      "border":         { "$value": "{color.ink.200}" },
-      "borderStrong":   { "$value": "{color.ink.300}" },
-      "text":           { "$value": "{color.ink.950}" },
-      "textSecondary":  { "$value": "{color.ink.600}" },
-      "textMuted":      { "$value": "{color.ink.500}" },
-      "action":         { "$value": "{color.ink.950}" },
-      "actionText":     { "$value": "{color.paper}" }
-    },
-    "dark": {
-      "bg":             { "$value": "{color.ink.950}" },
-      "bgSubtle":       { "$value": "{color.ink.900}" },
-      "bgInset":        { "$value": "#000000" },
-      "border":         { "$value": "{color.ink.800}" },
-      "borderStrong":   { "$value": "{color.ink.700}" },
-      "text":           { "$value": "{color.paper}" },
-      "textSecondary":  { "$value": "{color.ink.400}" },
-      "textMuted":      { "$value": "{color.ink.500}" },
-      "action":         { "$value": "{color.paper}" },
-      "actionText":     { "$value": "{color.ink.950}" }
-    }
+  "text": {
+    "heading": { "$value": "#343433", "$type": "color" },
+    "body":    { "$value": "#474645", "$type": "color" },
+    "muted":   { "$value": "#7E7E7D", "$type": "color" },
+    "onDark":  { "$value": "#FFFFFF", "$type": "color" }
+  },
+  "accent": {
+    "stoneBorder": { "$value": "#E5D5C3", "$type": "color" },
+    "blue":        { "$value": "#0086FC", "$type": "color" },
+    "sky":         { "$value": "#64C6FF", "$type": "color" },
+    "altBlue":     { "$value": "#00B2FF", "$type": "color" },
+    "green":       { "$value": "#00C978", "$type": "color" },
+    "mint":        { "$value": "#00CA48", "$type": "color" },
+    "ember":       { "$value": "#FF3E00", "$type": "color" },
+    "sun":         { "$value": "#FFCD6C", "$type": "color" },
+    "gold":        { "$value": "#D48F00", "$type": "color" },
+    "honey":       { "$value": "#FFBB26", "$type": "color" },
+    "pink":        { "$value": "#FF58AE", "$type": "color" },
+    "violet":      { "$value": "#9F4FFF", "$type": "color" },
+    "red":         { "$value": "#FF2B3A", "$type": "color" }
   },
   "font": {
-    "sans": { "$value": "Inter", "$type": "fontFamily" },
-    "mono": { "$value": "JetBrains Mono", "$type": "fontFamily" }
+    "display": { "$value": "Bricolage Grotesque", "$type": "fontFamily" },
+    "sans":    { "$value": "Inter", "$type": "fontFamily" },
+    "mono":    { "$value": "JetBrains Mono", "$type": "fontFamily" }
   },
-  "fontSize": {
-    "2xs":  { "$value": "11px" }, "xs":  { "$value": "12px" },
-    "sm":   { "$value": "14px" }, "base":{ "$value": "16px" },
-    "md":   { "$value": "17px" }, "lg":  { "$value": "20px" },
-    "xl":   { "$value": "24px" }, "2xl": { "$value": "30px" },
-    "3xl":  { "$value": "38px" }, "4xl": { "$value": "48px" },
-    "5xl":  { "$value": "60px" }
+  "typeScale": {
+    "micro":      { "size": "12px", "lineHeight": "19px", "tracking": "-0.010em" },
+    "caption":    { "size": "15px", "lineHeight": "22px", "tracking": "-0.014em" },
+    "body":       { "size": "17px", "lineHeight": "26px", "tracking": "-0.013em" },
+    "subheading": { "size": "19px", "lineHeight": "27px", "tracking": "-0.016em" },
+    "heading":    { "size": "23px", "lineHeight": "25px", "tracking": "-0.019em" },
+    "headingLg":  { "size": "44px", "lineHeight": "53px", "tracking": "-0.020em" },
+    "display":    { "size": "68px", "lineHeight": "75px", "tracking": "-0.031em" }
   },
   "fontWeight": {
     "regular":  { "$value": 400 },
     "medium":   { "$value": 500 },
     "semibold": { "$value": 600 }
   },
-  "tracking": {
-    "display": { "$value": "-0.035em" },
-    "heading": { "$value": "-0.022em" },
-    "body":    { "$value": "-0.011em" },
-    "eyebrow": { "$value": "0.10em" }
-  },
   "space": {
     "1": { "$value": "4px" },  "2": { "$value": "8px" },   "3": { "$value": "12px" },
     "4": { "$value": "16px" }, "5": { "$value": "24px" },  "6": { "$value": "32px" },
-    "7": { "$value": "48px" }, "8": { "$value": "64px" },  "9": { "$value": "96px" },
-    "10":{ "$value": "128px" }
+    "7": { "$value": "48px" }, "8": { "$value": "80px" },  "9": { "$value": "120px" }
   },
   "radius": {
-    "none": { "$value": "0px" },  "xs": { "$value": "4px" },  "sm": { "$value": "6px" },
-    "md":   { "$value": "8px" },  "lg": { "$value": "12px" }, "xl": { "$value": "16px" },
-    "2xl":  { "$value": "22px" }, "full": { "$value": "999px" }
+    "small":        { "$value": "2px" },
+    "badge":        { "$value": "6px" },
+    "card":         { "$value": "10px" },
+    "nav":          { "$value": "10px" },
+    "icon":         { "$value": "40px" },
+    "illustration": { "$value": "72px" },
+    "button":       { "$value": "32px" },
+    "pill":         { "$value": "9999px" }
   },
-  "duration": {
-    "instant": { "$value": "90ms" },  "fast":   { "$value": "140ms" },
-    "normal":  { "$value": "220ms" }, "slow":   { "$value": "380ms" }
-  },
-  "easing": {
-    "standard": { "$value": "cubic-bezier(0.2, 0, 0, 1)" },
-    "out":      { "$value": "cubic-bezier(0.16, 1, 0.3, 1)" },
-    "inOut":    { "$value": "cubic-bezier(0.65, 0, 0.35, 1)" }
+  "elevation": {
+    "hairline":     { "$value": "inset 0 0 0 1px #F2F0ED" },
+    "hairlineWarm": { "$value": "inset 0 0 0 1px #E5D5C3" },
+    "lift":         { "$value": "0 1px 6px 0 rgba(0,0,0,0.04), 0 0 24px 0 rgba(0,0,0,0.05)" },
+    "darkCard":     { "$value": "0 0 24px 0 rgba(0,0,0,0.15)" }
   },
   "layout": {
-    "container":   { "$value": "1120px" },
-    "containerSm": { "$value": "720px" },
-    "gutter":      { "$value": "24px" },
-    "hairline":    { "$value": "1px" }
+    "container": { "$value": "1200px" },
+    "prose":     { "$value": "680px" },
+    "gutter":    { "$value": "24px" },
+    "sectionGap":{ "$value": "80px–120px" },
+    "cardPadding":{ "$value": "32px" }
+  },
+  "motion": {
+    "fast":   { "$value": "140ms" },
+    "normal": { "$value": "220ms" },
+    "ease":   { "$value": "cubic-bezier(0.2, 0, 0, 1)" }
   }
 }
