@@ -107,7 +107,7 @@ Five stages, one process, no network:
 
 | | |
 |---|---|
-| **Shell** | Tauri v2 — Rust core, ~10 MB binary, well under 150 MB resident |
+| **Shell** | Tauri v2 — Rust core, 61 MB bundle (48 MB of that is ONNX Runtime) |
 | **Interface** | React 19 · TypeScript · Vite · Tailwind CSS v4 · Radix UI |
 | **Speech** | NVIDIA Parakeet TDT 0.6B (CC-BY-4.0) via ONNX Runtime + sherpa-onnx |
 | **Audio** | `cpal` capture · `rubato` resampling · Silero VAD |

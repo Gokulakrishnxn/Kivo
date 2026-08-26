@@ -388,6 +388,35 @@ Also budgeted: **idle RSS under 150 MB** with the model resident, **idle CPU und
 0.5 %**, and **cold start to first usable dictation under 2 s**. A dictation tool that
 makes the machine feel slower will be uninstalled regardless of its accuracy.
 
+> **Milestone 1 measurement — 26 August 2026. The memory budget is missed too.**
+>
+> Kivo with Parakeet TDT 0.6B v2 int8 resident, measured on the built `.app`:
+>
+> | | Measured | Budget |
+> |---|---|---|
+> | Idle RSS, settled | **≈ 960 MB** | 150 MB |
+> | Peak during CoreML graph compilation | ≈ 2.2 GB | — |
+> | Idle CPU | ~0.1 % | 0.5 % ✓ |
+> | Model load at startup | 6.5 s | — |
+>
+> The encoder alone is 622 MB on disk and is held resident so that dictation is
+> instant. That is the trade the current design makes, and at 960 MB it is the
+> wrong one for a tool that is meant to sit in the menu bar all day next to the
+> user's real work.
+>
+> The options, none of them free:
+>
+> 1. **Load on demand and unload after idle.** Cheapest memory, but pays the 6.5 s
+>    load on the first dictation after a pause — which breaks the product's core
+>    promise more visibly than memory does.
+> 2. **A smaller model.** Parakeet ships in smaller variants; accuracy cost unknown
+>    until measured.
+> 3. **Raise the budget and say so.** Defensible on a 16 GB machine, indefensible on
+>    8 GB, and the 8 GB machine is exactly where the CPU path already struggles.
+>
+> Decision owed before M5, since onboarding cannot honestly claim "runs quietly in
+> the background" until it is made.
+
 ### 9.6 Platform specifics
 
 | Concern | macOS | Windows |
