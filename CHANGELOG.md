@@ -10,6 +10,41 @@ messages — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## [Unreleased]
 
+### Added — Milestone 2: the macOS application
+
+- Working menu-bar app: hold a key, speak, and cleaned text is inserted at the cursor.
+- Cleanup engine with 33 tests, including a golden test reproducing the worked
+  example from the PRD and the landing page.
+- On-device recognition via NVIDIA Parakeet TDT 0.6B through sherpa-onnx.
+- Lock-free SPSC ring buffer for capture; the microphone opens on key-down and
+  closes on key-up so the OS indicator stays honest.
+- Onboarding: five steps that explain each permission *before* triggering it.
+- In-app model download, SHA-256 verified against a pinned digest, refusing to
+  install on mismatch. Mirrored on this repository's releases.
+- Persistent, searchable history in SQLite (mode 0600). Turning it off deletes the file.
+- Vocabulary that biases recognition (hotwords) plus post-hoc replacements.
+- Double-tap to latch hands-free; Esc discards a recording.
+- Input device selection with a fallback to the system default.
+- Overlay follows the pointer; app follows the OS light/dark theme.
+- Live network panel that records actual outbound requests rather than asserting none.
+
+### Fixed
+
+- `NSMicrophoneUsageDescription` was missing, which would have made macOS terminate
+  Kivo the instant it opened an input device.
+- The binary carried no `LC_RPATH`, so the first bundle died at launch unable to
+  load ONNX Runtime.
+- `.gitignore`'s `Icon?` rule swallowed the app icon directory on case-insensitive
+  filesystems.
+
+### Known gaps
+
+- Not signed or notarised, and there is no Windows build.
+- History is not encrypted at rest, contrary to DEL-6.
+- Word-level timestamps are unavailable through the current binding.
+- Measured latency and memory both exceed the budgets in PRD §9.5.
+
+
 ### Changed — brand v2.0: cream parchment
 
 - **Replaced the monochrome brand system entirely.** Kivo now looks like a storybook

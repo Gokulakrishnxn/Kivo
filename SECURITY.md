@@ -86,8 +86,14 @@ security bug:
 7. Text is inserted only into the focused application, and only in response to a
    user-initiated dictation.
 8. The clipboard is restored to its previous contents after the paste fallback.
-9. History, when enabled, is encrypted at rest with a key held in the OS keychain, and
-   can be disabled entirely so that nothing is written to disk.
+9. History, when enabled, is text only — never audio — and is stored in a SQLite file
+   readable solely by the user's own account (mode 0600). Disabling history deletes
+   that file, so "off" means gone rather than merely ignored.
+
+> **Not yet true:** history is *not* encrypted at rest. DEL-6 in the PRD calls for a
+> key held in the OS keychain and that is not implemented. Anyone who can read your
+> user account can read your transcript history. Treat that as the current guarantee
+> and no more.
 
 ## Known advisories we are not acting on
 

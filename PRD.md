@@ -208,7 +208,7 @@ Priority: **P0** ships in v1.0 or v1.0 does not ship. **P1** is v1.x. **P2** is 
 | ASR-2 | P0 | English (en-US, en-GB, en-IN) at a word error rate competitive with cloud dictation on clean near-field audio. |
 | ASR-3 | P0 | Punctuation and capitalisation restored by the model. |
 | ASR-4 | P0 | Hardware acceleration used where available, with an automatic CPU fallback that still meets the latency budget on a 4-core machine. |
-| ASR-5 | P0 | Word-level timestamps retained internally (needed by the cleanup layer and future editing). |
+| ASR-5 | P0 | Word-level timestamps retained internally. **Blocked** — the sherpa-rs binding returns text only. Needs an upstream change or a different binding; the tier-1 rules work without it. |
 | ASR-6 | P1 | Custom vocabulary — the user adds names, acronyms and jargon that bias recognition. |
 | ASR-7 | P1 | Additional languages via the multilingual Parakeet variant, selectable per mode. |
 | ASR-8 | P2 | Automatic language detection. |
@@ -234,7 +234,7 @@ Priority: **P0** ships in v1.0 or v1.0 does not ship. **P1** is v1.x. **P2** is 
 | DEL-3 | P0 | Insertion respects an existing selection (replaces it), matching normal typing behaviour. |
 | DEL-4 | P0 | A local history of the last N transcripts, searchable, with one-click re-copy. Default N = 100. |
 | DEL-5 | P0 | History can be cleared entirely, and can be disabled so nothing is ever written to disk. |
-| DEL-6 | P1 | History database encrypted at rest using an OS keychain-held key. |
+| DEL-6 | P1 | History database encrypted at rest using an OS keychain-held key. **Not implemented** — history is 0600 SQLite, unencrypted. |
 
 ### 8.5 Privacy and trust
 
@@ -262,7 +262,7 @@ Priority: **P0** ships in v1.0 or v1.0 does not ship. **P1** is v1.x. **P2** is 
 
 | ID | Priority | Requirement |
 |---|---|---|
-| DIS-1 | P0 | macOS: signed, notarised `.dmg`, universal binary (Apple Silicon + Intel). |
+| DIS-1 | P0 | macOS: signed, notarised `.dmg`, universal binary. **Blocked on credentials** — needs an Apple Developer ID; the unsigned `.app` builds today. |
 | DIS-2 | P0 | Windows: signed `.msi` and a portable `.exe`, x64 and ARM64. |
 | DIS-3 | P0 | In-app updates, signed, with release notes shown before applying. |
 | DIS-4 | P0 | A clean checkout builds with documented commands on both platforms. |
