@@ -136,27 +136,66 @@ violation of any of these is a security vulnerability** — see [SECURITY.md](SE
 
 ## Getting started
 
-Kivo is not yet released. To follow along, watch the repository or read the
-[milestone plan](PRD.md).
+> [!WARNING]
+> Kivo is pre-release and unsigned. It builds and runs, but it has not been
+> notarised, there is no installer yet, and the model has to be fetched by hand.
 
-To work on the website or the brand system today:
+### Build it
 
 ```bash
 git clone https://github.com/Gokulakrishnxn/Kivo.git
 cd Kivo
-python3 -m http.server 8000 --directory web
+pnpm install
+pnpm tauri build
 ```
 
-Then open <http://localhost:8000> — the brand kit is at `/brand.html`. No toolchain
-required.
+You need **Rust** (stable), **Node 20+**, **pnpm**, and Xcode Command Line Tools.
+On macOS the bundle lands in `src-tauri/target/release/bundle/macos/Kivo.app`.
+
+For development with hot reload:
+
+```bash
+pnpm tauri dev
+```
+
+### Give it a model
+
+Recognition needs the Parakeet weights, which are not in the repository:
+
+```bash
+./scripts/fetch-model.sh
+```
+
+That downloads roughly 600 MB, prints the SHA-256 so you can check it against the
+publisher, and installs the four ONNX artefacts where Kivo looks for them. Kivo
+starts fine without a model — it just tells you it cannot transcribe yet.
+
+### Grant two permissions
+
+macOS will ask for **Microphone** on the first dictation. You must also grant
+**Accessibility** in System Settings → Privacy & Security → Accessibility, which
+is how Kivo sees the global hotkey and inserts text. Kivo reads nothing from your
+screen; the code that uses this permission is in
+[`src-tauri/src/hotkey`](src-tauri/src/hotkey) and
+[`src-tauri/src/inject`](src-tauri/src/inject).
+
+Then hold **Right Option**, say something, and let go.
+
+### Work on the website instead
+
+No toolchain needed:
+
+```bash
+python3 -m http.server 8000 --directory web
+```
 
 ## Roadmap
 
 | | Milestone | Status |
 |---|---|---|
 | **M0** | Foundation — PRD, architecture, brand, website, CI | ✅ Done |
-| **M1** | Spike — Parakeet to ONNX, latency and accuracy measured on both platforms | ⏳ Next |
-| **M2** | Walking skeleton — hotkey → speech → text, macOS | ○ |
+| **M2** | Walking skeleton — hotkey → speech → text, macOS | ✅ Done |
+| **M1** | Spike — measure Parakeet's real latency and accuracy on both platforms | ⏳ Next |
 | **M3** | Windows parity | ○ |
 | **M4** | Cleanup engine, modes, vocabulary | ○ |
 | **M5** | Onboarding, settings, overlay, history | ○ |

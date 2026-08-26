@@ -157,10 +157,15 @@ jobs:
           PY
 
   app:
-    name: App build
-    runs-on: ubuntu-latest
+    name: App (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest]
     steps:
       - uses: actions/checkout@v7
+
       - name: Detect application source
         id: detect
         run: |
@@ -168,8 +173,49 @@ jobs:
             echo "present=true" >> "$GITHUB_OUTPUT"
           else
             echo "present=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Application scaffold not present yet - skipping build. See PRD.md for the delivery plan."
+            echo "::notice::Application scaffold not present yet - skipping."
           fi
-      - name: Skipped
-        if: steps.detect.outputs.present == 'false'
-        run: echo "No application source to build yet."
+
+      - uses: dtolnay/rust-toolchain@stable
+        if: steps.detect.outputs.present == 'true'
+        with:
+          components: clippy, rustfmt
+
+      - uses: Swatinem/rust-cache@v2
+        if: steps.detect.outputs.present == 'true'
+        with:
+          workspaces: src-tauri
+
+      - uses: pnpm/action-setup@v4
+        if: steps.detect.outputs.present == 'true'
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        if: steps.detect.outputs.present == 'true'
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install frontend dependencies
+        if: steps.detect.outputs.present == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck the interface
+        if: steps.detect.outputs.present == 'true'
+        run: pnpm typecheck
+
+      - name: Formatting
+        if: steps.detect.outputs.present == 'true'
+        working-directory: src-tauri
+        run: cargo fmt --check
+
+      - name: Lints
+        if: steps.detect.outputs.present == 'true'
+        working-directory: src-tauri
+        run: cargo clippy --lib --all-features -- -D warnings
+
+      - name: Tests
+        if: steps.detect.outputs.present == 'true'
+        working-directory: src-tauri
+        run: cargo test --lib
