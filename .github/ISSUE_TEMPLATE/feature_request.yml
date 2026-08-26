@@ -1,0 +1,62 @@
+name: ✨ Feature request
+description: Suggest something Kivo should do.
+labels: ["feature", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Kivo has a deliberately small surface: hold a key, speak, get clean text.
+        The best feature requests explain the problem first and let the solution follow.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you hitting?
+      description: Describe the situation, not the feature. What are you trying to get done?
+      placeholder: When I dictate into my code editor, Kivo capitalises and punctuates variable names…
+    validations: { required: true }
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like Kivo to do?
+    validations: { required: true }
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What have you tried instead?
+      description: Workarounds, other tools, existing Kivo settings.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Where does this belong?
+      options:
+        - Recognition / accuracy
+        - Text cleanup and formatting
+        - Modes (email, message, code, notes)
+        - Hotkeys and interaction
+        - Privacy and data control
+        - Platform support
+        - Interface and design
+        - Developer / extensibility
+    validations: { required: true }
+
+  - type: checkboxes
+    id: principles
+    attributes:
+      label: Fit with Kivo's principles
+      description: Kivo is on-device first, monochrome, and keeps a small surface. Tick what applies.
+      options:
+        - label: This works without sending audio or text off the device.
+        - label: This does not require an account or a subscription.
+        - label: This can be off by default and stay out of the way.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and discussions for this idea.
+          required: true

@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule: { interval: "weekly", day: "monday", time: "06:00" }
+    open-pull-requests-limit: 5
+    commit-message: { prefix: "ci", include: "scope" }
+    labels: ["dependencies", "ci"]
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule: { interval: "weekly", day: "monday", time: "06:00" }
+    open-pull-requests-limit: 10
+    commit-message: { prefix: "deps", prefix-development: "deps-dev", include: "scope" }
+    labels: ["dependencies", "javascript"]
+    groups:
+      dev-dependencies:
+        dependency-type: "development"
+      react:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+
+  - package-ecosystem: "cargo"
+    directory: "/src-tauri"
+    schedule: { interval: "weekly", day: "monday", time: "06:00" }
+    open-pull-requests-limit: 10
+    commit-message: { prefix: "deps", include: "scope" }
+    labels: ["dependencies", "rust"]
+    groups:
+      tauri:
+        patterns: ["tauri", "tauri-*"]

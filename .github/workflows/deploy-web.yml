@@ -1,0 +1,51 @@
+name: Deploy website
+
+on:
+  push:
+    branches: [main]
+    paths: ["web/**", "brand/**", ".github/workflows/deploy-web.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble publish directory
+        run: |
+          mkdir -p _site
+          cp -R web/. _site/
+          # The brand kit page links to the canonical assets in brand/.
+          mkdir -p _site/brand
+          cp -R brand/. _site/brand/
+          mkdir -p _site/docs
+          cp -R docs/. _site/docs/
+          touch _site/.nojekyll
+          echo "Published $(find _site -type f | wc -l) files"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

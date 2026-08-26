@@ -1,0 +1,27 @@
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: ["**/*.md", "docs/**"]
+
+brand:
+  - changed-files:
+      - any-glob-to-any-file: ["brand/**"]
+
+website:
+  - changed-files:
+      - any-glob-to-any-file: ["web/**"]
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: [".github/**"]
+
+rust:
+  - changed-files:
+      - any-glob-to-any-file: ["src-tauri/**", "**/*.rs", "**/Cargo.toml"]
+
+javascript:
+  - changed-files:
+      - any-glob-to-any-file: ["src/**", "**/*.ts", "**/*.tsx", "package.json"]
+
+asr:
+  - changed-files:
+      - any-glob-to-any-file: ["src-tauri/src/asr/**", "models/**"]
