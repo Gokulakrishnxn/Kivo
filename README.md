@@ -1,9 +1,6 @@
 <div align="center">
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="brand/logo/kivo-lockup-white.svg">
-  <img src="brand/logo/kivo-lockup-black.svg" alt="Kivo" width="220">
-</picture>
+<img src="brand/logo/kivo-lockup-colour.svg" alt="Kivo" width="240">
 
 ### Turns voice into clean text
 
@@ -168,20 +165,28 @@ required.
 
 ## Design
 
-Kivo is **monochrome by decision, not by omission**. Voice products default to purple
-gradients and glowing orbs — the visual language of something happening that you cannot
-see. Kivo is a tool that does a specific thing accurately, so it is black, white,
-geometric and hairline-ruled. Emphasis comes from inversion and weight, never hue.
+Kivo looks like **a storybook spread on cream parchment**. The chrome is deliberately
+quiet — warm paper, hairline borders, no shadows — so a small cast of hand-drawn
+characters and a scatter of punctuation confetti can carry the personality.
 
-The mark is the product drawn literally: three waveform bars resolving into three lines
-of set text, every element built from one stroke on a 32-unit grid.
+The mark is the product's thesis in six rectangles: three waveform bars in sky, sun and
+ember resolving into three lines of settled charcoal text. What you say arrives loud and
+messy; what Kivo hands back is calm.
 
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="brand/logo/kivo-mark-white.svg">
-    <img src="brand/logo/kivo-mark-black.svg" alt="The Kivo mark" width="72">
-  </picture>
+  <img src="brand/logo/kivo-lockup-colour.svg" alt="The Kivo lockup" width="240">
 </p>
+
+<p align="center">
+  <img src="brand/illustration/mascot-mic.svg" alt="The microphone character" width="62">
+  <img src="brand/illustration/mascot-bubble.svg" alt="The speech bubble character" width="62">
+  <img src="brand/illustration/mascot-page.svg" alt="The page character" width="62">
+  <img src="brand/illustration/mascot-caret.svg" alt="The cursor character" width="62">
+  <img src="brand/illustration/mascot-wave.svg" alt="The waveform character" width="62">
+</p>
+
+One rule governs the rest: **the illustrations are playful, the claims are not.** A
+storybook look does not license a storybook promise.
 
 [Brand guidelines](brand/BRAND.md) · [Design tokens](brand/tokens/kivo-tokens.css) ·
 [Interactive brand kit](web/brand.html)

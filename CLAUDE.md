@@ -73,20 +73,30 @@ a way around it. See [SECURITY.md](SECURITY.md) for the full list of properties.
 
 ## Design rules
 
-The full system is in [brand/BRAND.md](brand/BRAND.md). The parts most easily got wrong:
+The full system is in [brand/BRAND.md](brand/BRAND.md). Kivo v2 is **a storybook spread
+on cream parchment**: quiet chrome, hairline borders, and a small cast of hand-drawn
+characters carrying the personality. The parts most easily got wrong:
 
-- **Kivo is monochrome.** There is no accent colour. Emphasis comes from inversion and
-  weight, never hue. Introducing a colour is a brand change, not a design decision.
+- **Surfaces are defined by an INSET hairline, never a drop shadow.**
+  `box-shadow: inset 0 0 0 1px #F2F0ED`. Nothing floats. The only exceptions are the
+  dark feature card and a whisper-light lift at `rgba(0,0,0,.04)`.
+- **Ink `#121212` is the only fill a button ever gets.** Not blue, not ember, not violet.
+  Ember `#FF3E00` is the demo-link colour — underlined text, never a filled shape.
 - **Never hard-code a colour, size, radius or duration.** Everything comes from
-  `brand/tokens/kivo-tokens.css`. CI checks that the CSS and JSON token sources agree.
-- **Hairlines, not shadows.** A 1 px border is how surfaces separate. Only the dictation
-  overlay and menus may cast a shadow, using the two defined shadow tokens.
-- **Both themes, always.** Verify light and dark before calling an interface change done.
-- **Ink is `#0A0A0A`, not `#000000`.** Pure black is reserved for the dark theme's inset.
+  `brand/tokens/kivo-tokens.css`. CI checks the CSS and JSON sources agree, and that
+  `web/assets/` copies have not drifted.
+- **Display and hero headings use Bricolage Grotesque at 500.** Never Inter at display
+  sizes — that is what makes a page read as a generic template. Use `text-wrap: balance`.
+- **Canvas is `#FBFAF9`, not white.** Warm paper, not screen. Body text is warm brown
+  `#474645`, never a cool grey.
+- **No gradients, anywhere.** The system is strictly flat.
+- **Marketing surfaces are light only.** The cream canvas is the brand. The *application*
+  follows the OS theme using ink as its dark ground — a product concern, not a brand one.
+- **The cast is allowed a face; the product is not.** Mascots may be playful. Copy about
+  what Kivo does stays exact. Illustration strokes are `#343433`, never black.
 - **Sentence case** for all headings and buttons. The product name is always **Kivo**.
-- **The logo is not open for redesign.** Improving how it is applied is welcome.
-- Typography: **Inter** for interface, **JetBrains Mono** for anything measured,
-  versioned or machine-typed. Mono is used as a texture, deliberately.
+- **The logo is not open for redesign.** The three waveform bars are sky, sun and ember
+  and never change colour; only the text half flips on ink.
 
 ## Writing rules
 
@@ -122,7 +132,7 @@ The full system is in [brand/BRAND.md](brand/BRAND.md). The parts most easily go
 | `PRD.md` | Product definition — requirements, budgets, non-goals, milestones |
 | `docs/ARCHITECTURE.md` | System design; `docs/diagrams/` holds the light and dark SVGs |
 | `brand/BRAND.md` | Brand and design system |
-| `brand/logo/`, `brand/tokens/` | Canonical assets and tokens |
+| `brand/logo/`, `brand/illustration/`, `brand/tokens/` | Canonical marks, the cast, and tokens |
 | `web/` | Website (`index.html`) and brand kit page (`brand.html`) |
 | `.github/` | CI, bots, templates |
 | `src/`, `src-tauri/` | Interface and core — *arrive at Milestone 2* |
@@ -139,12 +149,13 @@ find . -name '*.svg' -not -path './node_modules/*' -exec python3 -c "import sys,
 # every JSON parses
 python3 -c "import json;json.load(open('brand/tokens/kivo-tokens.json'))"
 
-# serve the site and look at it, in both themes
+# serve the site and look at it
 python3 -m http.server 8000 --directory web
 ```
 
 Verify interface and website changes by actually rendering them, not by reading the
-markup. Screenshot both themes.
+markup. Screenshot the result — the browser pane's capture goes stale after the first
+shot, so re-open the preview rather than trusting a blank frame.
 
 ## Current state
 
