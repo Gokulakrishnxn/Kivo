@@ -1,0 +1,14 @@
+# Default owner for everything in the repository.
+*                       @Gokulakrishnxn
+
+# Brand assets and the design system are owned by the brand holder.
+/brand/                 @Gokulakrishnxn
+/web/                   @Gokulakrishnxn
+/docs/diagrams/         @Gokulakrishnxn
+
+# Licence, trademark and governance files.
+/LICENSE                @Gokulakrishnxn
+/NOTICE                 @Gokulakrishnxn
+/SECURITY.md            @Gokulakrishnxn
+/CODE_OF_CONDUCT.md     @Gokulakrishnxn
+/.github/               @Gokulakrishnxn

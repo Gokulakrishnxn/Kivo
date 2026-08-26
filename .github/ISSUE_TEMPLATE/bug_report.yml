@@ -1,0 +1,103 @@
+name: 🐛 Bug report
+description: Something in Kivo does not work the way it should.
+labels: ["bug", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file this.
+
+        **Before you paste anything:** Kivo handles your speech. Do not include audio,
+        transcripts, or screenshots containing anything you would not publish. Redact
+        freely — a redacted report is far more useful than no report.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did Kivo do, and what did you expect instead?
+      placeholder: I held the hotkey and said "…", and Kivo typed "…" instead of "…".
+    validations: { required: true }
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      value: |
+        1.
+        2.
+        3.
+    validations: { required: true }
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS (Apple Silicon)
+        - macOS (Intel)
+        - Windows 11
+        - Windows 10
+        - Other
+    validations: { required: true }
+
+  - type: input
+    id: os-version
+    attributes:
+      label: OS version
+      placeholder: "macOS 15.2 / Windows 11 23H2"
+    validations: { required: true }
+
+  - type: input
+    id: kivo-version
+    attributes:
+      label: Kivo version
+      description: Find it in Kivo → Settings → About.
+      placeholder: "0.1.0"
+    validations: { required: true }
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of Kivo?
+      options:
+        - Recognition accuracy (wrong words)
+        - Text cleanup (punctuation, fillers, formatting)
+        - Text insertion (wrong app, wrong place, nothing typed)
+        - Global hotkey
+        - Audio capture / microphone
+        - Speed / latency
+        - Settings or interface
+        - Install, update or startup
+        - Something else
+    validations: { required: true }
+
+  - type: input
+    id: target-app
+    attributes:
+      label: Which app were you dictating into?
+      placeholder: "Slack, VS Code, Chrome, Word…"
+
+  - type: dropdown
+    id: compute
+    attributes:
+      label: Compute backend
+      description: Shown in Settings → About → Runtime.
+      options: ["Not sure", "Apple Neural Engine / CoreML", "CUDA (NVIDIA GPU)", "DirectML", "CPU"]
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Settings → Advanced → Reveal logs. Redact before pasting.
+      render: shell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: I removed anything private from the text, logs and screenshots above.
+          required: true

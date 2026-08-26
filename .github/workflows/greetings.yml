@@ -1,0 +1,43 @@
+name: Greetings
+
+on: [issues, pull_request_target]
+
+permissions:
+  contents: read
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: >
+            Thanks for opening your first issue on Kivo, and welcome.
+
+
+            A maintainer will read this. To help it move quickly, make sure it says
+            which OS and Kivo version you are on, and — for accuracy problems — what
+            you said versus what Kivo typed. Never paste audio or transcripts that
+            contain anything you would not publish; Kivo is a dictation tool and we
+            take that seriously.
+
+
+            If you would like to work on it yourself, say so and it is yours.
+            [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md) has everything you need.
+          pr-message: >
+            Thanks for your first pull request to Kivo, and welcome.
+
+
+            The bots will label this and run CI shortly. A maintainer reviews every PR
+            personally — expect a response within a few days. If CI flags something,
+            it is nearly always a small fix, and you are welcome to ask for help in
+            the thread rather than guessing.
+
+
+            By contributing you agree your work is licensed under the MIT License,
+            copyright Gokulakrishnan. See
+            [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md).

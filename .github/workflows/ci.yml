@@ -1,0 +1,156 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repo-health:
+    name: Repository health
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Required files are present
+        run: |
+          missing=0
+          for f in README.md LICENSE NOTICE PRD.md CONTRIBUTING.md \
+                   CODE_OF_CONDUCT.md SECURITY.md CLAUDE.md \
+                   brand/BRAND.md brand/tokens/kivo-tokens.css \
+                   brand/tokens/kivo-tokens.json web/index.html; do
+            if [ ! -f "$f" ]; then echo "::error file=$f::required file is missing"; missing=1; fi
+          done
+          exit $missing
+
+      - name: SVG assets are well-formed
+        run: |
+          python3 - <<'PY'
+          import glob, sys, xml.dom.minidom
+          bad = []
+          files = glob.glob('**/*.svg', recursive=True)
+          for f in files:
+              try:
+                  xml.dom.minidom.parse(f)
+              except Exception as e:
+                  bad.append(f'{f}: {e}')
+          print(f'checked {len(files)} svg file(s)')
+          if bad:
+              for b in bad:
+                  print(f'::error::{b}')
+              sys.exit(1)
+          PY
+
+      - name: JSON is valid
+        run: |
+          python3 - <<'PY'
+          import glob, json, sys
+          bad = []
+          files = [f for f in glob.glob('**/*.json', recursive=True) if 'node_modules' not in f]
+          for f in files:
+              try:
+                  json.load(open(f))
+              except Exception as e:
+                  bad.append(f'{f}: {e}')
+          print(f'checked {len(files)} json file(s)')
+          if bad:
+              for b in bad:
+                  print(f'::error::{b}')
+              sys.exit(1)
+          PY
+
+      - name: Design tokens and stylesheet agree
+        run: |
+          python3 - <<'PY'
+          import json, re, sys
+          css = open('brand/tokens/kivo-tokens.css').read()
+          tok = json.load(open('brand/tokens/kivo-tokens.json'))
+          ramp = tok['color']['ink']
+          missing = [f'ink-{k} ({v["$value"]})' for k, v in ramp.items()
+                     if f'--kivo-ink-{k}:' not in css]
+          if missing:
+              for m in missing:
+                  print(f'::error::token {m} present in JSON but absent from CSS')
+              sys.exit(1)
+          print(f'{len(ramp)} ink steps present in both token sources')
+          PY
+
+      - name: Relative links in Markdown resolve
+        run: |
+          python3 - <<'PY'
+          import glob, os, re, sys
+          pat = re.compile(r'\[[^\]]*\]\(([^)\s#]+)')
+          bad = []
+          for md in glob.glob('**/*.md', recursive=True):
+              if 'node_modules' in md:
+                  continue
+              base = os.path.dirname(md)
+              for link in pat.findall(open(md, encoding='utf-8').read()):
+                  if re.match(r'^(https?:|mailto:|#|/)', link):
+                      continue
+                  target = os.path.normpath(os.path.join(base, link))
+                  if not os.path.exists(target):
+                      bad.append(f'{md} -> {link}')
+          if bad:
+              for b in bad:
+                  print(f'::error::broken relative link: {b}')
+              sys.exit(1)
+          print('all relative Markdown links resolve')
+          PY
+
+  website:
+    name: Website
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: HTML sanity check
+        run: |
+          python3 - <<'PY'
+          import glob, re, sys
+          bad = []
+          for f in glob.glob('web/**/*.html', recursive=True):
+              s = open(f, encoding='utf-8').read()
+              if '<title>' not in s:
+                  bad.append(f'{f}: missing <title>')
+              if 'lang=' not in s:
+                  bad.append(f'{f}: <html> missing lang attribute')
+              if re.search(r'<img(?![^>]*\salt=)', s):
+                  bad.append(f'{f}: an <img> is missing alt text')
+              for href in re.findall(r'(?:href|src)="(?!https?:|mailto:|#|data:)([^"]+)"', s):
+                  import os
+                  t = os.path.normpath(os.path.join('web', href.lstrip('/')))
+                  if not os.path.exists(t):
+                      bad.append(f'{f}: dead asset reference {href}')
+          if bad:
+              for b in bad:
+                  print(f'::error::{b}')
+              sys.exit(1)
+          print('html sanity checks passed')
+          PY
+
+  app:
+    name: App build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect application source
+        id: detect
+        run: |
+          if [ -f package.json ] && [ -d src-tauri ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Application scaffold not present yet - skipping build. See PRD.md for the delivery plan."
+          fi
+      - name: Skipped
+        if: steps.detect.outputs.present == 'false'
+        run: echo "No application source to build yet."
