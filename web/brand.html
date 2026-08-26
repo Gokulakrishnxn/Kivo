@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kivo — brand kit</title>
+<meta name="description" content="The Kivo brand kit: the mark, the drawn logotype, the monochrome ink ramp, typography, spacing, motion and usage rules.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/kivo-tokens.css">
+<link rel="stylesheet" href="assets/site.css">
+<script>
+  (function () {
+    try { var t = localStorage.getItem('kivo-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+  })();
+</script>
+<style>
+  .kit { padding-block: var(--kivo-space-7); }
+  .kit__head { max-width: 62ch; }
+  .kit__head h2 { margin-bottom: var(--kivo-space-3); }
+  .kit__head p { color: var(--kivo-text-secondary); }
+  .rule { border: 0; border-top: var(--kivo-hairline) solid var(--kivo-border); margin: 0; }
+
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: var(--kivo-space-3); }
+  .sw { border: var(--kivo-hairline) solid var(--kivo-border); border-radius: var(--kivo-radius-md); overflow: hidden; }
+  .sw__chip { height: 64px; }
+  .sw__meta { padding: var(--kivo-space-3); border-top: var(--kivo-hairline) solid var(--kivo-border); }
+  .sw__name { font-family: var(--kivo-font-mono); font-size: 10px; color: var(--kivo-text-secondary); }
+  .sw__hex { font-family: var(--kivo-font-mono); font-size: var(--kivo-text-xs); margin-top: 2px; }
+
+  .specimen { border: var(--kivo-hairline) solid var(--kivo-border); border-radius: var(--kivo-radius-lg); overflow: hidden; }
+  .specimen > div { padding: var(--kivo-space-4) var(--kivo-space-5); display: flex; align-items: baseline; gap: var(--kivo-space-5); flex-wrap: wrap; }
+  .specimen > div + div { border-top: var(--kivo-hairline) solid var(--kivo-border); }
+  .specimen .tag-l { font-family: var(--kivo-font-mono); font-size: 10px; color: var(--kivo-text-muted); width: 120px; flex: 0 0 auto; }
+
+  .logo-grid { display: grid; gap: var(--kivo-space-4); grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+  .logo-cell { border: var(--kivo-hairline) solid var(--kivo-border); border-radius: var(--kivo-radius-lg); overflow: hidden; }
+  .logo-cell__art { min-height: 132px; display: grid; place-items: center; padding: var(--kivo-space-5); }
+  .logo-cell__art svg { width: auto; }
+  .on-ink { background: var(--kivo-ink-950); color: var(--kivo-paper); }
+  .on-paper { background: var(--kivo-paper); color: var(--kivo-ink-950); }
+  .logo-cell__cap { padding: var(--kivo-space-3) var(--kivo-space-4); border-top: var(--kivo-hairline) solid var(--kivo-border); font-family: var(--kivo-font-mono); font-size: 10px; color: var(--kivo-text-secondary); }
+
+  .sizes { display: flex; align-items: flex-end; gap: var(--kivo-space-6); flex-wrap: wrap; }
+  .sizes figure { margin: 0; text-align: center; color: var(--kivo-text); }
+  .sizes figcaption { font-family: var(--kivo-font-mono); font-size: 10px; color: var(--kivo-text-muted); margin-top: var(--kivo-space-2); }
+
+  .yn { display: grid; gap: var(--kivo-space-4); grid-template-columns: 1fr; }
+  @media (min-width: 760px) { .yn { grid-template-columns: 1fr 1fr; } }
+  .yn__col { border: var(--kivo-hairline) solid var(--kivo-border); border-radius: var(--kivo-radius-lg); padding: var(--kivo-space-5); }
+  .yn__col h3 { font-size: var(--kivo-text-sm); font-family: var(--kivo-font-mono); text-transform: uppercase; letter-spacing: var(--kivo-tracking-eyebrow); color: var(--kivo-text-muted); margin-bottom: var(--kivo-space-3); }
+  .yn ul { list-style: none; padding: 0; display: grid; gap: var(--kivo-space-2); font-size: var(--kivo-text-sm); }
+  .yn li { display: flex; gap: var(--kivo-space-3); }
+  .yn li span:first-child { flex: 0 0 auto; font-family: var(--kivo-font-mono); }
+
+  .scale-bars { display: grid; gap: var(--kivo-space-2); }
+  .scale-bars div { display: flex; align-items: center; gap: var(--kivo-space-4); font-family: var(--kivo-font-mono); font-size: var(--kivo-text-xs); color: var(--kivo-text-secondary); }
+  .scale-bars i { display: block; height: 14px; background: var(--kivo-text); border-radius: 2px; }
+
+  .radii { display: flex; gap: var(--kivo-space-4); flex-wrap: wrap; }
+  .radii figure { margin: 0; text-align: center; }
+  .radii div { width: 76px; height: 76px; border: var(--kivo-hairline) solid var(--kivo-border-strong); background: var(--kivo-bg-subtle); }
+  .radii figcaption { font-family: var(--kivo-font-mono); font-size: 10px; color: var(--kivo-text-muted); margin-top: var(--kivo-space-2); }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="wrap nav__in">
+    <a class="nav__logo" href="./" aria-label="Kivo, home">
+      <svg viewBox="0 0 366 120" fill="currentColor" role="img" aria-label="Kivo">
+        <g transform="translate(0 16) scale(2.75)">
+          <rect x="3.4" y="10" width="3.2" height="12" rx="1.6"/><rect x="8.6" y="6" width="3.2" height="20" rx="1.6"/>
+          <rect x="13.8" y="8.5" width="3.2" height="15" rx="1.6"/><rect x="21.4" y="9.4" width="7.2" height="3.2" rx="1.6"/>
+          <rect x="21.4" y="14.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="19.4" width="4.4" height="3.2" rx="1.6"/>
+        </g>
+        <g transform="translate(89 0)">
+          <g fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M27 31V89"/><path d="M34 60L76 31"/><path d="M34 60L79 89"/>
+            <path d="M110 51V89"/><path d="M133 51L157 89L181 51"/><circle cx="229" cy="70" r="21"/>
+          </g><circle cx="110" cy="28" r="7"/>
+        </g>
+      </svg>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="./">Home</a>
+      <a href="https://github.com/Gokulakrishnxn/Kivo/tree/main/brand">Assets</a>
+      <a href="https://github.com/Gokulakrishnxn/Kivo">GitHub</a>
+      <button class="iconbtn" id="theme" type="button" aria-label="Switch between light and dark theme">
+        <svg data-theme-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+        </svg>
+        <svg data-theme-icon="dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero" style="padding-block:var(--kivo-space-8) var(--kivo-space-7)">
+  <div class="wrap stack-5">
+    <span class="eyebrow">Brand kit · v1.0</span>
+    <h1 class="h-display" style="max-width:16ch">Precise, not magical.</h1>
+    <p class="lead" style="max-width:56ch">
+      Voice products default to purple gradients and glowing orbs — the visual language
+      of something happening that you cannot see. Kivo is a tool that does a specific
+      thing accurately, so it is monochrome, geometric and hairline-ruled. Emphasis
+      comes from inversion and weight, never hue.
+    </p>
+    <div class="hero__cta">
+      <a class="btn btn--primary" href="https://github.com/Gokulakrishnxn/Kivo/tree/main/brand/logo">Download the assets</a>
+      <a class="btn btn--ghost" href="https://github.com/Gokulakrishnxn/Kivo/blob/main/brand/BRAND.md">Full guidelines</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== mark ====== -->
+<section class="kit">
+  <div class="wrap stack-5">
+    <div class="kit__head">
+      <span class="eyebrow">01 — The mark</span>
+      <h2 class="h-section">The product, drawn literally.</h2>
+      <p>
+        Three waveform bars on the left resolving into three lines of set text on the
+        right. Every element is one 3.2-unit stroke on a 32-unit grid with fully
+        rounded caps — the bars and the lines are the same stroke turned ninety
+        degrees. The wide gap in the middle is where the transformation is implied.
+        Do not close it.
+      </p>
+    </div>
+
+    <div class="logo-grid">
+      <div class="logo-cell">
+        <div class="logo-cell__art on-paper">
+          <svg viewBox="0 0 366 120" style="height:34px" fill="currentColor" role="img" aria-label="Kivo lockup on paper">
+            <g transform="translate(0 16) scale(2.75)">
+              <rect x="3.4" y="10" width="3.2" height="12" rx="1.6"/><rect x="8.6" y="6" width="3.2" height="20" rx="1.6"/>
+              <rect x="13.8" y="8.5" width="3.2" height="15" rx="1.6"/><rect x="21.4" y="9.4" width="7.2" height="3.2" rx="1.6"/>
+              <rect x="21.4" y="14.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="19.4" width="4.4" height="3.2" rx="1.6"/>
+            </g>
+            <g transform="translate(89 0)">
+              <g fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M27 31V89"/><path d="M34 60L76 31"/><path d="M34 60L79 89"/>
+                <path d="M110 51V89"/><path d="M133 51L157 89L181 51"/><circle cx="229" cy="70" r="21"/>
+              </g><circle cx="110" cy="28" r="7"/>
+            </g>
+          </svg>
+        </div>
+        <div class="logo-cell__cap">lockup · on paper</div>
+      </div>
+
+      <div class="logo-cell">
+        <div class="logo-cell__art on-ink">
+          <svg viewBox="0 0 366 120" style="height:34px" fill="currentColor" role="img" aria-label="Kivo lockup on ink">
+            <g transform="translate(0 16) scale(2.75)">
+              <rect x="3.4" y="10" width="3.2" height="12" rx="1.6"/><rect x="8.6" y="6" width="3.2" height="20" rx="1.6"/>
+              <rect x="13.8" y="8.5" width="3.2" height="15" rx="1.6"/><rect x="21.4" y="9.4" width="7.2" height="3.2" rx="1.6"/>
+              <rect x="21.4" y="14.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="19.4" width="4.4" height="3.2" rx="1.6"/>
+            </g>
+            <g transform="translate(89 0)">
+              <g fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M27 31V89"/><path d="M34 60L76 31"/><path d="M34 60L79 89"/>
+                <path d="M110 51V89"/><path d="M133 51L157 89L181 51"/><circle cx="229" cy="70" r="21"/>
+              </g><circle cx="110" cy="28" r="7"/>
+            </g>
+          </svg>
+        </div>
+        <div class="logo-cell__cap">lockup · on ink</div>
+      </div>
+
+      <div class="logo-cell">
+        <div class="logo-cell__art on-paper">
+          <svg viewBox="0 0 32 32" style="height:56px" fill="currentColor" role="img" aria-label="Kivo mark">
+            <rect x="3.4" y="10" width="3.2" height="12" rx="1.6"/><rect x="8.6" y="6" width="3.2" height="20" rx="1.6"/>
+            <rect x="13.8" y="8.5" width="3.2" height="15" rx="1.6"/><rect x="21.4" y="9.4" width="7.2" height="3.2" rx="1.6"/>
+            <rect x="21.4" y="14.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="19.4" width="4.4" height="3.2" rx="1.6"/>
+          </svg>
+        </div>
+        <div class="logo-cell__cap">mark · full</div>
+      </div>
+
+      <div class="logo-cell">
+        <div class="logo-cell__art on-paper">
+          <svg viewBox="0 0 32 32" style="height:56px" fill="currentColor" role="img" aria-label="Kivo compact mark">
+            <rect x="4" y="9" width="5" height="14" rx="2.5"/><rect x="11.5" y="5" width="5" height="22" rx="2.5"/>
+            <rect x="20" y="9.5" width="8" height="5" rx="2.5"/><rect x="20" y="17.5" width="8" height="5" rx="2.5"/>
+          </svg>
+        </div>
+        <div class="logo-cell__cap">mark · compact, for 16–23 px</div>
+      </div>
+
+      <div class="logo-cell">
+        <div class="logo-cell__art on-paper">
+          <svg viewBox="0 0 512 512" style="height:76px" role="img" aria-label="Kivo app icon">
+            <rect width="512" height="512" rx="112" fill="#0A0A0A"/>
+            <g transform="translate(64 64) scale(12)" fill="#FFFFFF">
+              <rect x="3.4" y="10" width="3.2" height="12" rx="1.6"/><rect x="8.6" y="6" width="3.2" height="20" rx="1.6"/>
+              <rect x="13.8" y="8.5" width="3.2" height="15" rx="1.6"/><rect x="21.4" y="9.4" width="7.2" height="3.2" rx="1.6"/>
+              <rect x="21.4" y="14.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="19.4" width="4.4" height="3.2" rx="1.6"/>
+            </g>
+          </svg>
+        </div>
+        <div class="logo-cell__cap">app icon · squircle at 22 %</div>
+      </div>
+
+      <div class="logo-cell">
+        <div class="logo-cell__art on-paper">
+          <svg viewBox="0 0 277 120" style="height:40px" fill="currentColor" role="img" aria-label="Kivo logotype">
+            <g fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M27 31V89"/><path d="M34 60L76 31"/><path d="M34 60L79 89"/>
+              <path d="M110 51V89"/><path d="M133 51L157 89L181 51"/><circle cx="229" cy="70" r="21"/>
+            </g><circle cx="110" cy="28" r="7"/>
+          </svg>
+        </div>
+        <div class="logo-cell__cap">logotype · drawn, not set</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ========================================================= sizes ====== -->
+<section class="kit">
+  <div class="wrap stack-5">
+    <div class="kit__head">
+      <span class="eyebrow">02 — Minimum sizes</span>
+      <h2 class="h-section">Below 24 px, switch marks.</h2>
+      <p>
+        The full mark's three text lines merge into a smudge at small sizes. This is
+        not a guideline, it is a measured limit — which is why the compact variant
+        exists. Compare the two at 16 and 20 px.
+      </p>
+    </div>
+    <div class="panel"><div class="panel__body">
+      <div class="panel__label">Full mark</div>
+      <div class="sizes" style="margin-bottom:var(--kivo-space-6)">
+        <figure><svg viewBox="0 0 32 32" width="16" height="16" fill="currentColor" role="img" aria-label="Full mark at 16 pixels"><rect x="3.4" y="10" width="3.2" height="12" rx="1.6"/><rect x="8.6" y="6" width="3.2" height="20" rx="1.6"/><rect x="13.8" y="8.5" width="3.2" height="15" rx="1.6"/><rect x="21.4" y="9.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="14.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="19.4" width="4.4" height="3.2" rx="1.6"/></svg><figcaption>16 ✕</figcaption></figure>
+        <figure><svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" role="img" aria-label="Full mark at 20 pixels"><rect x="3.4" y="10" width="3.2" height="12" rx="1.6"/><rect x="8.6" y="6" width="3.2" height="20" rx="1.6"/><rect x="13.8" y="8.5" width="3.2" height="15" rx="1.6"/><rect x="21.4" y="9.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="14.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="19.4" width="4.4" height="3.2" rx="1.6"/></svg><figcaption>20 ✕</figcaption></figure>
+        <figure><svg viewBox="0 0 32 32" width="24" height="24" fill="currentColor" role="img" aria-label="Full mark at 24 pixels"><rect x="3.4" y="10" width="3.2" height="12" rx="1.6"/><rect x="8.6" y="6" width="3.2" height="20" rx="1.6"/><rect x="13.8" y="8.5" width="3.2" height="15" rx="1.6"/><rect x="21.4" y="9.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="14.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="19.4" width="4.4" height="3.2" rx="1.6"/></svg><figcaption>24 ✓ min</figcaption></figure>
+        <figure><svg viewBox="0 0 32 32" width="40" height="40" fill="currentColor" role="img" aria-label="Full mark at 40 pixels"><rect x="3.4" y="10" width="3.2" height="12" rx="1.6"/><rect x="8.6" y="6" width="3.2" height="20" rx="1.6"/><rect x="13.8" y="8.5" width="3.2" height="15" rx="1.6"/><rect x="21.4" y="9.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="14.4" width="7.2" height="3.2" rx="1.6"/><rect x="21.4" y="19.4" width="4.4" height="3.2" rx="1.6"/></svg><figcaption>40 ✓</figcaption></figure>
+      </div>
+      <div class="panel__label">Compact mark</div>
+      <div class="sizes">
+        <figure><svg viewBox="0 0 32 32" width="16" height="16" fill="currentColor" role="img" aria-label="Compact mark at 16 pixels"><rect x="4" y="9" width="5" height="14" rx="2.5"/><rect x="11.5" y="5" width="5" height="22" rx="2.5"/><rect x="20" y="9.5" width="8" height="5" rx="2.5"/><rect x="20" y="17.5" width="8" height="5" rx="2.5"/></svg><figcaption>16 ✓ min</figcaption></figure>
+        <figure><svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" role="img" aria-label="Compact mark at 20 pixels"><rect x="4" y="9" width="5" height="14" rx="2.5"/><rect x="11.5" y="5" width="5" height="22" rx="2.5"/><rect x="20" y="9.5" width="8" height="5" rx="2.5"/><rect x="20" y="17.5" width="8" height="5" rx="2.5"/></svg><figcaption>20 ✓</figcaption></figure>
+        <figure><svg viewBox="0 0 32 32" width="24" height="24" fill="currentColor" role="img" aria-label="Compact mark at 24 pixels"><rect x="4" y="9" width="5" height="14" rx="2.5"/><rect x="11.5" y="5" width="5" height="22" rx="2.5"/><rect x="20" y="9.5" width="8" height="5" rx="2.5"/><rect x="20" y="17.5" width="8" height="5" rx="2.5"/></svg><figcaption>24 ✓</figcaption></figure>
+        <figure><svg viewBox="0 0 32 32" width="40" height="40" fill="currentColor" role="img" aria-label="Compact mark at 40 pixels"><rect x="4" y="9" width="5" height="14" rx="2.5"/><rect x="11.5" y="5" width="5" height="22" rx="2.5"/><rect x="20" y="9.5" width="8" height="5" rx="2.5"/><rect x="20" y="17.5" width="8" height="5" rx="2.5"/></svg><figcaption>40 ✓</figcaption></figure>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ======================================================== colour ====== -->
+<section class="kit">
+  <div class="wrap stack-5">
+    <div class="kit__head">
+      <span class="eyebrow">03 — Colour</span>
+      <h2 class="h-section">One ramp. No accent.</h2>
+      <p>
+        Kivo is monochrome, and adding a colour is a brand change rather than a design
+        decision. A primary button is not “the blue one”, it is the one filled with ink.
+        Ink is <code class="mono">#0A0A0A</code>, not pure black — black against white is
+        harsh at paragraph length and reads as unconsidered.
+      </p>
+    </div>
+    <div class="swatches" id="swatches"></div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ==================================================== typography ====== -->
+<section class="kit">
+  <div class="wrap stack-5">
+    <div class="kit__head">
+      <span class="eyebrow">04 — Typography</span>
+      <h2 class="h-section">Inter, and mono as a texture.</h2>
+      <p>
+        Inter for the interface, JetBrains Mono for anything measured, versioned or
+        typed by a machine. Both are open-licensed, so a fork inherits no licence trap.
+        Tracking tightens as type grows — display set at default tracking looks loose.
+      </p>
+    </div>
+    <div class="specimen">
+      <div><span class="tag-l">5xl · 60 · 600</span><span class="h-display" style="font-size:var(--kivo-text-5xl)">Turns voice</span></div>
+      <div><span class="tag-l">3xl · 38 · 600</span><span style="font-size:var(--kivo-text-3xl);font-weight:600;letter-spacing:var(--kivo-tracking-heading)">Clean, not just transcribed</span></div>
+      <div><span class="tag-l">xl · 24 · 600</span><span style="font-size:var(--kivo-text-xl);font-weight:600;letter-spacing:var(--kivo-tracking-heading)">One key. Any application.</span></div>
+      <div><span class="tag-l">md · 17 · 400</span><span style="font-size:var(--kivo-text-md)">Hold a key, speak, let go. Text appears at your cursor.</span></div>
+      <div><span class="tag-l">sm · 14 · 400</span><span style="font-size:var(--kivo-text-sm)">Interface default, and dense body copy in settings.</span></div>
+      <div><span class="tag-l">2xs · 11 · 600</span><span class="eyebrow">Eyebrow label, uppercase</span></div>
+      <div><span class="tag-l">mono · 12</span><span class="mono">parakeet-tdt-0.6b · sha256 verified · 284 ms</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ======================================================== layout ====== -->
+<section class="kit">
+  <div class="wrap stack-5">
+    <div class="kit__head">
+      <span class="eyebrow">05 — Space, shape, elevation</span>
+      <h2 class="h-section">Hairlines, not shadows.</h2>
+      <p>
+        A 1 px border is how Kivo says “this is a distinct thing”. Shadows are permitted
+        only on chrome that genuinely floats above the operating system — the dictation
+        overlay and menus — and there are exactly two of them. Nothing else casts a shadow.
+      </p>
+    </div>
+    <div class="split">
+      <div>
+        <div class="panel__label">Space · 4 px base</div>
+        <div class="scale-bars">
+          <div><span style="width:34px">4</span><i style="width:4px"></i></div>
+          <div><span style="width:34px">8</span><i style="width:8px"></i></div>
+          <div><span style="width:34px">12</span><i style="width:12px"></i></div>
+          <div><span style="width:34px">16</span><i style="width:16px"></i></div>
+          <div><span style="width:34px">24</span><i style="width:24px"></i></div>
+          <div><span style="width:34px">32</span><i style="width:32px"></i></div>
+          <div><span style="width:34px">48</span><i style="width:48px"></i></div>
+          <div><span style="width:34px">64</span><i style="width:64px"></i></div>
+          <div><span style="width:34px">96</span><i style="width:96px"></i></div>
+          <div><span style="width:34px">128</span><i style="width:128px"></i></div>
+        </div>
+      </div>
+      <div>
+        <div class="panel__label">Radius</div>
+        <div class="radii">
+          <figure><div style="border-radius:0"></div><figcaption>0</figcaption></figure>
+          <figure><div style="border-radius:4px"></div><figcaption>4</figcaption></figure>
+          <figure><div style="border-radius:6px"></div><figcaption>6</figcaption></figure>
+          <figure><div style="border-radius:8px"></div><figcaption>8</figcaption></figure>
+          <figure><div style="border-radius:12px"></div><figcaption>12</figcaption></figure>
+          <figure><div style="border-radius:16px"></div><figcaption>16</figcaption></figure>
+          <figure><div style="border-radius:22%"></div><figcaption>22 %</figcaption></figure>
+        </div>
+        <div class="panel__label" style="margin-top:var(--kivo-space-6)">Motion</div>
+        <p class="mono" style="color:var(--kivo-text-secondary);line-height:2">
+          instant 90 ms · fast 140 ms · normal 220 ms · slow 380 ms<br>
+          cubic-bezier(0.2, 0, 0, 1)<br>
+          reduced-motion sets every duration to zero
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ========================================================= usage ====== -->
+<section class="kit">
+  <div class="wrap stack-5">
+    <div class="kit__head">
+      <span class="eyebrow">06 — Usage</span>
+      <h2 class="h-section">Where the boundaries are.</h2>
+      <p>
+        Kivo's code is MIT licensed. The name and the marks are not — they stay with the
+        author, so that a fork gets its own identity rather than inheriting this one.
+      </p>
+    </div>
+    <div class="yn">
+      <div class="yn__col">
+        <h3>Do</h3>
+        <ul>
+          <li><span>✓</span><span>Use the lockup at 120 px wide or more, the mark alone below that.</span></li>
+          <li><span>✓</span><span>Keep clear space equal to one waveform bar height on all sides.</span></li>
+          <li><span>✓</span><span>Use the compact mark below 24 px.</span></li>
+          <li><span>✓</span><span>Invert to white on ink. That is the intended dark treatment.</span></li>
+          <li><span>✓</span><span>Say “a fork of Kivo”, or use the logo to write about the project.</span></li>
+        </ul>
+      </div>
+      <div class="yn__col">
+        <h3>Do not</h3>
+        <ul>
+          <li><span>✕</span><span>Recolour it, add a gradient, or give it a shadow.</span></li>
+          <li><span>✕</span><span>Stretch it non-uniformly, rotate it, or close the central gap.</span></li>
+          <li><span>✕</span><span>Rebuild the wordmark in a typeface. It is drawn; no font matches it.</span></li>
+          <li><span>✕</span><span>Place it on a busy image, or inside another container shape.</span></li>
+          <li><span>✕</span><span>Use the name or mark as the identity of your own fork or product.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ========================================================= voice ====== -->
+<section class="kit">
+  <div class="wrap stack-5">
+    <div class="kit__head">
+      <span class="eyebrow">07 — Voice</span>
+      <h2 class="h-section">Kivo does not listen. It records.</h2>
+      <p>
+        Never anthropomorphise the product. It records, recognises and inserts — it does
+        not listen, understand, think or help. The credibility of everything Kivo claims
+        about privacy rests on not pretending otherwise.
+      </p>
+    </div>
+    <div class="yn">
+      <div class="yn__col">
+        <h3>Write</h3>
+        <ul>
+          <li><span>✓</span><span>“Text appears at your cursor in under 300 ms.”</span></li>
+          <li><span>✓</span><span>“Kivo could not insert text into this app, so it copied it to your clipboard instead.”</span></li>
+          <li><span>✓</span><span>“Hold a key. Speak. It's text.”</span></li>
+        </ul>
+      </div>
+      <div class="yn__col">
+        <h3>Not</h3>
+        <ul>
+          <li><span>✕</span><span>“Lightning-fast, seamless AI dictation!”</span></li>
+          <li><span>✕</span><span>“Oops! Something went wrong.”</span></li>
+          <li><span>✕</span><span>“Kivo listens and understands what you mean.”</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot" style="border-top:var(--kivo-hairline) solid var(--kivo-border)">
+  <div class="wrap">
+    <div class="foot__legal" style="margin-top:0;border-top:0;padding-top:0">
+      <span>© 2026 Gokulakrishnan. Code MIT licensed; the Kivo name and logo are not.</span>
+      <span><a href="./">Home</a> · <a href="https://github.com/Gokulakrishnxn/Kivo/blob/main/brand/BRAND.md">Full guidelines</a> · <a href="https://github.com/Gokulakrishnxn/Kivo">GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var btn = document.getElementById('theme');
+    if (btn) btn.addEventListener('click', function () {
+      var root = document.documentElement;
+      var explicit = root.getAttribute('data-theme');
+      var dark = explicit ? explicit === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var next = dark ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('kivo-theme', next); } catch (e) {}
+    });
+
+    var RAMP = [
+      ['paper', '#FFFFFF'], ['ink-50', '#F7F7F7'], ['ink-100', '#EFEFEF'],
+      ['ink-200', '#E2E2E2'], ['ink-300', '#CBCBCB'], ['ink-400', '#A6A6A6'],
+      ['ink-500', '#7C7C7C'], ['ink-600', '#5C5C5C'], ['ink-700', '#404040'],
+      ['ink-800', '#292929'], ['ink-900', '#171717'], ['ink-950', '#0A0A0A']
+    ];
+    var host = document.getElementById('swatches');
+    if (!host) return;
+    RAMP.forEach(function (pair) {
+      var el = document.createElement('div');
+      el.className = 'sw';
+      el.innerHTML =
+        '<div class="sw__chip" style="background:' + pair[1] + '"></div>' +
+        '<div class="sw__meta"><div class="sw__name">--kivo-' + pair[0] + '</div>' +
+        '<div class="sw__hex">' + pair[1] + '</div></div>';
+      host.appendChild(el);
+    });
+  })();
+</script>
+
+</body>
+</html>
