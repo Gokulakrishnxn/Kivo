@@ -1,245 +1,269 @@
 # Kivo — Brand Kit
 
-The complete visual system for Kivo: what the marks are, how the system is built, and
-where the boundaries sit. Everything here is the canonical source. If a product screen
+The complete visual system for Kivo. Everything here is canonical: if a product screen
 and this document disagree, this document is right.
 
 **Interactive version:** [the brand kit page](../web/brand.html) renders every token,
-mark and specimen in both themes.
+mark, character and specimen live.
+
+> **Version 2.0 — August 2026.** Kivo previously used a strictly monochrome system.
+> It now uses the cream-parchment system described below. The change was deliberate and
+> total; nothing from v1 carries forward except the geometry of the mark itself.
 
 ---
 
 ## 1. The idea
 
-Kivo turns voice into clean text. The brand has one job: make that transformation feel
-**precise** rather than magical.
+**A storybook spread on cream parchment.**
 
-That single decision explains everything downstream. Voice products default to purple
-gradients, glowing orbs and soft blur — the visual language of *something happening
-that you cannot see*. Kivo goes the other way. It is monochrome, geometric, hairline-ruled
-and flat, because it is a tool that does a specific thing accurately, and it wants to
-be trusted rather than admired.
+Kivo's chrome is deliberately quiet — warm paper, hairline borders, no shadows — so a
+small cast of hand-drawn characters and a scatter of punctuation can carry all the
+personality. The interface recedes; the illustration does the emotional work.
 
-**Personality:** precise, quiet, unhurried, technical without being cold.
-**Not:** playful, futuristic, chatty, assistant-like, "AI".
+That split is the whole system, and it is also the honest shape of the product. Kivo is
+a small friendly thing that sits in your menu bar, and it is also a piece of software
+holding a microphone permission. The look is warm. The claims are exact.
+
+**Personality:** warm, playful, unhurried, precise where it counts.
+**Not:** corporate, futuristic, glossy, gradient-y, or breathlessly "AI".
+
+### The one rule that governs everything else
+
+> **The illustrations are playful. The claims are not.**
+
+A storybook look does not license a storybook promise. Kivo records, recognises and
+inserts. It does not listen, understand, think or help — and no amount of charm in the
+drawing changes what the copy is allowed to say. See §7.
 
 ---
 
 ## 2. The mark
 
-Kivo's mark is the product drawn literally: **three waveform bars on the left resolving
-into three lines of set text on the right.** Speech, then the gap where the work
-happens, then text.
+Three waveform bars — **sky, sun, ember** — resolving into three lines of set text in
+**charcoal**.
+
+The colour is the point. What you say arrives loud, bright and messy; what Kivo hands
+back is calm and settled. The mark is the product's whole thesis in six rectangles.
 
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="logo/kivo-lockup-white.svg">
-    <img src="logo/kivo-lockup-black.svg" alt="The Kivo lockup: the waveform-to-text mark beside the Kivo wordmark" width="320">
-  </picture>
+  <img src="logo/kivo-lockup-colour.svg" alt="The Kivo lockup: three coloured waveform bars resolving into three charcoal lines of text, beside the Kivo wordmark" width="300">
 </p>
 
 ### Construction
 
-Every element is drawn on a **32-unit grid** from a single **3.2-unit stroke** with
-fully rounded caps (`rx` = 1.6, exactly half the stroke). There is no second weight and
-no second radius. The vertical bars and the horizontal lines are the same stroke turned
-ninety degrees — which is the whole idea of the product expressed as geometry.
+Every element is one **3.2-unit stroke on a 32-unit grid** with fully rounded caps
+(`rx` = 1.6, exactly half the stroke). The vertical bars and the horizontal lines are
+the same stroke turned ninety degrees.
 
-The gap between the two groups is deliberately wide. It is the only empty space in the
-mark, and it is where the transformation is implied. Do not close it.
+The wide gap between the two groups is the only empty space in the mark, and it is where
+the transformation is implied. **Do not close it.**
+
+### Colour behaviour
+
+| Element | On canvas | On ink |
+|---|---|---|
+| Bar 1 | Sky `#64C6FF` | Sky `#64C6FF` — unchanged |
+| Bar 2 | Sun `#FFCD6C` | Sun `#FFCD6C` — unchanged |
+| Bar 3 | Ember `#FF3E00` | Ember `#FF3E00` — unchanged |
+| Text lines | Heading `#343433` | White `#FFFFFF` |
+| Wordmark | Ink `#121212` | White `#FFFFFF` |
+
+**The bars never change colour.** Only the text half flips. A single-colour version
+exists for embroidery, engraving and fax-grade reproduction — nothing else.
 
 ### Variants
 
 | File | Use |
 |---|---|
-| [`kivo-mark.svg`](logo/kivo-mark.svg) | The mark, inheriting `currentColor`. Preferred for web and app code. |
-| [`kivo-mark-black.svg`](logo/kivo-mark-black.svg) · [`kivo-mark-white.svg`](logo/kivo-mark-white.svg) | Fixed-colour, for contexts that cannot inherit. |
-| [`kivo-mark-compact.svg`](logo/kivo-mark-compact.svg) | **Two bars, two lines, heavier stroke.** For 16–23 px. |
-| [`kivo-logotype.svg`](logo/kivo-logotype.svg) | The word alone. |
-| [`kivo-lockup.svg`](logo/kivo-lockup.svg) | Mark + word. The default logo. |
-| [`kivo-app-icon.svg`](logo/kivo-app-icon.svg) | Black squircle, white glyph. Dock, tray, installer. |
-| [`kivo-app-icon-inverse.svg`](logo/kivo-app-icon-inverse.svg) | White squircle with a hairline, for dark tiles. |
-| [`favicon.svg`](logo/favicon.svg) | Theme-aware tile. Inverts with the browser. |
+| [`kivo-lockup-colour.svg`](logo/kivo-lockup-colour.svg) | **The default logo.** Mark + wordmark. |
+| [`kivo-mark-colour.svg`](logo/kivo-mark-colour.svg) | The mark alone, in colour. |
+| [`kivo-mark.svg`](logo/kivo-mark.svg) | Single-colour mark, inherits `currentColor`. |
+| [`kivo-mark-compact.svg`](logo/kivo-mark-compact.svg) | Two bars, two lines, heavier stroke. **For 16–23 px.** |
+| [`kivo-logotype.svg`](logo/kivo-logotype.svg) | The drawn word alone. |
+| [`kivo-app-icon.svg`](logo/kivo-app-icon.svg) | Paper squircle, warm hairline, colour glyph. |
+| [`favicon.svg`](logo/favicon.svg) | Compact mark on paper. |
 
 ### Minimum sizes
 
-These are not suggestions. The full mark's three text lines merge into a smudge below
-24 px, which is why the compact variant exists.
+Measured limits, not preferences. The full mark's three text lines merge into a smudge
+below 24 px.
 
 | Asset | Minimum | Below that |
 |---|---|---|
 | Full mark | 24 px | use the compact mark |
-| Compact mark | 16 px | use nothing; use the word |
+| Compact mark | 16 px | use the word alone |
 | Lockup | 120 px wide | use the mark alone |
-| Logotype | 64 px wide | — |
 | App icon | 32 px | — |
 
-### Clear space
+### Clear space and misuse
 
-Reserve clear space equal to **the height of one waveform bar in the mark** (¼ of the
-mark's height) on all four sides. Nothing enters it — no text, no rules, no edges.
+Clear space equals **one waveform bar height** (¼ of the mark's height) on all sides.
 
-### Misuse
-
-Do not: recolour it, add a gradient, add a shadow, outline it, rotate it, stretch it
-non-uniformly, reorder the elements, close the central gap, place it on a busy image,
-put it inside another shape, or rebuild the wordmark in a different typeface. The
-logotype is drawn, not set — there is no font that produces it.
+Do not: recolour the bars, add a gradient, add a shadow, outline it, rotate it, stretch
+it non-uniformly, reorder the elements, close the central gap, place it on a busy image,
+or rebuild the wordmark in a typeface. **The logotype is drawn, not set** — no font
+produces it.
 
 ---
 
-## 3. Colour
+## 3. The cast
 
-**Kivo is monochrome. There is no accent colour, and adding one is a brand change, not
-a design decision.**
+Five characters and a scatter of punctuation. They are the reason the interface can stay
+as quiet as it does.
 
-Emphasis is created by **inversion** and **weight** instead of hue. A primary button is
-not "the blue one", it is the one filled with ink. This is a constraint that pays for
-itself: it forces hierarchy to be carried by structure, and it makes the product legible
-to everyone regardless of colour vision.
-
-### The ink ramp
-
-| Token | Hex | Typical use |
+| Character | Colour | Is |
 |---|---|---|
-| `--kivo-paper` | `#FFFFFF` | Page and surface, light theme |
-| `--kivo-ink-50` | `#F7F7F7` | Subtle fills, alternating rows |
-| `--kivo-ink-100` | `#EFEFEF` | Inset wells, code blocks |
-| `--kivo-ink-200` | `#E2E2E2` | **Default hairline border** |
-| `--kivo-ink-300` | `#CBCBCB` | Strong border, dividers under emphasis |
-| `--kivo-ink-400` | `#A6A6A6` | Disabled text, dark-theme secondary text |
-| `--kivo-ink-500` | `#7C7C7C` | Muted text, captions |
-| `--kivo-ink-600` | `#5C5C5C` | **Secondary text** |
-| `--kivo-ink-700` | `#404040` | Dark-theme strong borders |
-| `--kivo-ink-800` | `#292929` | Dark-theme borders, raised surfaces |
-| `--kivo-ink-900` | `#171717` | Dark-theme surface |
-| `--kivo-ink-950` | `#0A0A0A` | **Primary text, primary action** |
+| **mic** | Sun `#FFCD6C` | the listening one |
+| **bubble** | Sky `#64C6FF` | what you said |
+| **page** | Green `#00C978` | the clean text it hands back |
+| **caret** | Ember `#FF3E00` | where the text lands |
+| **wave** | Pink `#FF58AE` | your voice, mid-air |
 
-Ink is `#0A0A0A`, not `#000000`. Pure black against pure white is harsh at paragraph
-length and reads as unconsidered. Pure black is reserved for `--kivo-bg-inset` in the
-dark theme, where it is a *recess* below the surface.
+**Drawing rules.** Flat fills from the accent palette. Strokes are **`#343433` at 3 units**,
+never black, never heavier. Dot eyes and stick limbs with a dot at each end. Organic
+radii of 40–72 px. No gradients, no shading, no outlines-within-outlines.
 
-### Semantic tokens
+**The confetti is punctuation** — full stop, comma, quotation mark, question mark,
+exclamation, em dash — plus a star, sparkle, keycap and heart. This is not decoration
+chosen at random: punctuation is precisely what Kivo adds to your speech.
 
-Product code must never reference the ramp directly. Use `--kivo-text`,
-`--kivo-border`, `--kivo-action` and their siblings, defined in
-[`tokens/kivo-tokens.css`](tokens/kivo-tokens.css). This is what makes the dark theme a
-token swap rather than an audit.
-
-### Dark theme
-
-Kivo's dark theme is a **true inversion, not a dimming**. Paper becomes ink; ink becomes
-paper. Both themes are first-class and both are checked before any interface change ships.
-
-### The one exception
-
-Destructive confirmations may use the platform's native danger colour. It is functional,
-never decorative, must never exceed roughly 1 % of the visible surface, and is
-explicitly outside the brand palette. Nothing else gets an exception.
-
-### Contrast
-
-All text meets **WCAG 2.2 AA**. Body text on paper (`ink-950` on `paper`) is 19.6:1.
-The lightest text permitted on paper is `ink-500` at 4.8:1, and only at 16 px or larger.
-`ink-400` is for disabled states and never carries meaning on its own.
+**Placement.** Scatter asymmetrically into negative space. Characters flank centred type
+and **never overlap it**. Confetti never sits inside a card's text column. Two clusters
+balancing a centred text block is the hero pattern; single small accents are the pattern
+everywhere else.
 
 ---
 
-## 4. Typography
+## 4. Colour
+
+Warm paper, one dark action, bright markers. **Ink is the only fill a button ever gets.**
+Every other colour is a marker on text or a fill in an illustration.
+
+### Surfaces
+
+| Token | Hex | Role |
+|---|---|---|
+| `--kivo-canvas` | `#FBFAF9` | Page background and nav. Warm paper, not screen white. |
+| `--kivo-stone` | `#F2F0ED` | **The inset border tone.** Also secondary panels. |
+| `--kivo-sand` | `#F6F4EF` | Secondary pill button, light tag surfaces. |
+| `--kivo-white` | `#FFFFFF` | Feature cards — only here does the hairline register. |
+| `--kivo-ink` | `#121212` | Primary action fill. The one dark surface. |
+| `--kivo-black` | `#000000` | The dark feature card and its shadow base. |
+
+### Text
+
+| Token | Hex | Role |
+|---|---|---|
+| `--kivo-heading` | `#343433` | Headings, nav, **and every illustration stroke**. |
+| `--kivo-body` | `#474645` | Body copy. Warm brown, never cool grey. |
+| `--kivo-muted` | `#7E7E7D` | Helper text, inactive nav, tertiary labels. |
+
+### Accents
+
+| Token | Hex | Role |
+|---|---|---|
+| `--kivo-stone-border` | `#E5D5C3` | Warm hairline on illustrations and the app icon. |
+| `--kivo-blue` | `#0086FC` | Inline links and list emphasis. **Never a button fill.** |
+| `--kivo-sky` | `#64C6FF` | Illustration fill. The first waveform bar. |
+| `--kivo-alt-blue` | `#00B2FF` | Secondary illustration fill, icon accents. |
+| `--kivo-green` | `#00C978` | Accent text, tags, short emphasised phrases. |
+| `--kivo-mint` | `#00CA48` | Wash behind content. Positive status pills. |
+| `--kivo-ember` | `#FF3E00` | **The signature link colour.** The third waveform bar. |
+| `--kivo-sun` | `#FFCD6C` | Illustration fill. The second waveform bar. |
+| `--kivo-gold` | `#D48F00` | Yellow accent text, where honey is too light to read. |
+| `--kivo-honey` | `#FFBB26` | Wash behind content. Pending status pills. |
+| `--kivo-pink` | `#FF58AE` | Badge fill and illustration accent. |
+| `--kivo-violet` | `#9F4FFF` | Wash and icon accent. **Never the primary CTA.** |
+| `--kivo-red` | `#FF2B3A` | Destructive and error only. Nothing else. |
+
+### The rules that matter
+
+1. **Ink `#121212` is the only button fill.** Not blue, not ember, not violet.
+2. **Ember `#FF3E00` is the demo-link colour** — underlined text, never a filled shape.
+3. **Blue is for inline links and list emphasis**, never a background.
+4. **Red is destructive only.** The warm-accent slot belongs to ember.
+5. **No gradients, anywhere.** The system is strictly flat.
+6. **Never separate surfaces white-on-white.** Shift to stone, or to ink.
+
+### Theme
+
+Kivo's marketing surfaces are **light only**. The cream canvas is the brand; there is no
+dark variant of it. The *application* follows the operating system's theme, using ink
+`#121212` as its dark ground — that is a product concern, not a brand one.
+
+---
+
+## 5. Typography
 
 | Role | Typeface | Notes |
 |---|---|---|
-| Interface, headings, body | **Inter** | Variable. SIL Open Font Licence. Neutral, excellent at small sizes, real tabular figures. |
-| Code, data, technical detail | **JetBrains Mono** | Apache 2.0. Used for anything measured, versioned or typed by a machine. |
+| Display, hero headings | **Bricolage Grotesque**, weight 500 | Slightly condensed, slightly playful. Makes a heading feel drawn rather than set. |
+| Everything else | **Inter**, 400 / 500 / 600 | The utility layer. |
+| Measured facts | **JetBrains Mono** | Versions, timings, hashes, key names. |
 
-Both are open-licensed and can ship with the app — a paid brand typeface in an MIT
-project is a licence trap for every fork.
+All three are open-licensed, so a fork inherits no licence trap.
 
-Kivo uses mono **as a texture, not just for code**: version strings, timings, key names,
-file paths and stage labels are all set in JetBrains Mono. It signals "this is a
-measured fact" and it is a large part of why the brand reads as technical without
-needing a single icon.
+**Never set display sizes in Inter.** The display face is what stops the page reading as
+a generic SaaS template.
 
 ### Scale
 
-| Token | Size | Weight | Tracking | Use |
-|---|---|---|---|---|
-| `--kivo-text-5xl` | 60 | 600 | −0.035em | Hero display |
-| `--kivo-text-4xl` | 48 | 600 | −0.035em | Page title |
-| `--kivo-text-3xl` | 38 | 600 | −0.022em | Section heading |
-| `--kivo-text-2xl` | 30 | 600 | −0.022em | Sub-section |
-| `--kivo-text-xl` | 24 | 600 | −0.022em | Card heading |
-| `--kivo-text-lg` | 20 | 400 | −0.011em | Lead paragraph |
-| `--kivo-text-md` | 17 | 400 | −0.011em | Long-form body |
-| `--kivo-text-base` | 16 | 400 | −0.011em | Body |
-| `--kivo-text-sm` | 14 | 400/500 | −0.011em | Interface default |
-| `--kivo-text-xs` | 12 | 500 | 0 | Metadata |
-| `--kivo-text-2xs` | 11 | 600 | +0.10em | Eyebrows, uppercase labels |
+| Role | Size | Line height | Tracking |
+|---|---|---|---|
+| display | 68 px | 75 | −0.031em |
+| heading-lg | 44 px | 53 | −0.020em |
+| heading | 23 px | 25 | −0.019em |
+| subheading | 19 px | 27 | −0.016em |
+| body | 17 px | 26 | −0.013em |
+| caption | 15 px | 22 | −0.014em |
+| micro | 12 px | 19 | −0.010em |
 
-**Tracking tightens as type grows.** Display type set at default tracking looks loose
-and amateur; the negative values above are doing real work.
-
-**Line height:** 1.06 display · 1.18 headings · 1.62 body.
-**Measure:** 62–72 characters. Never let a paragraph run the full width of a wide screen.
-**Weights:** 400, 500, 600 only. No 700, no italics in the interface.
+Tracking tightens as type grows; display set at default tracking looks loose and amateur.
+Use `text-wrap: balance` on display and `heading-lg` — an orphaned last word ruins a hero.
 
 ---
 
-## 5. Space, shape and elevation
+## 6. Space, shape and elevation
 
-**Grid:** 4 px base. Every dimension is a multiple of 4.
-**Container:** 1120 px, 24 px gutters. Prose narrows to 720 px.
+**Grid:** 4 px base, comfortable density.
+**Container:** 1200 px. Prose narrows to 680 px.
+**Section gap:** 80–120 px. **Card padding:** 32 px. **Element gap:** 8–12 px.
 
-**Radius:** 0 · 4 · 6 · 8 · 12 · 16 · 22 · full. Kivo is squared-off — buttons and
-inputs use 6–8 px, cards 12 px, the app icon squircle is 22 % of its edge. Pills are
-reserved for status badges only.
+**Radius:** 2 small · 6 badge · **10 cards and nav (the default)** · 32 buttons ·
+40 icons · 72 illustration · 9999 pills.
 
-**Elevation — the important rule: Kivo separates surfaces with hairlines, not shadows.**
-A 1 px `--kivo-border` is the default way to say "this is a distinct thing". Shadows are
-permitted only on chrome that genuinely floats above the operating system — the
-dictation overlay and menus — and there are exactly two, defined as `--kivo-shadow-hud`
-and `--kivo-shadow-menu`. Nothing else casts a shadow. Ever.
+### Elevation — the signature technique
 
----
+> **Cards are defined by a 1 px _inset_ hairline in stone, not by a drop shadow.**
+> `box-shadow: inset 0 0 0 1px #F2F0ED`
 
-## 6. Motion
+This is what gives every page its flat, pressed-into-paper quality. Nothing floats.
 
-Dictation happens in under 300 milliseconds. Animation that draws attention to itself
-makes a fast product feel slow.
+The only exceptions: the dark feature card may use `0 0 24px rgba(0,0,0,.15)`, and a
+card may use a whisper-light lift at `rgba(0,0,0,.04)`. **Never heavier than that.**
 
-| Token | Duration | Use |
-|---|---|---|
-| `--kivo-duration-instant` | 90 ms | Hover, focus, press |
-| `--kivo-duration-fast` | 140 ms | Toggles, small reveals |
-| `--kivo-duration-normal` | 220 ms | Panels, overlay entry |
-| `--kivo-duration-slow` | 380 ms | Full-screen transitions only |
+## 6b. Motion
 
-Easing: `--kivo-ease-standard` `cubic-bezier(0.2, 0, 0, 1)` for almost everything —
-it leaves immediately and settles gently. Never `linear`, except for the live waveform,
-which is data and must not be smoothed.
-
-**The recording overlay** is the one place motion is expressive: the waveform is driven
-by real input level, at real time, with no interpolation. A user must be able to tell a
-dead microphone from a quiet room instantly.
-
-`prefers-reduced-motion: reduce` sets every duration to zero. This is honoured in the
-tokens themselves, so it cannot be forgotten in a component.
+Fast 140 ms, normal 220 ms, easing `cubic-bezier(0.2, 0, 0, 1)`. Mascots may bob gently
+(±7 px, ~4.5 s) — that is the only decorative animation permitted, and
+`prefers-reduced-motion: reduce` stops it along with everything else.
 
 ---
 
 ## 7. Voice and tone
 
-Write like a precise colleague, not like a product.
+Warm on the surface, exact underneath.
 
-- **Plain and specific.** "Text appears at your cursor in under 300 ms", not "lightning-fast, seamless dictation".
+- **Plain and specific.** "Text appears at your cursor in under 300 ms", not "lightning-fast dictation".
 - **Second person, active voice.** "You hold a key. Kivo types."
 - **Numbers over adjectives.** Claims should be checkable.
-- **Never anthropomorphise.** Kivo does not listen, understand, think or help. It records, recognises and inserts. It is a tool, and the brand's credibility rests on not pretending otherwise.
-- **No exclamation marks. No emoji in product copy.** (README and issue templates may use them sparingly for navigation.)
-- **Own failure plainly.** "Kivo could not insert text into this app, so it copied it to your clipboard instead." Not "Oops! Something went wrong."
+- **Never anthropomorphise Kivo.** It records, recognises and inserts. It does not listen,
+  understand, think or help. **The cast is allowed a face; the product is not.**
+- **No exclamation marks. No emoji in product copy.**
+- **Own failure plainly.** "Kivo could not insert text into this app, so it copied it to
+  your clipboard instead." Not "Oops! Something went wrong."
 
-Capitalisation: **Kivo** always, never KIVO or kivo. Sentence case for all headings and
-buttons, never Title Case.
+Capitalisation: **Kivo** always. Sentence case for all headings and buttons.
 
 One-liners, in order of preference:
 > Turns voice into clean text.
@@ -250,17 +274,17 @@ One-liners, in order of preference:
 
 ## 8. Using the brand
 
-The code in this repository is MIT licensed. **The Kivo name and the assets in this
-directory are not covered by that licence.** See [NOTICE](../NOTICE) for the full terms.
+The code in this repository is MIT licensed. **The Kivo name, the marks and the cast in
+this directory are not covered by that licence.** See [NOTICE](../NOTICE).
 
-**You may** refer to Kivo by name, reproduce the logo unmodified to write or talk about
-the project, and say your work is a fork of Kivo.
+**You may** refer to Kivo by name, reproduce the logo unmodified to write about the
+project, and say your work is a fork of Kivo.
 
-**You may not** use the Kivo name or logo as the identity of your own fork, product or
-company, modify the logo and still present it as Kivo, or imply endorsement.
+**You may not** use the Kivo name, logo or characters as the identity of your own fork,
+product or company, modify them and still present them as Kivo, or imply endorsement.
 
-If you fork Kivo, please give it your own name and your own mark. The system in this
-document is a good starting point for building one.
+If you fork Kivo, give it your own name and your own mark. This document is a reasonable
+template for building one.
 
 ---
 
@@ -268,30 +292,29 @@ document is a good starting point for building one.
 
 ```
 brand/
-├── BRAND.md                    this document
+├── BRAND.md                      this document
 ├── logo/
-│   ├── kivo-mark.svg           mark · currentColor
-│   ├── kivo-mark-black.svg
-│   ├── kivo-mark-white.svg
-│   ├── kivo-mark-compact.svg   16–23 px variant
-│   ├── kivo-mark-compact-black.svg
-│   ├── kivo-mark-compact-white.svg
-│   ├── kivo-logotype.svg       drawn wordmark
-│   ├── kivo-logotype-black.svg
-│   ├── kivo-logotype-white.svg
-│   ├── kivo-lockup.svg         mark + wordmark · the default logo
-│   ├── kivo-lockup-black.svg
-│   ├── kivo-lockup-white.svg
-│   ├── kivo-app-icon.svg
-│   ├── kivo-app-icon-inverse.svg
+│   ├── kivo-lockup-colour.svg    THE default logo
+│   ├── kivo-mark-colour.svg      the mark, in colour
+│   ├── kivo-mark.svg             single-colour · currentColor
+│   ├── kivo-mark-compact.svg     16–23 px variant
+│   ├── kivo-logotype.svg         the drawn word
+│   ├── kivo-app-icon.svg         paper squircle
 │   └── favicon.svg
+├── illustration/
+│   ├── mascot-mic.svg            the listening one
+│   ├── mascot-bubble.svg         what you said
+│   ├── mascot-page.svg           the clean text
+│   ├── mascot-caret.svg          where it lands
+│   ├── mascot-wave.svg           your voice, mid-air
+│   └── confetti-*.svg            punctuation ×10
 └── tokens/
-    ├── kivo-tokens.css         the implementation source of truth
-    └── kivo-tokens.json        W3C design-token format, for tooling
+    ├── kivo-tokens.css           the implementation source of truth
+    └── kivo-tokens.json          W3C design-token format, for tooling
 ```
 
-Every asset is SVG. There are no raster masters — the marks are geometric and any PNG
-you need should be exported from these files at the size you need it.
+Every asset is SVG. There are no raster masters — export a PNG from these at whatever
+size you need it.
 
 ---
 
