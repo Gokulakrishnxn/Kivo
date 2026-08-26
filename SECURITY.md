@@ -89,6 +89,17 @@ security bug:
 9. History, when enabled, is encrypted at rest with a key held in the OS keychain, and
    can be disabled entirely so that nothing is written to disk.
 
+## Known advisories we are not acting on
+
+Kept here so the reasoning is public and nobody re-investigates it.
+
+| Advisory | Package | Why it is not being fixed |
+|---|---|---|
+| Unsoundness in `glib`'s `Iterator` impls (medium) | `glib` 0.18.5 | Reached only through `gtk` → Tauri's **Linux** backend. `cargo tree --target aarch64-apple-darwin` resolves zero `glib` nodes; the Linux target resolves 29. Kivo ships macOS and Windows only, so the code is never compiled. It also cannot be patched locally — `gtk` 0.18.2 pins `glib ^0.18`, so a bump to 0.20 is rejected by the resolver. Revisit if Linux support lands, or when Tauri updates its GTK stack. |
+
+If you can show that any entry in this table *is* reachable on a shipping build,
+that is a valid vulnerability report and we would like to hear it.
+
 ## Supported versions
 
 | Version | Supported |
