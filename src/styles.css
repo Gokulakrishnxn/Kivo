@@ -144,3 +144,82 @@ input[type="text"] { width: 100%; user-select: text; }
   box-shadow: var(--kivo-hairline); border-radius: 6px; padding: 3px 7px;
 }
 @media (prefers-reduced-motion: reduce) { .hud .wave i { animation: none; height: 12px; } }
+
+/* ── dark theme ──────────────────────────────────────────────────────────
+   The marketing site is light-only — the cream canvas is the brand. The
+   application is different: it sits inside the user's OS all day and has to
+   follow it. Ink is the dark ground, per BRAND.md. Only the semantic tokens
+   are redefined; nothing below this block knows which theme is active. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --kivo-canvas:  #121212;
+    --kivo-white:   #1B1B1A;
+    --kivo-stone:   #2A2A28;
+    --kivo-sand:    #232322;
+    --kivo-heading: #F4F2EF;
+    --kivo-body:    #CFCCC7;
+    --kivo-muted:   #9A9792;
+    --kivo-ink:     #F4F2EF;      /* the "one dark action" inverts to light */
+    --kivo-badge-ink: #10231A;
+    --kivo-hairline: inset 0 0 0 1px #2A2A28;
+    --kivo-hairline-warm: inset 0 0 0 1px #3A362F;
+  }
+  /* Ink is now light, so text on it must be dark. */
+  .btn { color: #121212; }
+  .btn.sand { color: var(--kivo-heading); }
+  .pill[data-state="recording"], .pill[data-state="working"] { color: #10231A; }
+  .switch:checked::after { background: #121212; }
+}
+
+/* ── onboarding ─────────────────────────────────────────────────────────── */
+.onboard {
+  max-width: 520px; margin: 0 auto; padding: 56px var(--kivo-space-6) var(--kivo-space-7);
+  display: grid; gap: var(--kivo-space-4); justify-items: start;
+  -webkit-app-region: drag;
+}
+.onboard > * { -webkit-app-region: no-drag; }
+.onboard h1 {
+  font-family: var(--kivo-font-display); font-weight: 500;
+  font-size: 30px; line-height: 1.15; letter-spacing: -0.02em;
+  color: var(--kivo-ink); text-wrap: balance;
+}
+.onboard p { color: var(--kivo-body); font-size: var(--kivo-body-size); line-height: 1.55; }
+.onboard__action { margin-top: var(--kivo-space-3); width: 100%; }
+.onboard__dots { display: flex; gap: 6px; margin-top: var(--kivo-space-3); }
+.onboard__dots i {
+  width: 22px; height: 3px; border-radius: 999px; background: var(--kivo-stone); display: block;
+  transition: background var(--kivo-duration-fast) var(--kivo-ease);
+}
+.onboard__dots i[data-on="true"] { background: var(--kivo-ink); }
+.onboard__step { font-size: var(--kivo-micro); color: var(--kivo-muted); margin-top: var(--kivo-space-4); }
+.stack { display: grid; gap: 10px; justify-items: start; }
+.stack .btn { min-width: 190px; justify-content: center; }
+.ok  { color: var(--kivo-green-ink); font-size: var(--kivo-caption); }
+.bad { color: var(--kivo-ember-ink); font-size: var(--kivo-caption); }
+.tryit {
+  width: 100%; background: var(--kivo-white); box-shadow: var(--kivo-hairline);
+  border: 0; border-radius: 10px; padding: 12px 14px; resize: none;
+  font: inherit; color: var(--kivo-heading); user-select: text;
+}
+
+/* ── vocabulary chips and inline forms ──────────────────────────────────── */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 0 10px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--kivo-sand); box-shadow: var(--kivo-hairline);
+  border-radius: 999px; padding: 5px 6px 5px 12px;
+  font-size: var(--kivo-micro); color: var(--kivo-heading);
+}
+.chip button {
+  border: 0; background: transparent; cursor: pointer; color: var(--kivo-muted);
+  width: 18px; height: 18px; border-radius: 999px; line-height: 1;
+}
+.chip button:hover { color: var(--kivo-ember-ink); }
+.inline { display: flex; gap: 6px; padding-bottom: 4px; }
+.inline input { flex: 1; min-width: 0; }
+.entry__foot { display: flex; align-items: center; gap: var(--kivo-space-3); margin-top: 4px; }
+.linkish {
+  border: 0; background: transparent; cursor: pointer; padding: 2px 0;
+  font-size: var(--kivo-micro); color: var(--kivo-ember-ink);
+  text-decoration: underline; text-underline-offset: 2px;
+}
