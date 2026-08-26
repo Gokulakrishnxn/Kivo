@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 277 120" width="277" height="120" fill="none" role="img" aria-label="Kivo">
+  <title>Kivo</title>
+  <g stroke="#0A0A0A" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <!-- K -->
+    <path d="M27 31V89"/>
+    <path d="M34 60L76 31"/>
+    <path d="M34 60L79 89"/>
+    <!-- i -->
+    <path d="M110 51V89"/>
+    <!-- v -->
+    <path d="M133 51L157 89L181 51"/>
+    <!-- o -->
+    <circle cx="229" cy="70" r="21"/>
+  </g>
+  <!-- tittle -->
+  <circle cx="110" cy="28" r="7" fill="#0A0A0A"/>
+</svg>
