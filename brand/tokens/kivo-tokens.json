@@ -1,0 +1,95 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$description": "Kivo design tokens. Strictly monochrome: emphasis comes from inversion and weight, never hue.",
+  "color": {
+    "paper": { "$value": "#FFFFFF", "$type": "color" },
+    "ink": {
+      "50":  { "$value": "#F7F7F7", "$type": "color" },
+      "100": { "$value": "#EFEFEF", "$type": "color" },
+      "200": { "$value": "#E2E2E2", "$type": "color" },
+      "300": { "$value": "#CBCBCB", "$type": "color" },
+      "400": { "$value": "#A6A6A6", "$type": "color" },
+      "500": { "$value": "#7C7C7C", "$type": "color" },
+      "600": { "$value": "#5C5C5C", "$type": "color" },
+      "700": { "$value": "#404040", "$type": "color" },
+      "800": { "$value": "#292929", "$type": "color" },
+      "900": { "$value": "#171717", "$type": "color" },
+      "950": { "$value": "#0A0A0A", "$type": "color" }
+    }
+  },
+  "semantic": {
+    "light": {
+      "bg":             { "$value": "{color.paper}" },
+      "bgSubtle":       { "$value": "{color.ink.50}" },
+      "bgInset":        { "$value": "{color.ink.100}" },
+      "border":         { "$value": "{color.ink.200}" },
+      "borderStrong":   { "$value": "{color.ink.300}" },
+      "text":           { "$value": "{color.ink.950}" },
+      "textSecondary":  { "$value": "{color.ink.600}" },
+      "textMuted":      { "$value": "{color.ink.500}" },
+      "action":         { "$value": "{color.ink.950}" },
+      "actionText":     { "$value": "{color.paper}" }
+    },
+    "dark": {
+      "bg":             { "$value": "{color.ink.950}" },
+      "bgSubtle":       { "$value": "{color.ink.900}" },
+      "bgInset":        { "$value": "#000000" },
+      "border":         { "$value": "{color.ink.800}" },
+      "borderStrong":   { "$value": "{color.ink.700}" },
+      "text":           { "$value": "{color.paper}" },
+      "textSecondary":  { "$value": "{color.ink.400}" },
+      "textMuted":      { "$value": "{color.ink.500}" },
+      "action":         { "$value": "{color.paper}" },
+      "actionText":     { "$value": "{color.ink.950}" }
+    }
+  },
+  "font": {
+    "sans": { "$value": "Inter", "$type": "fontFamily" },
+    "mono": { "$value": "JetBrains Mono", "$type": "fontFamily" }
+  },
+  "fontSize": {
+    "2xs":  { "$value": "11px" }, "xs":  { "$value": "12px" },
+    "sm":   { "$value": "14px" }, "base":{ "$value": "16px" },
+    "md":   { "$value": "17px" }, "lg":  { "$value": "20px" },
+    "xl":   { "$value": "24px" }, "2xl": { "$value": "30px" },
+    "3xl":  { "$value": "38px" }, "4xl": { "$value": "48px" },
+    "5xl":  { "$value": "60px" }
+  },
+  "fontWeight": {
+    "regular":  { "$value": 400 },
+    "medium":   { "$value": 500 },
+    "semibold": { "$value": 600 }
+  },
+  "tracking": {
+    "display": { "$value": "-0.035em" },
+    "heading": { "$value": "-0.022em" },
+    "body":    { "$value": "-0.011em" },
+    "eyebrow": { "$value": "0.10em" }
+  },
+  "space": {
+    "1": { "$value": "4px" },  "2": { "$value": "8px" },   "3": { "$value": "12px" },
+    "4": { "$value": "16px" }, "5": { "$value": "24px" },  "6": { "$value": "32px" },
+    "7": { "$value": "48px" }, "8": { "$value": "64px" },  "9": { "$value": "96px" },
+    "10":{ "$value": "128px" }
+  },
+  "radius": {
+    "none": { "$value": "0px" },  "xs": { "$value": "4px" },  "sm": { "$value": "6px" },
+    "md":   { "$value": "8px" },  "lg": { "$value": "12px" }, "xl": { "$value": "16px" },
+    "2xl":  { "$value": "22px" }, "full": { "$value": "999px" }
+  },
+  "duration": {
+    "instant": { "$value": "90ms" },  "fast":   { "$value": "140ms" },
+    "normal":  { "$value": "220ms" }, "slow":   { "$value": "380ms" }
+  },
+  "easing": {
+    "standard": { "$value": "cubic-bezier(0.2, 0, 0, 1)" },
+    "out":      { "$value": "cubic-bezier(0.16, 1, 0.3, 1)" },
+    "inOut":    { "$value": "cubic-bezier(0.65, 0, 0.35, 1)" }
+  },
+  "layout": {
+    "container":   { "$value": "1120px" },
+    "containerSm": { "$value": "720px" },
+    "gutter":      { "$value": "24px" },
+    "hairline":    { "$value": "1px" }
+  }
+}
