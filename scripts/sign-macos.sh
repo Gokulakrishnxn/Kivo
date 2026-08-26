@@ -24,8 +24,18 @@ set -euo pipefail
 # Note: macOS ships bash 3.2, where expanding an empty array under `set -u`
 # is an error — hence the ${arr[@]+"${arr[@]}"} guards below.
 
-APP="src-tauri/target/release/bundle/macos/Kivo.app"
-[ -d "$APP" ] || { echo "No app at $APP — run 'pnpm tauri build --bundles app' first." >&2; exit 1; }
+# Accepts an explicit bundle path; defaults to the universal build, then the
+# host-arch one.
+APP="${1:-}"
+if [ -z "$APP" ]; then
+  for candidate in \
+    "src-tauri/target/universal-apple-darwin/release/bundle/macos/Kivo.app" \
+    "src-tauri/target/release/bundle/macos/Kivo.app"; do
+    [ -d "$candidate" ] && { APP="$candidate"; break; }
+  done
+fi
+[ -d "$APP" ] || { echo "No app found — run 'pnpm tauri build --bundles app' first." >&2; exit 1; }
+echo "Bundle: $APP"
 
 IDENTITY="${APPLE_SIGNING_IDENTITY:--}"
 ENTITLEMENTS="src-tauri/Entitlements.plist"

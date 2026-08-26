@@ -136,10 +136,27 @@ violation of any of these is a security vulnerability** — see [SECURITY.md](SE
 
 ## Getting started
 
-> [!WARNING]
-> Kivo is pre-release. It builds, runs and transcribes, but it is not yet signed
-> with a Developer ID — so on any Mac other than the one that built it, macOS will
-> refuse to open it until you right-click → Open. See [docs/SIGNING.md](docs/SIGNING.md).
+**[Download Kivo 0.1.0 for macOS →](https://github.com/Gokulakrishnxn/Kivo/releases/latest)**
+Universal — Apple Silicon and Intel, macOS 11 or later.
+
+> [!IMPORTANT]
+> Kivo is not signed with an Apple Developer ID, so after dragging it to
+> Applications you must **right-click → Open** the first time. macOS may say the
+> app is *"damaged"* — it is not. That is the message it shows for any app it
+> cannot trace to a paid developer account. You do this once.
+>
+> Verify the download first: the SHA-256 is on the
+> [release page](https://github.com/Gokulakrishnxn/Kivo/releases/latest).
+
+Kivo then asks for two permissions, explaining each before it does:
+**Microphone**, and **Accessibility** (System Settings → Privacy & Security →
+Accessibility) — which is how it sees your hotkey and inserts text. It reads
+nothing from your screen.
+
+The speech model is a separate ~460 MB download offered during onboarding,
+verified against a pinned checksum.
+
+Then hold **Right Option**, speak, and let go.
 
 ### Build it
 
@@ -147,7 +164,9 @@ violation of any of these is a security vulnerability** — see [SECURITY.md](SE
 git clone https://github.com/Gokulakrishnxn/Kivo.git
 cd Kivo
 pnpm install
-pnpm tauri build
+pnpm tauri build --target universal-apple-darwin --bundles app
+./scripts/sign-macos.sh        # ad-hoc signature, no certificate needed
+./scripts/package-macos.sh     # produces dist/Kivo-<version>-<archs>.dmg
 ```
 
 You need **Rust** (stable), **Node 20+**, **pnpm**, and Xcode Command Line Tools.
