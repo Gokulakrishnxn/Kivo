@@ -28,7 +28,10 @@
      --------------------------------------------------------------------- */
   --kivo-heading:     #343433;  /* headings, nav, decorative strokes      */
   --kivo-body:        #474645;  /* body copy, secondary text              */
-  --kivo-muted:       #7E7E7D;  /* helper text, inactive nav, tertiary    */
+  --kivo-muted:       #6D6D6C;  /* helper text, inactive nav, tertiary    */
+                                /* darkened from the reference's #7E7E7D, which  */
+                                /* is 3.90:1 on canvas and fails WCAG AA at the  */
+                                /* 12-15px sizes it is actually used at.         */
   --kivo-on-dark:     #FFFFFF;
 
   /* ---------------------------------------------------------------------
@@ -54,6 +57,18 @@
   --kivo-violet:      #9F4FFF;  /* violet wash. Never the primary CTA.    */
   --kivo-red:         #FF2B3A;  /* destructive and error ONLY             */
 
+  /* Accent TEXT tints. The bright accents above are illustration fills, washes
+     and badge grounds — as small text on cream every one of them fails WCAG AA
+     (green is 2.09:1). These are the same hues darkened to the lightest value
+     that clears 4.5:1 on canvas. Use these whenever an accent carries words. */
+  --kivo-green-ink:   #00834E;  /* 4.62:1 on canvas */
+  --kivo-blue-ink:    #0072D6;  /* 4.60:1 */
+  --kivo-ember-ink:   #D63400;  /* 4.63:1 */
+  --kivo-gold-ink:    #9B6800;  /* 4.61:1 */
+  --kivo-pink-ink:    #DF0073;  /* 4.59:1 */
+  --kivo-violet-ink:  #943BFF;  /* 4.65:1 */
+  --kivo-badge-ink:   #0A2E14;  /* label on any accent fill; >=6.7:1 on all    */
+
   /* ---------------------------------------------------------------------
      4. SEMANTIC — what product code should actually reference
      --------------------------------------------------------------------- */
@@ -63,8 +78,8 @@
   --kivo-text:          var(--kivo-heading);
   --kivo-text-body:     var(--kivo-body);
   --kivo-text-muted:    var(--kivo-muted);
-  --kivo-link:          var(--kivo-blue);
-  --kivo-link-accent:   var(--kivo-ember);
+  --kivo-link:          var(--kivo-blue-ink);
+  --kivo-link-accent:   var(--kivo-ember-ink);
   --kivo-action:        var(--kivo-ink);
   --kivo-action-text:   var(--kivo-white);
   --kivo-focus:         var(--kivo-ink);

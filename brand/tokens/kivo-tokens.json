@@ -2,84 +2,291 @@
   "$schema": "https://design-tokens.github.io/community-group/format/",
   "$description": "Kivo design tokens. A storybook spread on cream parchment: quiet chrome, inset hairlines instead of shadows, bright flat accents used as punctuation.",
   "surface": {
-    "canvas": { "$value": "#FBFAF9", "$type": "color" },
-    "stone":  { "$value": "#F2F0ED", "$type": "color" },
-    "sand":   { "$value": "#F6F4EF", "$type": "color" },
-    "white":  { "$value": "#FFFFFF", "$type": "color" },
-    "ink":    { "$value": "#121212", "$type": "color" },
-    "black":  { "$value": "#000000", "$type": "color" }
+    "canvas": {
+      "$value": "#FBFAF9",
+      "$type": "color"
+    },
+    "stone": {
+      "$value": "#F2F0ED",
+      "$type": "color"
+    },
+    "sand": {
+      "$value": "#F6F4EF",
+      "$type": "color"
+    },
+    "white": {
+      "$value": "#FFFFFF",
+      "$type": "color"
+    },
+    "ink": {
+      "$value": "#121212",
+      "$type": "color"
+    },
+    "black": {
+      "$value": "#000000",
+      "$type": "color"
+    }
   },
   "text": {
-    "heading": { "$value": "#343433", "$type": "color" },
-    "body":    { "$value": "#474645", "$type": "color" },
-    "muted":   { "$value": "#7E7E7D", "$type": "color" },
-    "onDark":  { "$value": "#FFFFFF", "$type": "color" }
+    "heading": {
+      "$value": "#343433",
+      "$type": "color"
+    },
+    "body": {
+      "$value": "#474645",
+      "$type": "color"
+    },
+    "muted": {
+      "$value": "#6D6D6C",
+      "$type": "color"
+    },
+    "onDark": {
+      "$value": "#FFFFFF",
+      "$type": "color"
+    }
   },
   "accent": {
-    "stoneBorder": { "$value": "#E5D5C3", "$type": "color" },
-    "blue":        { "$value": "#0086FC", "$type": "color" },
-    "sky":         { "$value": "#64C6FF", "$type": "color" },
-    "altBlue":     { "$value": "#00B2FF", "$type": "color" },
-    "green":       { "$value": "#00C978", "$type": "color" },
-    "mint":        { "$value": "#00CA48", "$type": "color" },
-    "ember":       { "$value": "#FF3E00", "$type": "color" },
-    "sun":         { "$value": "#FFCD6C", "$type": "color" },
-    "gold":        { "$value": "#D48F00", "$type": "color" },
-    "honey":       { "$value": "#FFBB26", "$type": "color" },
-    "pink":        { "$value": "#FF58AE", "$type": "color" },
-    "violet":      { "$value": "#9F4FFF", "$type": "color" },
-    "red":         { "$value": "#FF2B3A", "$type": "color" }
+    "stoneBorder": {
+      "$value": "#E5D5C3",
+      "$type": "color"
+    },
+    "blue": {
+      "$value": "#0086FC",
+      "$type": "color"
+    },
+    "sky": {
+      "$value": "#64C6FF",
+      "$type": "color"
+    },
+    "altBlue": {
+      "$value": "#00B2FF",
+      "$type": "color"
+    },
+    "green": {
+      "$value": "#00C978",
+      "$type": "color"
+    },
+    "mint": {
+      "$value": "#00CA48",
+      "$type": "color"
+    },
+    "ember": {
+      "$value": "#FF3E00",
+      "$type": "color"
+    },
+    "sun": {
+      "$value": "#FFCD6C",
+      "$type": "color"
+    },
+    "gold": {
+      "$value": "#D48F00",
+      "$type": "color"
+    },
+    "honey": {
+      "$value": "#FFBB26",
+      "$type": "color"
+    },
+    "pink": {
+      "$value": "#FF58AE",
+      "$type": "color"
+    },
+    "violet": {
+      "$value": "#9F4FFF",
+      "$type": "color"
+    },
+    "red": {
+      "$value": "#FF2B3A",
+      "$type": "color"
+    }
   },
   "font": {
-    "display": { "$value": "Bricolage Grotesque", "$type": "fontFamily" },
-    "sans":    { "$value": "Inter", "$type": "fontFamily" },
-    "mono":    { "$value": "JetBrains Mono", "$type": "fontFamily" }
+    "display": {
+      "$value": "Bricolage Grotesque",
+      "$type": "fontFamily"
+    },
+    "sans": {
+      "$value": "Inter",
+      "$type": "fontFamily"
+    },
+    "mono": {
+      "$value": "JetBrains Mono",
+      "$type": "fontFamily"
+    }
   },
   "typeScale": {
-    "micro":      { "size": "12px", "lineHeight": "19px", "tracking": "-0.010em" },
-    "caption":    { "size": "15px", "lineHeight": "22px", "tracking": "-0.014em" },
-    "body":       { "size": "17px", "lineHeight": "26px", "tracking": "-0.013em" },
-    "subheading": { "size": "19px", "lineHeight": "27px", "tracking": "-0.016em" },
-    "heading":    { "size": "23px", "lineHeight": "25px", "tracking": "-0.019em" },
-    "headingLg":  { "size": "44px", "lineHeight": "53px", "tracking": "-0.020em" },
-    "display":    { "size": "68px", "lineHeight": "75px", "tracking": "-0.031em" }
+    "micro": {
+      "size": "12px",
+      "lineHeight": "19px",
+      "tracking": "-0.010em"
+    },
+    "caption": {
+      "size": "15px",
+      "lineHeight": "22px",
+      "tracking": "-0.014em"
+    },
+    "body": {
+      "size": "17px",
+      "lineHeight": "26px",
+      "tracking": "-0.013em"
+    },
+    "subheading": {
+      "size": "19px",
+      "lineHeight": "27px",
+      "tracking": "-0.016em"
+    },
+    "heading": {
+      "size": "23px",
+      "lineHeight": "25px",
+      "tracking": "-0.019em"
+    },
+    "headingLg": {
+      "size": "44px",
+      "lineHeight": "53px",
+      "tracking": "-0.020em"
+    },
+    "display": {
+      "size": "68px",
+      "lineHeight": "75px",
+      "tracking": "-0.031em"
+    }
   },
   "fontWeight": {
-    "regular":  { "$value": 400 },
-    "medium":   { "$value": 500 },
-    "semibold": { "$value": 600 }
+    "regular": {
+      "$value": 400
+    },
+    "medium": {
+      "$value": 500
+    },
+    "semibold": {
+      "$value": 600
+    }
   },
   "space": {
-    "1": { "$value": "4px" },  "2": { "$value": "8px" },   "3": { "$value": "12px" },
-    "4": { "$value": "16px" }, "5": { "$value": "24px" },  "6": { "$value": "32px" },
-    "7": { "$value": "48px" }, "8": { "$value": "80px" },  "9": { "$value": "120px" }
+    "1": {
+      "$value": "4px"
+    },
+    "2": {
+      "$value": "8px"
+    },
+    "3": {
+      "$value": "12px"
+    },
+    "4": {
+      "$value": "16px"
+    },
+    "5": {
+      "$value": "24px"
+    },
+    "6": {
+      "$value": "32px"
+    },
+    "7": {
+      "$value": "48px"
+    },
+    "8": {
+      "$value": "80px"
+    },
+    "9": {
+      "$value": "120px"
+    }
   },
   "radius": {
-    "small":        { "$value": "2px" },
-    "badge":        { "$value": "6px" },
-    "card":         { "$value": "10px" },
-    "nav":          { "$value": "10px" },
-    "icon":         { "$value": "40px" },
-    "illustration": { "$value": "72px" },
-    "button":       { "$value": "32px" },
-    "pill":         { "$value": "9999px" }
+    "small": {
+      "$value": "2px"
+    },
+    "badge": {
+      "$value": "6px"
+    },
+    "card": {
+      "$value": "10px"
+    },
+    "nav": {
+      "$value": "10px"
+    },
+    "icon": {
+      "$value": "40px"
+    },
+    "illustration": {
+      "$value": "72px"
+    },
+    "button": {
+      "$value": "32px"
+    },
+    "pill": {
+      "$value": "9999px"
+    }
   },
   "elevation": {
-    "hairline":     { "$value": "inset 0 0 0 1px #F2F0ED" },
-    "hairlineWarm": { "$value": "inset 0 0 0 1px #E5D5C3" },
-    "lift":         { "$value": "0 1px 6px 0 rgba(0,0,0,0.04), 0 0 24px 0 rgba(0,0,0,0.05)" },
-    "darkCard":     { "$value": "0 0 24px 0 rgba(0,0,0,0.15)" }
+    "hairline": {
+      "$value": "inset 0 0 0 1px #F2F0ED"
+    },
+    "hairlineWarm": {
+      "$value": "inset 0 0 0 1px #E5D5C3"
+    },
+    "lift": {
+      "$value": "0 1px 6px 0 rgba(0,0,0,0.04), 0 0 24px 0 rgba(0,0,0,0.05)"
+    },
+    "darkCard": {
+      "$value": "0 0 24px 0 rgba(0,0,0,0.15)"
+    }
   },
   "layout": {
-    "container": { "$value": "1200px" },
-    "prose":     { "$value": "680px" },
-    "gutter":    { "$value": "24px" },
-    "sectionGap":{ "$value": "80px–120px" },
-    "cardPadding":{ "$value": "32px" }
+    "container": {
+      "$value": "1200px"
+    },
+    "prose": {
+      "$value": "680px"
+    },
+    "gutter": {
+      "$value": "24px"
+    },
+    "sectionGap": {
+      "$value": "80px–120px"
+    },
+    "cardPadding": {
+      "$value": "32px"
+    }
   },
   "motion": {
-    "fast":   { "$value": "140ms" },
-    "normal": { "$value": "220ms" },
-    "ease":   { "$value": "cubic-bezier(0.2, 0, 0, 1)" }
+    "fast": {
+      "$value": "140ms"
+    },
+    "normal": {
+      "$value": "220ms"
+    },
+    "ease": {
+      "$value": "cubic-bezier(0.2, 0, 0, 1)"
+    }
+  },
+  "accentText": {
+    "$description": "Accent hues darkened to the lightest value clearing WCAG AA (4.5:1) on canvas. Use whenever an accent carries text.",
+    "greenInk": {
+      "$value": "#00834E",
+      "$type": "color"
+    },
+    "blueInk": {
+      "$value": "#0072D6",
+      "$type": "color"
+    },
+    "emberInk": {
+      "$value": "#D63400",
+      "$type": "color"
+    },
+    "goldInk": {
+      "$value": "#9B6800",
+      "$type": "color"
+    },
+    "pinkInk": {
+      "$value": "#DF0073",
+      "$type": "color"
+    },
+    "violetInk": {
+      "$value": "#943BFF",
+      "$type": "color"
+    },
+    "badgeInk": {
+      "$value": "#0A2E14",
+      "$type": "color"
+    }
   }
 }
