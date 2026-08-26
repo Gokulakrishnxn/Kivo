@@ -14,7 +14,9 @@ use crate::asr::{parakeet::Parakeet, Recogniser, Unavailable};
 use crate::audio::{self, Capture};
 use crate::clean;
 use crate::config::Config;
+use crate::history::{self, History};
 use crate::inject;
+use crate::models::NetworkEvent;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
@@ -24,21 +26,17 @@ pub enum State {
     Working,
 }
 
-#[derive(Debug, Clone, Serialize)]
-pub struct Entry {
-    pub raw: String,
-    pub text: String,
-    pub mode: String,
-    pub millis: u64,
-    pub at: String,
-}
+pub use history::Entry;
 
 pub struct Kivo {
     pub config: Mutex<Config>,
     recogniser: Mutex<Box<dyn Recogniser>>,
     capture: Mutex<Option<Capture>>,
     pub state: Mutex<State>,
-    pub history: Mutex<Vec<Entry>>,
+    pub history: Mutex<History>,
+    /// Every outbound request Kivo has attempted, so the network panel in
+    /// Settings reports what happened rather than asserting what should.
+    pub network: Mutex<Vec<NetworkEvent>>,
     /// Non-fatal problems worth showing in the interface.
     pub last_error: Mutex<Option<String>>,
 }
@@ -51,7 +49,7 @@ impl Kivo {
         // A missing model must not stop the app from starting; the user needs
         // the interface in order to fix it.
         let recogniser: Box<dyn Recogniser> = if Parakeet::is_installed(&dir) {
-            match Parakeet::load(&dir, num_threads()) {
+            match Parakeet::load_with_hotwords(&dir, num_threads(), &config.vocabulary) {
                 Ok(p) => Box::new(p),
                 Err(e) => {
                     tracing::error!("could not load Parakeet: {e:#}");
@@ -62,27 +60,54 @@ impl Kivo {
             Box::new(Unavailable)
         };
 
+        let history = History::open(config.keep_history);
+
         Arc::new(Self {
             config: Mutex::new(config),
             recogniser: Mutex::new(recogniser),
             capture: Mutex::new(None),
             state: Mutex::new(State::Idle),
-            history: Mutex::new(Vec::new()),
+            history: Mutex::new(history),
+            network: Mutex::new(Vec::new()),
             last_error: Mutex::new(None),
         })
+    }
+
+    /// Apply a new configuration, reopening whatever it changes.
+    pub fn apply_config(&self, next: Config) {
+        let previous = self.config.lock().clone();
+        *self.config.lock() = next.clone();
+
+        if previous.keep_history != next.keep_history {
+            *self.history.lock() = History::open(next.keep_history);
+            if !next.keep_history {
+                // Off means gone, not merely ignored.
+                History::destroy();
+            }
+        }
+        if previous.vocabulary != next.vocabulary {
+            if let Err(e) = self.reload_model() {
+                tracing::warn!("could not reload the model for new vocabulary: {e:#}");
+            }
+        }
     }
 
     pub fn describe_model(&self) -> String {
         self.recogniser.lock().describe()
     }
 
-    /// Try to (re)load the model — used after a download completes.
+    /// Try to (re)load the model — after a download, or a vocabulary change.
     pub fn reload_model(&self) -> Result<String> {
         let dir = Parakeet::default_dir();
-        let p = Parakeet::load(&dir, num_threads())?;
+        let vocab = self.config.lock().vocabulary.clone();
+        let p = Parakeet::load_with_hotwords(&dir, num_threads(), &vocab)?;
         let desc = p.describe();
         *self.recogniser.lock() = Box::new(p);
         Ok(desc)
+    }
+
+    pub fn recent_history(&self, limit: usize, query: &str) -> Vec<Entry> {
+        self.history.lock().recent(limit, query)
     }
 
     /// Key down: open the microphone.
@@ -90,7 +115,8 @@ impl Kivo {
         if *self.state.lock() != State::Idle {
             return;
         }
-        match Capture::start() {
+        let device = self.config.lock().input_device.clone();
+        match Capture::start(&device) {
             Ok(c) => {
                 *self.capture.lock() = Some(c);
                 *self.state.lock() = State::Recording;
@@ -149,22 +175,27 @@ impl Kivo {
             ));
         }
 
-        let entry = Entry {
-            raw,
-            text,
-            mode: format!("{:?}", cfg.mode),
-            millis: started.elapsed().as_millis() as u64,
-            at: timestamp(),
-        };
+        let millis = started.elapsed().as_millis() as u64;
+        let mode = cfg.mode.label().to_string();
 
-        if cfg.keep_history {
-            let mut h = self.history.lock();
-            h.insert(0, entry.clone());
-            h.truncate(cfg.history_limit);
-        }
+        let id = self
+            .history
+            .lock()
+            .insert(&raw, &text, &mode, millis, cfg.history_limit)
+            .unwrap_or_else(|e| {
+                tracing::error!("could not record history: {e:#}");
+                0
+            });
 
         *self.state.lock() = State::Idle;
-        Some(entry)
+        Some(Entry {
+            id,
+            raw,
+            text,
+            mode,
+            millis,
+            at: now_secs(),
+        })
     }
 
     /// Discard whatever is being recorded without inserting anything.
@@ -182,13 +213,12 @@ fn num_threads() -> i32 {
         .unwrap_or(2)
 }
 
-fn timestamp() -> String {
+fn now_secs() -> i64 {
     use std::time::{SystemTime, UNIX_EPOCH};
-    let secs = SystemTime::now()
+    SystemTime::now()
         .duration_since(UNIX_EPOCH)
-        .map(|d| d.as_secs())
-        .unwrap_or(0);
-    secs.to_string()
+        .map(|d| d.as_secs() as i64)
+        .unwrap_or(0)
 }
 
 #[cfg(test)]
