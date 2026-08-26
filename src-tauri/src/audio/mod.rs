@@ -21,16 +21,44 @@ pub struct Capture {
     pub device_name: String,
 }
 
+/// Every input device the OS is offering, newest listing each call.
+pub fn input_devices() -> Vec<String> {
+    let host = cpal::default_host();
+    host.input_devices()
+        .map(|ds| {
+            ds.filter_map(|d| d.description().ok().map(|x| x.name().to_string()))
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
 impl Capture {
-    /// Open the default input device and start filling the ring.
+    /// Open an input device and start filling the ring.
+    ///
+    /// `preferred` names a device; an empty string, or a name that is no longer
+    /// present, falls back to the system default. Devices get unplugged, and a
+    /// dictation tool that simply stops working when a headset is removed is
+    /// worse than one that quietly follows the default.
     ///
     /// The device is opened here and dropped in `stop`, so the OS microphone
     /// indicator reflects reality — a dictation tool that holds the mic open
     /// while idle has lost the privacy argument whatever its source says.
-    pub fn start() -> Result<Self> {
+    pub fn start(preferred: &str) -> Result<Self> {
         let host = cpal::default_host();
         let device = host
-            .default_input_device()
+            .input_devices()
+            .ok()
+            .and_then(|mut ds| {
+                if preferred.is_empty() {
+                    return None;
+                }
+                ds.find(|d| {
+                    d.description()
+                        .map(|x| x.name() == preferred)
+                        .unwrap_or(false)
+                })
+            })
+            .or_else(|| host.default_input_device())
             .ok_or_else(|| anyhow!("no input device available"))?;
         let device_name = device
             .description()

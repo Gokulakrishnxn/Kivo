@@ -7,7 +7,7 @@
 //! punctuation and capitalisation itself, so there is no second model in the
 //! path — requirement ASR-3 is satisfied by the model, not by us.
 
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, Context, Result};
 use std::path::{Path, PathBuf};
 
 use super::Recogniser;
@@ -23,7 +23,31 @@ pub struct Parakeet {
 impl Parakeet {
     /// Load a model directory. Fails loudly if any artefact is missing rather
     /// than half-initialising.
+    ///
+    /// `hotwords` biases recognition toward names, acronyms and jargon the user
+    /// has told Kivo about. This is a different mechanism from the cleanup
+    /// layer's replacements: replacements rewrite text after the fact, whereas
+    /// this makes the model more likely to hear the word in the first place.
+    pub fn load_with_hotwords(dir: &Path, threads: i32, hotwords: &[String]) -> Result<Self> {
+        let file = if hotwords.is_empty() {
+            String::new()
+        } else {
+            match write_hotwords(dir, hotwords) {
+                Ok(p) => p,
+                Err(e) => {
+                    tracing::warn!("could not write the hotwords file, continuing without: {e:#}");
+                    String::new()
+                }
+            }
+        };
+        Self::load_inner(dir, threads, file)
+    }
+
     pub fn load(dir: &Path, threads: i32) -> Result<Self> {
+        Self::load_inner(dir, threads, String::new())
+    }
+
+    fn load_inner(dir: &Path, threads: i32, hotwords_file: String) -> Result<Self> {
         for f in REQUIRED {
             let p = dir.join(f);
             if !p.exists() {
@@ -48,7 +72,15 @@ impl Parakeet {
             num_threads: threads.max(1),
             sample_rate: crate::audio::TARGET_RATE as i32,
             feature_dim: 80,
-            decoding_method: "greedy_search".into(),
+            // Hotword biasing requires the modified beam search decoder;
+            // greedy search ignores it entirely.
+            decoding_method: if hotwords_file.is_empty() {
+                "greedy_search".into()
+            } else {
+                "modified_beam_search".into()
+            },
+            hotwords_file,
+            hotwords_score: 1.5,
             model_type: "nemo_transducer".into(),
             provider: Some(provider.into()),
             debug: false,
@@ -83,6 +115,19 @@ impl Parakeet {
 
 fn path(dir: &Path, name: &str) -> String {
     dir.join(name).to_string_lossy().into_owned()
+}
+
+/// sherpa-onnx wants hotwords as a file, one phrase per line.
+fn write_hotwords(dir: &Path, words: &[String]) -> Result<String> {
+    let p = dir.join("hotwords.txt");
+    let body: String = words
+        .iter()
+        .map(|w| w.trim())
+        .filter(|w| !w.is_empty())
+        .collect::<Vec<_>>()
+        .join("\n");
+    std::fs::write(&p, body).context("could not write hotwords")?;
+    Ok(p.to_string_lossy().into_owned())
 }
 
 impl Recogniser for Parakeet {

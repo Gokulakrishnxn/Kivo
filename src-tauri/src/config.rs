@@ -21,6 +21,12 @@ pub struct Config {
     pub collapse_stutters: bool,
     pub resolve_corrections: bool,
     pub replacements: Vec<Replacement>,
+    /// Words to bias recognition toward — names, acronyms, jargon. Distinct
+    /// from `replacements`, which rewrite text after the fact; these make the
+    /// model likelier to hear the word at all.
+    pub vocabulary: Vec<String>,
+    /// Empty means "follow the system default input".
+    pub input_device: String,
     /// Paste is faster and near-universal; typing is the fallback for apps
     /// that refuse a synthetic paste.
     pub use_typing: bool,
@@ -40,6 +46,8 @@ impl Default for Config {
             collapse_stutters: true,
             resolve_corrections: true,
             replacements: Vec::new(),
+            vocabulary: Vec::new(),
+            input_device: String::new(),
             use_typing: false,
             keep_history: true,
             history_limit: 100,
