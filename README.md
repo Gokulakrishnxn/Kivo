@@ -166,9 +166,15 @@ Recognition needs the Parakeet weights, which are not in the repository:
 ./scripts/fetch-model.sh
 ```
 
-That downloads roughly 600 MB, prints the SHA-256 so you can check it against the
-publisher, and installs the four ONNX artefacts where Kivo looks for them. Kivo
-starts fine without a model — it just tells you it cannot transcribe yet.
+That pulls a 460 MB archive from
+[Kivo's model release](https://github.com/Gokulakrishnxn/Kivo/releases/tag/models-parakeet-tdt-0.6b-v2),
+**verifies it against a pinned SHA-256 and refuses to install on a mismatch**, then
+puts the four ONNX artefacts where Kivo looks for them. Kivo starts fine without a
+model — it just tells you it cannot transcribe yet.
+
+The weights are NVIDIA's Parakeet TDT 0.6B v2 under CC-BY-4.0; the ONNX export is
+[sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)'s. Kivo mirrors the archive so
+the hash can be pinned; neither the weights nor the export are Kivo's work.
 
 ### Grant two permissions
 
@@ -195,7 +201,7 @@ python3 -m http.server 8000 --directory web
 |---|---|---|
 | **M0** | Foundation — PRD, architecture, brand, website, CI | ✅ Done |
 | **M2** | Walking skeleton — hotkey → speech → text, macOS | ✅ Done |
-| **M1** | Spike — measure Parakeet's real latency and accuracy on both platforms | ⏳ Next |
+| **M1** | Spike — Parakeet measured; transcription correct, [latency ~3× over budget](PRD.md) | ⚠️ In progress |
 | **M3** | Windows parity | ○ |
 | **M4** | Cleanup engine, modes, vocabulary | ○ |
 | **M5** | Onboarding, settings, overlay, history | ○ |

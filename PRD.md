@@ -312,13 +312,37 @@ It is the right fit for Kivo specifically because:
 - **There is a multilingual sibling** (Parakeet TDT 0.6B v3, 25 European languages),
   which makes ASR-7 a model swap rather than a re-architecture.
 
-> **To validate during Milestone 1.** Published leaderboard figures (~6% WER on the
-> HF Open ASR leaderboard) are measured on read speech with a datacentre GPU. They
-> are not a prediction of Kivo's numbers. Before committing, we measure WER *and*
-> wall-clock latency on our own harness (§9.5), on a base M-series Mac and a mid-range
-> Windows laptop, using real dictation audio. If Parakeet fails the latency budget on
-> CPU, the fallback is a distilled Whisper variant at a known accuracy cost. The
-> abstraction boundary in `asr/` exists precisely to keep that swap cheap.
+> **Milestone 1 measurement — 26 August 2026. Parakeet misses the latency budget.**
+>
+> Measured with `cargo run --release --example transcribe`, Parakeet TDT 0.6B v2
+> int8 via sherpa-onnx on the CoreML provider, Apple Silicon, 7.43 s of clean
+> read speech:
+>
+> | | |
+> |---|---|
+> | Model load (once, at startup) | 6.5 s |
+> | First inference, cold | 1453 ms |
+> | **Warm median, 7 runs** | **663 ms** — 11.2× real time |
+> | Cleanup (tiers 0–1) | 0.7 ms |
+>
+> Extrapolated to the ten-second utterance §9.5 budgets, recognition alone lands
+> near **890 ms against a 300 ms budget** — roughly 3× over. Transcription quality
+> was correct, including punctuation and capitalisation.
+>
+> This does not settle the question yet, and the model is not being swapped on one
+> datapoint. Still to test before deciding: the CPU provider (CoreML may be falling
+> back per-op and paying transfer costs for nothing), thread count, the non-quantised
+> export, and a shorter utterance — a two-second dictation is the common case and
+> may behave very differently from a 7.4 s read passage.
+>
+> If the budget still cannot be met, the options in order are: accept a higher budget
+> and say so publicly, ship a smaller Parakeet variant, or fall back to a distilled
+> Whisper at a known accuracy cost. The trait boundary in `asr/` exists precisely so
+> that stays a contained change — it is already carrying a second implementation
+> (`Unavailable`) today.
+>
+> Published leaderboard figures (~6 % WER) remain what they always were: read speech
+> on a datacentre GPU, not a prediction of Kivo's numbers.
 
 ### 9.3 Pipeline
 
