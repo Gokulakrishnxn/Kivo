@@ -185,6 +185,36 @@ Every other colour is a marker on text or a fill in an illustration.
 5. **No gradients, anywhere.** The system is strictly flat.
 6. **Never separate surfaces white-on-white.** Shift to stone, or to ink.
 
+### Accent text vs accent fill
+
+**The bright accents are fills, not text.** Every one of them fails WCAG AA as small
+text on canvas — green is 2.09:1, gold 2.61:1, pink 2.78:1, ember 3.39:1, blue 3.46:1.
+That is a property of the palette, not a mistake to design around: those hues exist for
+illustration fills, washes, badge grounds and the logo bars.
+
+When an accent has to carry **words**, use the matching `-ink` tint. Each is the same
+hue darkened to the lightest value that clears 4.5:1 on canvas.
+
+| Fill | As text | Tint token | Ratio |
+|---|---|---|---|
+| `--kivo-green` `#00C978` | 2.09:1 ✗ | `--kivo-green-ink` `#00834E` | 4.62:1 ✓ |
+| `--kivo-blue` `#0086FC` | 3.46:1 ✗ | `--kivo-blue-ink` `#0072D6` | 4.60:1 ✓ |
+| `--kivo-ember` `#FF3E00` | 3.39:1 ✗ | `--kivo-ember-ink` `#D63400` | 4.63:1 ✓ |
+| `--kivo-gold` `#D48F00` | 2.61:1 ✗ | `--kivo-gold-ink` `#9B6800` | 4.61:1 ✓ |
+| `--kivo-pink` `#FF58AE` | 2.78:1 ✗ | `--kivo-pink-ink` `#DF0073` | 4.59:1 ✓ |
+| `--kivo-violet` `#9F4FFF` | 4.00:1 ✗ | `--kivo-violet-ink` `#943BFF` | 4.65:1 ✓ |
+
+Badge labels use `--kivo-badge-ink` `#0A2E14`, which clears 4.5:1 on every accent fill
+(mint 6.7:1, honey 8.8:1, sky 7.8:1).
+
+`--kivo-muted` is `#6D6D6C`, not the `#7E7E7D` the look was derived from — that value is
+3.90:1 on canvas and fails at the 12–15 px sizes helper text is actually set at.
+
+### Contrast floor
+
+**All text meets WCAG 2.2 AA.** Body on canvas is 11.4:1. Nothing ships below 4.5:1, and
+that is verified by an automated sweep across thirteen viewport widths rather than by eye.
+
 ### Theme
 
 Kivo's marketing surfaces are **light only**. The cream canvas is the brand; there is no
