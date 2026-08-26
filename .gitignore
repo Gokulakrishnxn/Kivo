@@ -66,3 +66,8 @@ models/*.onnx
 coverage/
 .nyc_output/
 *.lcov
+
+# ---- macOS app build ----
+src-tauri/target/
+src-tauri/gen/
+dist/

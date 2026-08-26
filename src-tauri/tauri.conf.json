@@ -1,0 +1,75 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Kivo",
+  "version": "0.1.0",
+  "identifier": "sh.kivo.desktop",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:5183",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "macOSPrivateApi": true,
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Kivo",
+        "width": 900,
+        "height": 660,
+        "minWidth": 720,
+        "minHeight": 540,
+        "visible": false,
+        "titleBarStyle": "Transparent",
+        "hiddenTitle": true,
+        "backgroundColor": "#FBFAF9"
+      },
+      {
+        "label": "overlay",
+        "url": "overlay.html",
+        "width": 260,
+        "height": 96,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "resizable": false,
+        "focus": false,
+        "visible": false,
+        "shadow": false,
+        "acceptFirstMouse": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: asset: http://asset.localhost; connect-src 'self' ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "app",
+      "dmg"
+    ],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "category": "Productivity",
+    "shortDescription": "Turns voice into clean text.",
+    "longDescription": "Hold a key, speak, and clean punctuated text appears at your cursor in whatever app you were already using. Everything runs on your device.",
+    "copyright": "Copyright (c) 2026 Gokulakrishnan",
+    "licenseFile": "../LICENSE",
+    "macOS": {
+      "minimumSystemVersion": "11.0",
+      "frameworks": [
+        "target/release/libonnxruntime.1.17.1.dylib",
+        "target/release/libsherpa-onnx-c-api.dylib",
+        "target/release/libsherpa-onnx-cxx-api.dylib"
+      ]
+    }
+  }
+}

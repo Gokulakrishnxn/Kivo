@@ -1,0 +1,146 @@
+/* Kivo's interface. Built from the same tokens as the website — no colour,
+   size, radius or duration is hard-coded here. */
+@import "../brand/tokens/kivo-tokens.css";
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+body {
+  background: var(--kivo-canvas);
+  color: var(--kivo-body);
+  font-family: var(--kivo-font-sans);
+  font-size: var(--kivo-caption);
+  line-height: 1.5;
+  letter-spacing: var(--kivo-track-body);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  overflow-x: hidden;
+}
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--kivo-ink); outline-offset: 2px; border-radius: 6px; }
+
+/* ── settings shell ─────────────────────────────────────────────────────── */
+.titlebar { height: 38px; -webkit-app-region: drag; }
+.shell { padding: 0 var(--kivo-space-6) var(--kivo-space-7); max-width: 760px; margin-inline: auto; }
+
+.head { display: flex; align-items: center; gap: var(--kivo-space-3); padding-bottom: var(--kivo-space-5); }
+.head svg { height: 22px; width: auto; }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+.pill {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 7px;
+  border-radius: var(--kivo-radius-pill); padding: 5px 12px;
+  font-size: var(--kivo-micro); font-weight: 600; background: var(--kivo-stone);
+  color: var(--kivo-body);
+}
+.pill[data-state="recording"] { background: var(--kivo-mint); color: var(--kivo-badge-ink); }
+.pill[data-state="working"] { background: var(--kivo-honey); color: var(--kivo-badge-ink); }
+.pill i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; display: block; }
+
+.card {
+  background: var(--kivo-white); border-radius: var(--kivo-radius-card);
+  box-shadow: var(--kivo-hairline); padding: var(--kivo-space-5);
+  margin-bottom: var(--kivo-space-3);
+}
+.card h2 {
+  font-family: var(--kivo-font-display); font-size: 17px; font-weight: 500;
+  color: var(--kivo-ink); margin-bottom: 4px;
+}
+.card p.sub { color: var(--kivo-muted); font-size: var(--kivo-micro); margin-bottom: var(--kivo-space-4); }
+
+.row {
+  display: flex; align-items: center; gap: var(--kivo-space-4);
+  padding: 11px 0; border-top: 1px solid var(--kivo-stone);
+}
+.row:first-of-type { border-top: 0; }
+.row .grow { flex: 1; min-width: 0; }
+.row strong { display: block; color: var(--kivo-heading); font-weight: 500; }
+.row span.hint { display: block; color: var(--kivo-muted); font-size: var(--kivo-micro); }
+
+/* ── controls ───────────────────────────────────────────────────────────── */
+.switch {
+  appearance: none; width: 40px; height: 24px; border-radius: 999px;
+  background: var(--kivo-stone); position: relative; cursor: pointer; flex: 0 0 auto;
+  transition: background var(--kivo-duration-fast) var(--kivo-ease);
+  box-shadow: var(--kivo-hairline);
+}
+.switch::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px;
+  border-radius: 50%; background: var(--kivo-white);
+  box-shadow: 0 1px 3px rgba(0,0,0,.18);
+  transition: transform var(--kivo-duration-fast) var(--kivo-ease);
+}
+.switch:checked { background: var(--kivo-ink); }
+.switch:checked::after { transform: translateX(16px); }
+
+select, input[type="text"] {
+  background: var(--kivo-canvas); border: 0; box-shadow: var(--kivo-hairline);
+  border-radius: 8px; padding: 8px 11px; min-height: 36px; color: var(--kivo-heading);
+}
+input[type="text"] { width: 100%; user-select: text; }
+
+.btn {
+  border: 0; border-radius: var(--kivo-radius-button); padding: 9px 16px;
+  min-height: 36px; font-size: var(--kivo-micro); font-weight: 600; cursor: pointer;
+  background: var(--kivo-ink); color: var(--kivo-white);
+}
+.btn.sand { background: var(--kivo-sand); color: var(--kivo-ink); box-shadow: var(--kivo-hairline); }
+.btn:disabled { opacity: .45; cursor: default; }
+
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button {
+  border: 0; box-shadow: var(--kivo-hairline); background: var(--kivo-canvas);
+  border-radius: 999px; padding: 7px 14px; font-size: var(--kivo-micro);
+  font-weight: 500; cursor: pointer; color: var(--kivo-body);
+}
+.seg button[aria-pressed="true"] { background: var(--kivo-ink); color: var(--kivo-white); box-shadow: none; }
+
+.banner {
+  border-radius: var(--kivo-radius-card); padding: var(--kivo-space-4);
+  margin-bottom: var(--kivo-space-3); font-size: var(--kivo-micro);
+  display: flex; gap: var(--kivo-space-3); align-items: flex-start;
+}
+.banner.warn { background: var(--kivo-honey); color: var(--kivo-badge-ink); }
+.banner.info { background: var(--kivo-sand); box-shadow: var(--kivo-hairline); color: var(--kivo-body); }
+.banner button { margin-left: auto; }
+
+.preview {
+  background: var(--kivo-canvas); border-radius: 10px; padding: var(--kivo-space-4);
+  box-shadow: var(--kivo-hairline); user-select: text;
+}
+.preview .label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: .09em;
+  color: var(--kivo-muted); font-weight: 600; margin-bottom: 4px;
+}
+.preview .said { color: var(--kivo-muted); }
+.preview .typed { color: var(--kivo-ink); font-weight: 500; margin-top: 10px; }
+
+.entry { padding: 11px 0; border-top: 1px solid var(--kivo-stone); user-select: text; }
+.entry:first-child { border-top: 0; }
+.entry .meta { font-size: 10px; color: var(--kivo-muted); font-family: var(--kivo-font-mono); }
+.empty { color: var(--kivo-muted); font-size: var(--kivo-micro); padding: var(--kivo-space-4) 0; }
+
+/* ── overlay ────────────────────────────────────────────────────────────── */
+.overlay-body { background: transparent; overflow: hidden; }
+.hud {
+  display: flex; align-items: center; gap: 12px;
+  margin: 8px; padding: 14px 18px;
+  background: var(--kivo-canvas); border-radius: 18px;
+  box-shadow: var(--kivo-hairline), 0 8px 30px rgba(0,0,0,.16);
+}
+.hud .wave { display: flex; align-items: center; gap: 3px; height: 24px; }
+.hud .wave i {
+  width: 3px; border-radius: 999px; background: var(--kivo-ink); display: block;
+  animation: bar .9s ease-in-out infinite;
+}
+@keyframes bar { 0%,100% { height: 5px } 50% { height: var(--h,18px) } }
+.hud .label { font-size: var(--kivo-micro); font-weight: 600; color: var(--kivo-ink); }
+.hud .key {
+  margin-left: auto; font-family: var(--kivo-font-mono); font-size: 10px;
+  color: var(--kivo-muted); background: var(--kivo-sand);
+  box-shadow: var(--kivo-hairline); border-radius: 6px; padding: 3px 7px;
+}
+@media (prefers-reduced-motion: reduce) { .hud .wave i { animation: none; height: 12px; } }

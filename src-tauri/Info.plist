@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Shown in the macOS permission prompt. Without this key the system
+       terminates the process the moment it opens an input device. -->
+  <key>NSMicrophoneUsageDescription</key>
+  <string>Kivo records while you hold your dictation key so it can turn what you say into text. Audio is processed on this Mac and is never uploaded or written to disk.</string>
+
+  <!-- Kivo lives in the menu bar. No Dock icon, no app switcher entry. -->
+  <key>LSUIElement</key>
+  <true/>
+</dict>
+</plist>

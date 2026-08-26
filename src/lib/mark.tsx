@@ -1,0 +1,23 @@
+/** The Kivo mark: voice comes in bright, text settles into ink. */
+export function Mark({ height = 22 }: { height?: number }) {
+  return (
+    <svg viewBox="0 0 366 120" style={{ height, width: "auto" }} role="img" aria-label="Kivo">
+      <g transform="translate(0 16) scale(2.75)">
+        <rect x="3.4" y="10" width="3.2" height="12" rx="1.6" fill="#64C6FF" />
+        <rect x="8.6" y="6" width="3.2" height="20" rx="1.6" fill="#FFCD6C" />
+        <rect x="13.8" y="8.5" width="3.2" height="15" rx="1.6" fill="#FF3E00" />
+        <rect x="21.4" y="9.4" width="7.2" height="3.2" rx="1.6" fill="#343433" />
+        <rect x="21.4" y="14.4" width="7.2" height="3.2" rx="1.6" fill="#343433" />
+        <rect x="21.4" y="19.4" width="4.4" height="3.2" rx="1.6" fill="#343433" />
+      </g>
+      <g transform="translate(89 0)">
+        <g fill="none" stroke="#121212" strokeWidth="14" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M27 31V89" /><path d="M34 60L76 31" /><path d="M34 60L79 89" />
+          <path d="M110 51V89" /><path d="M133 51L157 89L181 51" />
+          <circle cx="229" cy="70" r="21" />
+        </g>
+        <circle cx="110" cy="28" r="7" fill="#121212" />
+      </g>
+    </svg>
+  );
+}
