@@ -1,0 +1,32 @@
+Kivo
+Copyright (c) 2026 Gokulakrishnan
+
+This product is free and open source software, released under the MIT License.
+See the LICENSE file for the full text.
+
+--------------------------------------------------------------------------------
+BRAND AND TRADEMARK
+--------------------------------------------------------------------------------
+
+The MIT License covers the SOURCE CODE of this project. It does not grant any
+right to use the Kivo name, the Kivo logo, the Kivo wordmark, or any other Kivo
+brand asset found in the `brand/` directory.
+
+You may:
+  - Fork, modify, redistribute and sell the code, per the MIT License.
+  - Use the Kivo name and logo to refer factually to this project
+    (for example: "built with Kivo", "a fork of Kivo").
+  - Reproduce the logo unmodified in articles, talks and documentation.
+
+You may not, without written permission from the copyright holder:
+  - Use the Kivo name or logo as the name or logo of your own fork,
+    product, service or company.
+  - Imply that your derivative work is endorsed by, affiliated with,
+    or officially released by the Kivo project.
+  - Modify, recolor, redraw or distort the Kivo logo and continue to
+    present it as the Kivo logo.
+
+If you distribute a modified version, please give it a different name and a
+different logo. See `brand/BRAND.md` for full brand usage guidelines.
+
+Contact: https://github.com/Gokulakrishnxn/Kivo
