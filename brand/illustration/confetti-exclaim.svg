@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40" fill="none" role="img" aria-label="An exclamation mark">
+  <title>An exclamation mark</title>
+  <path d="M20 8v16" stroke="#00C978" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="20" cy="31" r="3.4" fill="#00C978"/>
+</svg>
