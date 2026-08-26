@@ -23,7 +23,13 @@
   .sw__hex { font-family: var(--kivo-font-mono); font-size: 11px; color: var(--kivo-muted); margin-top: 1px; }
   .sw__role { font-size: 11px; color: var(--kivo-muted); margin-top: 6px; line-height: 1.4; }
   .spec { background: var(--kivo-white); border-radius: var(--kivo-radius-card); box-shadow: var(--kivo-hairline); overflow: hidden; }
-  .spec > div { padding: 18px var(--kivo-space-6); display: flex; align-items: baseline; gap: var(--kivo-space-5); flex-wrap: wrap; }
+  .spec > div { padding: 18px clamp(var(--kivo-space-4), 4vw, var(--kivo-space-6)); display: flex; align-items: baseline; gap: var(--kivo-space-5); flex-wrap: wrap; }
+  @media (max-width: 700px) {
+    .spec > div { display: grid; gap: 6px; }
+    .spec__tag { width: auto; }
+    .spec .display { font-size: clamp(2rem, 11vw, 3.4rem) !important; }
+    .spec .heading-lg { font-size: clamp(1.6rem, 8vw, 2.75rem) !important; }
+  }
   .spec > div + div { border-top: 1px solid var(--kivo-stone); }
   .spec__tag { font-family: var(--kivo-font-mono); font-size: 11px; color: var(--kivo-muted); width: 150px; flex: 0 0 auto; }
   .cast { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: var(--kivo-space-3); }
@@ -73,6 +79,25 @@
     <div class="nav__actions">
       <a class="btn btn--ghost" href="https://github.com/Gokulakrishnxn/Kivo/tree/main/brand">Assets</a>
       <a class="btn btn--dark" href="https://github.com/Gokulakrishnxn/Kivo">GitHub</a>
+      <button class="nav__toggle" type="button" id="navToggle"
+              aria-expanded="false" aria-controls="navPanel" aria-label="Open menu">
+        <svg class="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="nav__panel" id="navPanel" data-open="false">
+    <div class="wrap">
+      <ul>
+          <li><a href="./">Home</a></li>
+          <li><a href="#main">The mark</a></li>
+          <li><a href="https://github.com/Gokulakrishnxn/Kivo/tree/main/brand">Assets</a></li>
+          <li><a href="https://github.com/Gokulakrishnxn/Kivo/blob/main/brand/BRAND.md">Guidelines</a></li>
+      </ul>
+      <div class="nav__panel__cta">
+        <a class="btn btn--sand" href="https://github.com/Gokulakrishnxn/Kivo/tree/main/brand">Assets</a>
+        <a class="btn btn--dark" href="https://github.com/Gokulakrishnxn/Kivo">GitHub</a>
+      </div>
     </div>
   </div>
 </header>
@@ -248,8 +273,15 @@
     <div class="sw-grid" id="sw-surface"></div>
     <p class="eyebrow" style="margin:var(--kivo-space-6) 0 var(--kivo-space-3)">Text</p>
     <div class="sw-grid" id="sw-text"></div>
-    <p class="eyebrow" style="margin:var(--kivo-space-6) 0 var(--kivo-space-3)">Accents</p>
+    <p class="eyebrow" style="margin:var(--kivo-space-6) 0 var(--kivo-space-3)">Accents — fills, washes and illustration</p>
     <div class="sw-grid" id="sw-accent"></div>
+    <p class="eyebrow" style="margin:var(--kivo-space-6) 0 var(--kivo-space-2)">Accents — when they carry text</p>
+    <p class="caption" style="margin-bottom:var(--kivo-space-3);max-width:62ch">
+      Every fill above fails WCAG AA as small text on canvas. These are the same hues
+      darkened to the lightest value that clears 4.5:1 — use them whenever an accent
+      becomes words.
+    </p>
+    <div class="sw-grid" id="sw-accent-text"></div>
   </div>
 </section>
 
@@ -436,6 +468,15 @@
       ["Muted", "#7E7E7D", "Helper text, inactive nav, tertiary labels."],
       ["On dark", "#FFFFFF", "Text on ink and on the dark card."]
     ],
+    "sw-accent-text": [
+      ["Green ink", "#00834E", "Green as TEXT. 4.62:1 on canvas; the fill is 2.09:1."],
+      ["Blue ink", "#0072D6", "Blue as TEXT. 4.60:1; the fill is 3.46:1."],
+      ["Ember ink", "#D63400", "Ember as TEXT — demo links. 4.63:1; the fill is 3.39:1."],
+      ["Gold ink", "#9B6800", "Gold as TEXT. 4.61:1; the fill is 2.61:1."],
+      ["Pink ink", "#DF0073", "Pink as TEXT. 4.59:1; the fill is 2.78:1."],
+      ["Violet ink", "#943BFF", "Violet as TEXT. 4.65:1; the fill is 4.00:1."],
+      ["Badge ink", "#0A2E14", "Label on any accent fill. At least 6.7:1 on all three."]
+    ],
     "sw-accent": [
       ["Stone border", "#E5D5C3", "Warm hairline on illustrations and the app icon."],
       ["Blue", "#0086FC", "Inline links and list emphasis. Never a button fill."],
@@ -467,6 +508,35 @@
       host.appendChild(el);
     }
   }
+</script>
+
+<script>
+  (function () {
+    var btn = document.getElementById('navToggle');
+    var panel = document.getElementById('navPanel');
+    if (!btn || !panel) return;
+    function setOpen(open) {
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      panel.setAttribute('data-open', String(open));
+    }
+    btn.addEventListener('click', function () {
+      setOpen(btn.getAttribute('aria-expanded') !== 'true');
+    });
+    panel.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+        setOpen(false); btn.focus();
+      }
+    });
+    // Leaving the mobile breakpoint must not strand an open panel.
+    var mq = window.matchMedia('(min-width: 1000px)');
+    (mq.addEventListener ? mq.addEventListener.bind(mq, 'change') : mq.addListener.bind(mq))(function () {
+      if (mq.matches) setOpen(false);
+    });
+  })();
 </script>
 
 </body>

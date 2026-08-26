@@ -49,6 +49,25 @@
     <div class="nav__actions">
       <a class="btn btn--ghost" href="https://github.com/Gokulakrishnxn/Kivo">GitHub</a>
       <a class="btn btn--dark" href="https://github.com/Gokulakrishnxn/Kivo">Get started</a>
+      <button class="nav__toggle" type="button" id="navToggle"
+              aria-expanded="false" aria-controls="navPanel" aria-label="Open menu">
+        <svg class="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="nav__panel" id="navPanel" data-open="false">
+    <div class="wrap">
+      <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#privacy">Privacy</a></li>
+          <li><a href="brand.html">Brand</a></li>
+      </ul>
+      <div class="nav__panel__cta">
+        <a class="btn btn--sand" href="https://github.com/Gokulakrishnxn/Kivo">GitHub</a>
+        <a class="btn btn--dark" href="https://github.com/Gokulakrishnxn/Kivo">Get started</a>
+      </div>
     </div>
   </div>
 </header>
@@ -83,6 +102,13 @@
         Free and open source · <span class="t-green">No account</span> ·
         <span class="t-blue">No subscription</span>
       </p>
+    </div>
+
+    <div class="cast-row" aria-hidden="true">
+      <img class="bob" src="assets/illustration/mascot-mic.svg" alt="" style="animation-delay:.2s">
+      <img class="bob" src="assets/illustration/mascot-bubble.svg" alt="" style="animation-delay:.8s">
+      <img class="bob" src="assets/illustration/mascot-page.svg" alt="" style="animation-delay:1.4s">
+      <img class="bob" src="assets/illustration/mascot-caret.svg" alt="" style="animation-delay:2s">
     </div>
 
     <div class="cluster" aria-hidden="true">
@@ -436,6 +462,35 @@
     </div>
   </div>
 </footer>
+
+<script>
+  (function () {
+    var btn = document.getElementById('navToggle');
+    var panel = document.getElementById('navPanel');
+    if (!btn || !panel) return;
+    function setOpen(open) {
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      panel.setAttribute('data-open', String(open));
+    }
+    btn.addEventListener('click', function () {
+      setOpen(btn.getAttribute('aria-expanded') !== 'true');
+    });
+    panel.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+        setOpen(false); btn.focus();
+      }
+    });
+    // Leaving the mobile breakpoint must not strand an open panel.
+    var mq = window.matchMedia('(min-width: 1000px)');
+    (mq.addEventListener ? mq.addEventListener.bind(mq, 'change') : mq.addListener.bind(mq))(function () {
+      if (mq.matches) setOpen(false);
+    });
+  })();
+</script>
 
 </body>
 </html>
