@@ -1,0 +1,32 @@
+{
+  "name": "kivo",
+  "version": "0.1.0",
+  "description": "Turns voice into clean text.",
+  "license": "MIT",
+  "author": "Gokulakrishnan",
+  "repository": "https://github.com/Gokulakrishnxn/Kivo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "app:dev": "tauri dev",
+    "app:build": "tauri build",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.9.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.9.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
+    "@vitejs/plugin-react": "^5.0.4",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.9"
+  }
+}
