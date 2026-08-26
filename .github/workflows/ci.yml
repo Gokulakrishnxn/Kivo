@@ -73,14 +73,19 @@ jobs:
           import json, re, sys
           css = open('brand/tokens/kivo-tokens.css').read()
           tok = json.load(open('brand/tokens/kivo-tokens.json'))
-          ramp = tok['color']['ink']
-          missing = [f'ink-{k} ({v["$value"]})' for k, v in ramp.items()
-                     if f'--kivo-ink-{k}:' not in css]
+          declared = set(re.findall(r'--kivo-[a-z0-9-]+', css))
+          missing = []
+          for group in ('surface', 'text', 'accent'):
+              for name, entry in tok[group].items():
+                  hexv = entry['$value']
+                  if hexv.upper() not in css.upper():
+                      missing.append(f'{group}.{name} ({hexv})')
           if missing:
               for m in missing:
-                  print(f'::error::token {m} present in JSON but absent from CSS')
+                  print(f'::error::token {m} is in the JSON but its value never appears in the CSS')
               sys.exit(1)
-          print(f'{len(ramp)} ink steps present in both token sources')
+          n = sum(len(tok[g]) for g in ('surface', 'text', 'accent'))
+          print(f'{n} colour tokens present in both sources; {len(declared)} custom properties declared')
           PY
 
       - name: Website token copy matches the canonical source
@@ -90,7 +95,12 @@ jobs:
             diff brand/tokens/kivo-tokens.css web/assets/kivo-tokens.css || true
             exit 1
           fi
-          echo "website token copy is identical to the canonical source"
+          if ! diff -rq brand/illustration web/assets/illustration > /dev/null; then
+            echo "::error::web/assets/illustration has drifted from brand/illustration"
+            diff -rq brand/illustration web/assets/illustration || true
+            exit 1
+          fi
+          echo "website copies are identical to the canonical sources"
 
       - name: Relative links in Markdown resolve
         run: |
