@@ -1,0 +1,12 @@
+* text=auto eol=lf
+
+*.svg   text
+*.md    text
+*.png   binary
+*.jpg   binary
+*.ico   binary
+*.woff2 binary
+
+# Keep generated brand assets out of diff noise
+brand/logo/*.svg linguist-generated=false
+web/** linguist-documentation

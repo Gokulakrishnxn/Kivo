@@ -1,0 +1,68 @@
+# ---- OS ----
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+desktop.ini
+Icon?
+
+# ---- Editors ----
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.claude/
+
+# ---- Node ----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+.npm/
+
+# ---- Build output ----
+dist/
+build/
+out/
+_site/
+.next/
+.output/
+.turbo/
+*.tsbuildinfo
+
+# ---- Rust / native (future app targets) ----
+target/
+**/*.rs.bk
+Cargo.lock.bak
+
+# ---- Swift / Xcode (future macOS target) ----
+DerivedData/
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+.build/
+
+# ---- Env & secrets ----
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.mobileprovision
+secrets.json
+
+# ---- Models & audio scratch ----
+models/*.bin
+models/*.gguf
+models/*.onnx
+*.wav
+*.flac
+!brand/**/*.wav
+
+# ---- Coverage & test ----
+coverage/
+.nyc_output/
+*.lcov
