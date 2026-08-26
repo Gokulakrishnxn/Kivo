@@ -4,7 +4,10 @@
 .LSOverride
 Thumbs.db
 desktop.ini
-Icon?
+# macOS custom folder icon is literally "Icon\r". The common `Icon?` form
+# also matches `icons` on a case-insensitive filesystem, which silently
+# swallowed the app icon directory.
+Icon[\r]
 
 # ---- Editors ----
 .vscode/*
