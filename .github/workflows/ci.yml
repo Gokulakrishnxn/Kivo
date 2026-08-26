@@ -185,6 +185,21 @@ jobs:
         if: steps.detect.outputs.present == 'true'
         with:
           workspaces: src-tauri
+          # Cache the registry but NOT target/. sherpa-rs-sys emits
+          # libonnxruntime into the profile directory from its build script;
+          # a restored target/ marks that script fresh so it never reruns,
+          # while the cache's pruning has already dropped the dylib — and the
+          # link then fails with "library 'onnxruntime.1.17.1' not found".
+          cache-targets: false
+
+      # The prebuilt native libraries, which is the slow part worth keeping.
+      - name: Cache sherpa-onnx prebuilts
+        if: steps.detect.outputs.present == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/sherpa-rs
+          key: sherpa-rs-${{ runner.os }}-${{ hashFiles('src-tauri/Cargo.lock') }}
+          restore-keys: sherpa-rs-${{ runner.os }}-
 
       - uses: pnpm/action-setup@v4
         if: steps.detect.outputs.present == 'true'

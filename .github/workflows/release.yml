@@ -40,6 +40,16 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: src-tauri
+          # See ci.yml — a restored target/ skips the build script that emits
+          # libonnxruntime, and the link then fails.
+          cache-targets: false
+
+      - name: Cache sherpa-onnx prebuilts
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/sherpa-rs
+          key: sherpa-rs-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('src-tauri/Cargo.lock') }}
+          restore-keys: sherpa-rs-${{ runner.os }}-${{ matrix.target }}-
 
       - uses: pnpm/action-setup@v4
         with:
