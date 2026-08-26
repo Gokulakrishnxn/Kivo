@@ -18,7 +18,7 @@ jobs:
     name: Repository health
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Required files are present
         run: |
@@ -119,7 +119,7 @@ jobs:
     name: Website
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: HTML sanity check
         run: |
@@ -150,7 +150,7 @@ jobs:
     name: App build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Detect application source
         id: detect
         run: |

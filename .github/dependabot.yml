@@ -7,24 +7,6 @@ updates:
     commit-message: { prefix: "ci", include: "scope" }
     labels: ["dependencies", "ci"]
 
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule: { interval: "weekly", day: "monday", time: "06:00" }
-    open-pull-requests-limit: 10
-    commit-message: { prefix: "deps", prefix-development: "deps-dev", include: "scope" }
-    labels: ["dependencies", "javascript"]
-    groups:
-      dev-dependencies:
-        dependency-type: "development"
-      react:
-        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
-
-  - package-ecosystem: "cargo"
-    directory: "/src-tauri"
-    schedule: { interval: "weekly", day: "monday", time: "06:00" }
-    open-pull-requests-limit: 10
-    commit-message: { prefix: "deps", include: "scope" }
-    labels: ["dependencies", "rust"]
-    groups:
-      tauri:
-        patterns: ["tauri", "tauri-*"]
+  # npm and cargo ecosystems are deliberately absent until the application
+  # scaffold lands at Milestone 2. Dependabot errors on a manifest that does
+  # not exist, so they are added with src/ and src-tauri/, not before.
