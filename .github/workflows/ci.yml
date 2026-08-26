@@ -83,6 +83,15 @@ jobs:
           print(f'{len(ramp)} ink steps present in both token sources')
           PY
 
+      - name: Website token copy matches the canonical source
+        run: |
+          if ! diff -q brand/tokens/kivo-tokens.css web/assets/kivo-tokens.css > /dev/null; then
+            echo "::error::web/assets/kivo-tokens.css has drifted from brand/tokens/kivo-tokens.css"
+            diff brand/tokens/kivo-tokens.css web/assets/kivo-tokens.css || true
+            exit 1
+          fi
+          echo "website token copy is identical to the canonical source"
+
       - name: Relative links in Markdown resolve
         run: |
           python3 - <<'PY'
