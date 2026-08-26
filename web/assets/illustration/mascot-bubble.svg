@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 130" width="120" height="130" fill="none" role="img" aria-label="A speech bubble character">
+  <title>A speech bubble character</title>
+  <path d="M46 96L40 120" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="40" cy="120" r="3.2" fill="#343433"/>
+  <path d="M74 96L80 120" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="80" cy="120" r="3.2" fill="#343433"/>
+  <path d="M14 40C14 24 26 14 44 14h32c18 0 30 10 30 26v18c0 16-12 26-30 26H56l-18 16 3-16h-1c-16 0-26-10-26-26z"
+        fill="#64C6FF" stroke="#343433" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="48" cy="42" r="3.8" fill="#343433"/>
+  <circle cx="72" cy="42" r="3.8" fill="#343433"/>
+  <path d="M53.0 54Q60.0 60 67.0 54" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <path d="M14 52L2 44" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="2" cy="44" r="3.2" fill="#343433"/>
+  <path d="M106 52L118 44" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="118" cy="44" r="3.2" fill="#343433"/>
+</svg>

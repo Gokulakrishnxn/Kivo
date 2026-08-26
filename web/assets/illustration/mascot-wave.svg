@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130" width="130" height="130" fill="none" role="img" aria-label="A waveform character">
+  <title>A waveform character</title>
+  <rect x="16" y="46" width="16" height="40" rx="8" fill="#FF58AE" stroke="#343433" stroke-width="3"/>
+  <rect x="42" y="22" width="16" height="88" rx="8" fill="#FF58AE" stroke="#343433" stroke-width="3"/>
+  <rect x="68" y="34" width="16" height="64" rx="8" fill="#FF58AE" stroke="#343433" stroke-width="3"/>
+  <rect x="94" y="52" width="16" height="30" rx="8" fill="#FF58AE" stroke="#343433" stroke-width="3"/>
+  <circle cx="52" cy="52" r="3.8" fill="#343433"/>
+  <circle cx="74" cy="52" r="3.8" fill="#343433"/>
+  <path d="M57.0 66Q63.0 72 69.0 66" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <path d="M50 110L44 124" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="44" cy="124" r="3.2" fill="#343433"/>
+  <path d="M70 110L76 124" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76" cy="124" r="3.2" fill="#343433"/>
+</svg>

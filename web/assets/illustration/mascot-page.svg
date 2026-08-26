@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 130" width="120" height="130" fill="none" role="img" aria-label="A page of clean text, as a character">
+  <title>A page of clean text, as a character</title>
+  <path d="M46 100L40 122" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="40" cy="122" r="3.2" fill="#343433"/>
+  <path d="M74 100L80 122" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="80" cy="122" r="3.2" fill="#343433"/>
+  <rect x="26" y="10" width="68" height="92" rx="18" fill="#00C978" stroke="#343433" stroke-width="3"/>
+  <path d="M40 26h40M40 36h40M40 46h24" stroke="#343433" stroke-width="2.6" stroke-linecap="round" opacity=".5"/>
+  <circle cx="50" cy="66" r="3.8" fill="#343433"/>
+  <circle cx="70" cy="66" r="3.8" fill="#343433"/>
+  <path d="M53.0 80Q60.0 86 67.0 80" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <path d="M26 64L10 72" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="10" cy="72" r="3.2" fill="#343433"/>
+  <path d="M94 64L110 72" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="110" cy="72" r="3.2" fill="#343433"/>
+</svg>

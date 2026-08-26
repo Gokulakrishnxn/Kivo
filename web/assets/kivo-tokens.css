@@ -1,224 +1,157 @@
 /* =============================================================================
    KIVO DESIGN TOKENS
    The single source of truth for Kivo's visual system.
-   Kivo is a strictly monochrome brand: emphasis is created by INVERSION and
-   WEIGHT, never by hue. There is no accent colour.
+
+   Kivo is a storybook spread on cream parchment: a warm paper canvas carries
+   hand-drawn characters and scattered punctuation confetti in bright flat
+   fills, while the interface itself stays deliberately quiet. Surfaces are
+   defined by INSET HAIRLINES, never drop shadows. Colour is semantic — ink
+   for the one serious action, accents as punctuation, never as chrome.
+
    Copyright (c) 2026 Gokulakrishnan - MIT
    ========================================================================== */
 
 :root {
   /* ---------------------------------------------------------------------
-     1. PRIMITIVES - the ink ramp
-     A single neutral ramp. Every surface, border and text colour in the
-     product is drawn from these twelve steps plus paper.
+     1. SURFACES — warm paper, not screen white
      --------------------------------------------------------------------- */
-  --kivo-paper:      #FFFFFF;
-  --kivo-ink-50:     #F7F7F7;
-  --kivo-ink-100:    #EFEFEF;
-  --kivo-ink-200:    #E2E2E2;
-  --kivo-ink-300:    #CBCBCB;
-  --kivo-ink-400:    #A6A6A6;
-  --kivo-ink-500:    #7C7C7C;
-  --kivo-ink-600:    #5C5C5C;
-  --kivo-ink-700:    #404040;
-  --kivo-ink-800:    #292929;
-  --kivo-ink-900:    #171717;
-  --kivo-ink-950:    #0A0A0A;
+  --kivo-canvas:      #FBFAF9;  /* page background, nav surface           */
+  --kivo-stone:       #F2F0ED;  /* card surfaces, THE inset border tone   */
+  --kivo-sand:        #F6F4EF;  /* secondary pill, light tag surfaces     */
+  --kivo-white:       #FFFFFF;  /* feature cards — only here does the     */
+                                /* 1px inset hairline actually register    */
+  --kivo-ink:         #121212;  /* primary action fill, dark cards        */
+  --kivo-black:       #000000;  /* the single darkest surface             */
 
   /* ---------------------------------------------------------------------
-     2. SEMANTIC - light theme (default)
-     Never reference a primitive directly in product code. Use these.
+     2. TEXT — warm, never cool grey
      --------------------------------------------------------------------- */
-  --kivo-bg:              var(--kivo-paper);
-  --kivo-bg-subtle:       var(--kivo-ink-50);
-  --kivo-bg-inset:        var(--kivo-ink-100);
-  --kivo-surface:         var(--kivo-paper);
-  --kivo-surface-raised:  var(--kivo-paper);
-
-  --kivo-border:          var(--kivo-ink-200);
-  --kivo-border-strong:   var(--kivo-ink-300);
-  --kivo-border-focus:    var(--kivo-ink-950);
-
-  --kivo-text:            var(--kivo-ink-950);
-  --kivo-text-secondary:  var(--kivo-ink-600);
-  --kivo-text-muted:      var(--kivo-ink-500);
-  --kivo-text-inverse:    var(--kivo-paper);
-
-  --kivo-action:          var(--kivo-ink-950);
-  --kivo-action-hover:    var(--kivo-ink-800);
-  --kivo-action-text:     var(--kivo-paper);
-
-  /* The "live" state. Kivo has no accent colour, so an active microphone
-     is signalled by full inversion plus motion, not by red. */
-  --kivo-live:            var(--kivo-ink-950);
-  --kivo-live-bg:         var(--kivo-paper);
+  --kivo-heading:     #343433;  /* headings, nav, decorative strokes      */
+  --kivo-body:        #474645;  /* body copy, secondary text              */
+  --kivo-muted:       #7E7E7D;  /* helper text, inactive nav, tertiary    */
+  --kivo-on-dark:     #FFFFFF;
 
   /* ---------------------------------------------------------------------
-     3. TYPOGRAPHY
+     3. ACCENTS — punctuation, not chrome
+     Every one of these is a marker. None of them is a button background,
+     with the single exception of --kivo-ink.
      --------------------------------------------------------------------- */
-  --kivo-font-sans: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont,
-                    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --kivo-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono",
-                    Menlo, Consolas, "Liberation Mono", monospace;
+  --kivo-stone-border: #E5D5C3; /* hairline on illustrations and shapes   */
 
-  --kivo-text-2xs:  0.6875rem; /* 11 - legal, captions */
-  --kivo-text-xs:   0.75rem;   /* 12 - eyebrows, meta */
-  --kivo-text-sm:   0.875rem;  /* 14 - UI default, dense body */
-  --kivo-text-base: 1rem;      /* 16 - body */
-  --kivo-text-md:   1.0625rem; /* 17 - lead paragraph */
-  --kivo-text-lg:   1.25rem;   /* 20 */
-  --kivo-text-xl:   1.5rem;    /* 24 - card heading */
-  --kivo-text-2xl:  1.875rem;  /* 30 - section heading */
-  --kivo-text-3xl:  2.375rem;  /* 38 */
-  --kivo-text-4xl:  3rem;      /* 48 */
-  --kivo-text-5xl:  3.75rem;   /* 60 - display */
+  --kivo-blue:        #0086FC;  /* inline links, feature list emphasis    */
+  --kivo-sky:         #64C6FF;  /* illustration fill, mascot accents      */
+  --kivo-alt-blue:    #00B2FF;  /* secondary illustration fill, icons     */
 
-  --kivo-weight-regular:  400;
-  --kivo-weight-medium:   500;
-  --kivo-weight-semibold: 600;
+  --kivo-green:       #00C978;  /* green accent text, tags, short phrases */
+  --kivo-mint:        #00CA48;  /* green wash behind content              */
 
-  /* Optical tracking: tighter as type grows. */
-  --kivo-tracking-display: -0.035em;
-  --kivo-tracking-heading: -0.022em;
-  --kivo-tracking-body:    -0.011em;
-  --kivo-tracking-eyebrow:  0.10em;
+  --kivo-ember:       #FF3E00;  /* THE signature secondary link colour    */
+  --kivo-sun:         #FFCD6C;  /* illustration fill, decorative shapes   */
+  --kivo-gold:        #D48F00;  /* yellow accent text                     */
+  --kivo-honey:       #FFBB26;  /* yellow wash behind content             */
 
-  --kivo-leading-tight:   1.06;
-  --kivo-leading-heading: 1.18;
-  --kivo-leading-body:    1.62;
+  --kivo-pink:        #FF58AE;  /* badge fill, illustration accent        */
+  --kivo-violet:      #9F4FFF;  /* violet wash. Never the primary CTA.    */
+  --kivo-red:         #FF2B3A;  /* destructive and error ONLY             */
 
   /* ---------------------------------------------------------------------
-     4. SPACE - 4px base grid
+     4. SEMANTIC — what product code should actually reference
      --------------------------------------------------------------------- */
-  --kivo-space-1:   0.25rem;  /*   4 */
-  --kivo-space-2:   0.5rem;   /*   8 */
-  --kivo-space-3:   0.75rem;  /*  12 */
-  --kivo-space-4:   1rem;     /*  16 */
-  --kivo-space-5:   1.5rem;   /*  24 */
-  --kivo-space-6:   2rem;     /*  32 */
-  --kivo-space-7:   3rem;     /*  48 */
-  --kivo-space-8:   4rem;     /*  64 */
-  --kivo-space-9:   6rem;     /*  96 */
-  --kivo-space-10:  8rem;     /* 128 */
+  --kivo-bg:            var(--kivo-canvas);
+  --kivo-surface:       var(--kivo-white);
+  --kivo-surface-alt:   var(--kivo-stone);
+  --kivo-text:          var(--kivo-heading);
+  --kivo-text-body:     var(--kivo-body);
+  --kivo-text-muted:    var(--kivo-muted);
+  --kivo-link:          var(--kivo-blue);
+  --kivo-link-accent:   var(--kivo-ember);
+  --kivo-action:        var(--kivo-ink);
+  --kivo-action-text:   var(--kivo-white);
+  --kivo-focus:         var(--kivo-ink);
 
   /* ---------------------------------------------------------------------
-     5. RADIUS - restrained. Kivo is squared-off, not pill-shaped.
+     5. TYPOGRAPHY
+     Display is a slightly playful, slightly condensed grotesque at 500.
+     Body is Inter. Never set display sizes in Inter.
      --------------------------------------------------------------------- */
-  --kivo-radius-none: 0;
-  --kivo-radius-xs:   4px;
-  --kivo-radius-sm:   6px;
-  --kivo-radius-md:   8px;
-  --kivo-radius-lg:   12px;
-  --kivo-radius-xl:   16px;
-  --kivo-radius-2xl:  22px;   /* app-icon squircle ratio: 22% of edge */
-  --kivo-radius-full: 999px;
+  --kivo-font-display: "Bricolage Grotesque", "Druk Wide", "GT America Compressed",
+                       "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --kivo-font-sans:    "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont,
+                       "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --kivo-font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono",
+                       Menlo, Consolas, monospace;
+
+  /* Scale — size / line-height / tracking, per the reference */
+  --kivo-micro:        0.75rem;    /* 12 · 19 · -0.010em */
+  --kivo-caption:      0.9375rem;  /* 15 · 22 · -0.014em */
+  --kivo-body-size:    1.0625rem;  /* 17 · 26 · -0.013em */
+  --kivo-subheading:   1.1875rem;  /* 19 · 27 · -0.016em */
+  --kivo-heading-size: 1.4375rem;  /* 23 · 25 · -0.019em */
+  --kivo-heading-lg:   2.75rem;    /* 44 · 53 · -0.020em */
+  --kivo-display:      4.25rem;    /* 68 · 75 · -0.031em */
+
+  --kivo-lh-display:   1.10;
+  --kivo-lh-heading:   1.09;
+  --kivo-lh-body:      1.53;
+  --kivo-lh-caption:   1.58;
+
+  --kivo-track-display:   -0.031em;
+  --kivo-track-heading-lg:-0.020em;
+  --kivo-track-heading:   -0.019em;
+  --kivo-track-body:      -0.013em;
+  --kivo-track-caption:   -0.014em;
+
+  --kivo-w-regular:  400;
+  --kivo-w-medium:   500;
+  --kivo-w-semibold: 600;
 
   /* ---------------------------------------------------------------------
-     6. ELEVATION
-     Kivo separates surfaces with HAIRLINES, not shadows. Only floating
-     product chrome (the dictation HUD, menus) may use these.
+     6. SPACE — 4 px base, comfortable density
      --------------------------------------------------------------------- */
-  --kivo-shadow-none: none;
-  --kivo-shadow-hud:  0 1px 2px rgba(10,10,10,.04),
-                      0 8px 24px rgba(10,10,10,.10),
-                      0 24px 64px rgba(10,10,10,.10);
-  --kivo-shadow-menu: 0 1px 2px rgba(10,10,10,.06),
-                      0 6px 16px rgba(10,10,10,.10);
+  --kivo-space-1:  0.25rem;   /*   4 */
+  --kivo-space-2:  0.5rem;    /*   8 */
+  --kivo-space-3:  0.75rem;   /*  12 */
+  --kivo-space-4:  1rem;      /*  16 */
+  --kivo-space-5:  1.5rem;    /*  24 */
+  --kivo-space-6:  2rem;      /*  32 — card padding */
+  --kivo-space-7:  3rem;      /*  48 */
+  --kivo-space-8:  5rem;      /*  80 — section gap, min */
+  --kivo-space-9:  7.5rem;    /* 120 — section gap, max */
+
+  --kivo-container: 1200px;
+  --kivo-prose:     680px;
+  --kivo-gutter:    24px;
 
   /* ---------------------------------------------------------------------
-     7. MOTION
-     Dictation is a real-time interaction. Nothing may feel laggy.
+     7. RADIUS
      --------------------------------------------------------------------- */
-  --kivo-duration-instant: 90ms;
-  --kivo-duration-fast:    140ms;
-  --kivo-duration-normal:  220ms;
-  --kivo-duration-slow:    380ms;
-  --kivo-ease-standard:  cubic-bezier(0.2, 0, 0, 1);
-  --kivo-ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
-  --kivo-ease-in-out:    cubic-bezier(0.65, 0, 0.35, 1);
+  --kivo-radius-small:        2px;
+  --kivo-radius-badge:        6px;
+  --kivo-radius-card:        10px;   /* cards AND nav — the default      */
+  --kivo-radius-nav:         10px;
+  --kivo-radius-icon:        40px;
+  --kivo-radius-illustration:72px;
+  --kivo-radius-button:      32px;   /* pills                            */
+  --kivo-radius-pill:      9999px;
 
   /* ---------------------------------------------------------------------
-     8. LAYOUT
+     8. ELEVATION — the signature technique
+     Cards are defined by an INTERIOR hairline, giving a pressed-into-paper
+     feel. Never a drop shadow heavier than 0.04 alpha.
      --------------------------------------------------------------------- */
-  --kivo-container:    1120px;
-  --kivo-container-sm: 720px;
-  --kivo-gutter:       24px;
-  --kivo-hairline:     1px;
-}
+  --kivo-hairline:      inset 0 0 0 1px var(--kivo-stone);
+  --kivo-hairline-warm: inset 0 0 0 1px var(--kivo-stone-border);
+  --kivo-lift:          0 1px 6px 0 rgba(0,0,0,.04), 0 0 24px 0 rgba(0,0,0,.05);
+  --kivo-dark-card:     0 0 24px 0 rgba(0,0,0,.15);
 
-/* =============================================================================
-   DARK THEME
-   Kivo's dark theme is a true inversion, not a dimming. Paper becomes ink.
-   Applies on an explicit [data-theme="dark"] and on system preference.
-   ========================================================================== */
-:root[data-theme="dark"],
-:root:not([data-theme="light"]) .kivo-invert {
-  --kivo-bg:              var(--kivo-ink-950);
-  --kivo-bg-subtle:       var(--kivo-ink-900);
-  --kivo-bg-inset:        #000000;
-  --kivo-surface:         var(--kivo-ink-900);
-  --kivo-surface-raised:  var(--kivo-ink-800);
-
-  --kivo-border:          var(--kivo-ink-800);
-  --kivo-border-strong:   var(--kivo-ink-700);
-  --kivo-border-focus:    var(--kivo-paper);
-
-  --kivo-text:            var(--kivo-paper);
-  --kivo-text-secondary:  var(--kivo-ink-400);
-  --kivo-text-muted:      var(--kivo-ink-500);
-  --kivo-text-inverse:    var(--kivo-ink-950);
-
-  --kivo-action:          var(--kivo-paper);
-  --kivo-action-hover:    var(--kivo-ink-200);
-  --kivo-action-text:     var(--kivo-ink-950);
-
-  --kivo-live:            var(--kivo-paper);
-  --kivo-live-bg:         var(--kivo-ink-950);
-
-  --kivo-shadow-hud:  0 1px 2px rgba(0,0,0,.6),
-                      0 8px 24px rgba(0,0,0,.55),
-                      0 24px 64px rgba(0,0,0,.45);
-  --kivo-shadow-menu: 0 1px 2px rgba(0,0,0,.6),
-                      0 6px 16px rgba(0,0,0,.5);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --kivo-bg:              var(--kivo-ink-950);
-    --kivo-bg-subtle:       var(--kivo-ink-900);
-    --kivo-bg-inset:        #000000;
-    --kivo-surface:         var(--kivo-ink-900);
-    --kivo-surface-raised:  var(--kivo-ink-800);
-
-    --kivo-border:          var(--kivo-ink-800);
-    --kivo-border-strong:   var(--kivo-ink-700);
-    --kivo-border-focus:    var(--kivo-paper);
-
-    --kivo-text:            var(--kivo-paper);
-    --kivo-text-secondary:  var(--kivo-ink-400);
-    --kivo-text-muted:      var(--kivo-ink-500);
-    --kivo-text-inverse:    var(--kivo-ink-950);
-
-    --kivo-action:          var(--kivo-paper);
-    --kivo-action-hover:    var(--kivo-ink-200);
-    --kivo-action-text:     var(--kivo-ink-950);
-
-    --kivo-live:            var(--kivo-paper);
-    --kivo-live-bg:         var(--kivo-ink-950);
-
-    --kivo-shadow-hud:  0 1px 2px rgba(0,0,0,.6),
-                        0 8px 24px rgba(0,0,0,.55),
-                        0 24px 64px rgba(0,0,0,.45);
-    --kivo-shadow-menu: 0 1px 2px rgba(0,0,0,.6),
-                        0 6px 16px rgba(0,0,0,.5);
-  }
+  /* ---------------------------------------------------------------------
+     9. MOTION
+     --------------------------------------------------------------------- */
+  --kivo-duration-fast:   140ms;
+  --kivo-duration-normal: 220ms;
+  --kivo-ease:            cubic-bezier(0.2, 0, 0, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :root {
-    --kivo-duration-instant: 0ms;
-    --kivo-duration-fast:    0ms;
-    --kivo-duration-normal:  0ms;
-    --kivo-duration-slow:    0ms;
-  }
+  :root { --kivo-duration-fast: 0ms; --kivo-duration-normal: 0ms; }
 }

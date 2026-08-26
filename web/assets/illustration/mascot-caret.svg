@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 130" width="120" height="130" fill="none" role="img" aria-label="A text cursor character">
+  <title>A text cursor character</title>
+  <path d="M48 92L42 118" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="42" cy="118" r="3.2" fill="#343433"/>
+  <path d="M72 92L78 118" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="78" cy="118" r="3.2" fill="#343433"/>
+  <path d="M60 10 100 88H20Z" fill="#FF3E00" stroke="#343433" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="50" cy="62" r="3.8" fill="#343433"/>
+  <circle cx="70" cy="62" r="3.8" fill="#343433"/>
+  <path d="M54.0 74Q60.0 80 66.0 74" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <path d="M30 72L12 80" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="12" cy="80" r="3.2" fill="#343433"/>
+  <path d="M90 72L108 80" stroke="#343433" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="108" cy="80" r="3.2" fill="#343433"/>
+</svg>
