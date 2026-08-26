@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 716" width="1240" height="716" font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif" role="img" aria-label="Kivo architecture">
+<title>Kivo architecture</title>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#404040"/></marker><marker id="ahf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5C5C5C"/></marker></defs>
+<rect width="1240" height="716" fill="#0A0A0A"/>
+<g transform="translate(24 0)">
+<g transform="translate(0 32) scale(1.35)">
+<rect x="3.4" y="10" width="3.2" height="12" rx="1.6" fill="#FFFFFF"/>
+<rect x="8.6" y="6" width="3.2" height="20" rx="1.6" fill="#FFFFFF"/>
+<rect x="13.8" y="8.5" width="3.2" height="15" rx="1.6" fill="#FFFFFF"/>
+<rect x="21.4" y="9.4" width="7.2" height="3.2" rx="1.6" fill="#FFFFFF"/>
+<rect x="21.4" y="14.4" width="7.2" height="3.2" rx="1.6" fill="#FFFFFF"/>
+<rect x="21.4" y="19.4" width="4.4" height="3.2" rx="1.6" fill="#FFFFFF"/>
+</g>
+<text x="66" y="52" font-size="21" font-weight="600" letter-spacing="-0.5" fill="#FFFFFF">Kivo — System Architecture</text>
+<text x="66" y="74" font-size="13" fill="#A6A6A6">Speech to clean text, on device. macOS · Windows.</text>
+</g>
+<text x="1216" y="52" text-anchor="end" font-size="11" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#5C5C5C">v0.1 · 2026</text>
+<text x="1216" y="72" text-anchor="end" font-size="11" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#5C5C5C">MIT · Gokulakrishnan</text>
+<rect x="24" y="118" width="1192" height="354" rx="14" fill="none" stroke="#404040" stroke-width="1.5" stroke-dasharray="7 6"/>
+<rect x="40" y="107" width="344" height="22" rx="11" fill="#0A0A0A"/>
+<text x="54" y="123" font-size="10.5" font-weight="600" letter-spacing="1.4" fill="#A6A6A6">TRUST BOUNDARY — NO AUDIO LEAVES THIS DEVICE</text>
+<text x="42.0" y="152" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#5C5C5C">01</text>
+<text x="68.0" y="152" font-size="10.5" font-weight="600" letter-spacing="1.5" fill="#FFFFFF">CAPTURE</text>
+<line x1="42.0" y1="164" x2="250.8" y2="164" stroke="#292929" stroke-width="1"/>
+<rect x="42.0" y="192" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="58.0" y="223" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">Global Hotkey</text>
+<text x="58.0" y="244" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">CGEventTap / RegisterHotKey</text>
+<rect x="42.0" y="282" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="58.0" y="313" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">Audio Capture</text>
+<text x="58.0" y="334" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">cpal · 16 kHz mono f32</text>
+<rect x="42.0" y="372" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="58.0" y="403" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">Ring Buffer</text>
+<text x="58.0" y="424" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">lock-free, 30 s window</text>
+<line x1="256.8" y1="320.0" x2="274.8" y2="320.0" stroke="#404040" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="278.8" y="152" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#5C5C5C">02</text>
+<text x="304.8" y="152" font-size="10.5" font-weight="600" letter-spacing="1.5" fill="#FFFFFF">SEGMENT</text>
+<line x1="278.8" y1="164" x2="487.6" y2="164" stroke="#292929" stroke-width="1"/>
+<rect x="278.8" y="192" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="294.8" y="223" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">Resampler</text>
+<text x="294.8" y="244" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">rubato · sinc interp.</text>
+<rect x="278.8" y="282" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="294.8" y="313" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">Silero VAD</text>
+<text x="294.8" y="334" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">ONNX · speech / silence</text>
+<rect x="278.8" y="372" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="294.8" y="403" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">Endpointer</text>
+<text x="294.8" y="424" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">chunk + pad boundaries</text>
+<line x1="493.6" y1="320.0" x2="511.6" y2="320.0" stroke="#404040" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="515.6" y="152" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#5C5C5C">03</text>
+<text x="541.6" y="152" font-size="10.5" font-weight="600" letter-spacing="1.5" fill="#FFFFFF">RECOGNISE</text>
+<line x1="515.6" y1="164" x2="724.4000000000001" y2="164" stroke="#292929" stroke-width="1"/>
+<rect x="515.6" y="192" width="208.8" height="76" rx="9" fill="#FFFFFF"/>
+<text x="531.6" y="223" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#0A0A0A">Parakeet TDT 0.6B</text>
+<text x="531.6" y="244" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#0A0A0A" opacity="0.62">NVIDIA · ONNX export</text>
+<rect x="515.6" y="282" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="531.6" y="313" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">ONNX Runtime</text>
+<text x="531.6" y="334" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">CoreML / DirectML / CUDA</text>
+<rect x="515.6" y="372" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="531.6" y="403" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">TDT Decoder</text>
+<text x="531.6" y="424" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">tokens + word timings</text>
+<line x1="730.4000000000001" y1="320.0" x2="748.4000000000001" y2="320.0" stroke="#404040" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="752.4000000000001" y="152" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#5C5C5C">04</text>
+<text x="778.4000000000001" y="152" font-size="10.5" font-weight="600" letter-spacing="1.5" fill="#FFFFFF">CLEAN</text>
+<line x1="752.4000000000001" y1="164" x2="961.2" y2="164" stroke="#292929" stroke-width="1"/>
+<rect x="752.4000000000001" y="192" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="768.4000000000001" y="223" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">Disfluency Filter</text>
+<text x="768.4000000000001" y="244" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">um, uh, false starts</text>
+<rect x="752.4000000000001" y="282" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="768.4000000000001" y="313" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">Vocabulary + Rules</text>
+<text x="768.4000000000001" y="334" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">names, acronyms, numbers</text>
+<rect x="752.4000000000001" y="372" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="768.4000000000001" y="403" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">LLM Polish</text>
+<text x="768.4000000000001" y="424" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">optional · local GGUF</text>
+<line x1="967.2" y1="320.0" x2="985.2" y2="320.0" stroke="#404040" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="989.2" y="152" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#5C5C5C">05</text>
+<text x="1015.2" y="152" font-size="10.5" font-weight="600" letter-spacing="1.5" fill="#FFFFFF">DELIVER</text>
+<line x1="989.2" y1="164" x2="1198.0" y2="164" stroke="#292929" stroke-width="1"/>
+<rect x="989.2" y="192" width="208.8" height="76" rx="9" fill="#FFFFFF"/>
+<text x="1005.2" y="223" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#0A0A0A">Text Injection</text>
+<text x="1005.2" y="244" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#0A0A0A" opacity="0.62">AXUIElement / SendInput</text>
+<rect x="989.2" y="282" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="1005.2" y="313" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">Clipboard Fallback</text>
+<text x="1005.2" y="334" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">restores prior contents</text>
+<rect x="989.2" y="372" width="208.8" height="76" rx="9" fill="#171717" stroke="#292929" stroke-width="1"/>
+<text x="1005.2" y="403" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">History</text>
+<text x="1005.2" y="424" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">SQLite · encrypted at rest</text>
+<text x="42" y="502" font-size="11" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#5C5C5C">microphone → pcm → speech segments → tokens → formatted text → your cursor</text>
+<text x="1216" y="502" text-anchor="end" font-size="11" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#5C5C5C">target: &lt; 300 ms from key-up to text</text>
+<rect x="24" y="526" width="1192" height="92" rx="12" fill="#000000" stroke="#292929" stroke-width="1"/>
+<text x="46" y="552" font-size="10.5" font-weight="600" letter-spacing="1.5" fill="#A6A6A6">APPLICATION SHELL</text>
+<text x="46.0" y="584" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">App Shell</text>
+<text x="46.0" y="604" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">Tauri v2 · Rust core</text>
+<line x1="319.0" y1="566" x2="319.0" y2="602" stroke="#292929" stroke-width="1"/>
+<text x="333.0" y="584" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">Interface</text>
+<text x="333.0" y="604" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">React + TS + Vite</text>
+<line x1="606.0" y1="566" x2="606.0" y2="602" stroke="#292929" stroke-width="1"/>
+<text x="620.0" y="584" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">Model Manager</text>
+<text x="620.0" y="604" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">fetch · verify · cache</text>
+<line x1="893.0" y1="566" x2="893.0" y2="602" stroke="#292929" stroke-width="1"/>
+<text x="907.0" y="584" font-size="13.5" font-weight="600" letter-spacing="-0.2" fill="#FFFFFF">Updater</text>
+<text x="907.0" y="604" font-size="10.5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">signed · notarised</text>
+<line x1="24" y1="640" x2="1216" y2="640" stroke="#292929" stroke-width="1"/>
+<text x="24" y="666" font-size="10.5" font-weight="600" letter-spacing="1.5" fill="#A6A6A6">NETWORK</text>
+<text x="116" y="666" font-size="12" fill="#FFFFFF">Two outbound calls exist, both user-initiated and both verifiable:</text>
+<text x="24" y="690" font-size="11" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" fill="#A6A6A6">→ model download (once, SHA-256 pinned)  → update check (opt-out)  × audio × transcripts × telemetry × account</text>
+</svg>
