@@ -70,6 +70,7 @@ function App() {
   }
 
   const stateLabel = { idle: "Ready", recording: "Listening", working: "Working" }[snap.state];
+  const hotkeyNote = snap.hotkeys.find((h) => h.value === config.hotkey)?.note ?? null;
 
   return (
     <>
@@ -116,11 +117,21 @@ function App() {
           <h2>Dictation</h2>
           <p className="sub">Hold to talk, or tap twice to keep it on. Esc throws the recording away.</p>
           <div className="row">
-            <div className="grow"><strong>Hold-to-talk key</strong><span className="hint">A bare modifier cannot collide with an app shortcut.</span></div>
+            <div className="grow">
+              <strong>Hold-to-talk key</strong>
+              <span className="hint">
+                A bare modifier does nothing on its own, so it cannot collide with an
+                app shortcut. Space is offered only as a chord — on its own it would
+                type into whatever you are working in.
+              </span>
+            </div>
             <select value={config.hotkey} onChange={(e) => update({ hotkey: e.target.value })}>
               {snap.hotkeys.map((h) => <option key={h.value} value={h.value}>{h.label}</option>)}
             </select>
           </div>
+          {hotkeyNote && (
+            <p className="note">{hotkeyNote}</p>
+          )}
           <div className="row">
             <div className="grow"><strong>Microphone</strong><span className="hint">Falls back to the system default if this one is unplugged.</span></div>
             <select value={config.input_device} onChange={(e) => update({ input_device: e.target.value })}>

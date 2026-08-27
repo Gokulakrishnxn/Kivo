@@ -223,3 +223,16 @@ input[type="text"] { width: 100%; user-select: text; }
   font-size: var(--kivo-micro); color: var(--kivo-ember-ink);
   text-decoration: underline; text-underline-offset: 2px;
 }
+
+/* A caveat attached to a specific choice — a collision with a macOS default,
+   for instance. Warm rather than alarming: it is information, not an error. */
+.note {
+  background: var(--kivo-sand);
+  box-shadow: var(--kivo-hairline-warm);
+  border-radius: 8px;
+  padding: 9px 12px;
+  margin: 2px 0 4px;
+  font-size: var(--kivo-micro);
+  line-height: 1.5;
+  color: var(--kivo-body);
+}

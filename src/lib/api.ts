@@ -39,7 +39,7 @@ export interface Snapshot {
   network: NetworkEvent[];
   devices: string[];
   error: string | null;
-  hotkeys: { value: string; label: string }[];
+  hotkeys: { value: string; label: string; note: string | null }[];
   modes: { value: Mode; label: string }[];
   onboarded: boolean;
 }

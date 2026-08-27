@@ -14,6 +14,7 @@ pub mod hotkey;
 pub mod inject;
 pub mod models;
 pub mod pipeline;
+pub mod tray;
 
 use std::sync::Arc;
 
@@ -52,6 +53,8 @@ struct Snapshot {
 struct HotKeyOption {
     value: HotKey,
     label: &'static str,
+    /// A collision worth warning about, shown beside the choice.
+    note: Option<&'static str>,
 }
 
 #[derive(Serialize)]
@@ -82,6 +85,7 @@ fn snapshot(app: tauri::State<'_, Arc<Kivo>>, query: Option<String>) -> Snapshot
             .map(|h| HotKeyOption {
                 value: *h,
                 label: h.label(),
+                note: h.note(),
             })
             .collect(),
         modes: [
@@ -303,22 +307,26 @@ pub fn run() {
 
             let worker = kivo.clone();
             let worker_handle = handle.clone();
+            let animator = tray::Animator::new();
             std::thread::spawn(move || {
                 for trigger in rx {
                     match trigger {
                         Trigger::Down => {
                             worker.begin();
                             show_overlay(&worker_handle);
+                            animator.start(&worker_handle);
                             broadcast(&worker_handle, &worker);
                         }
                         Trigger::Cancel => {
                             worker.cancel();
+                            animator.stop();
                             hide_overlay(&worker_handle);
                             broadcast(&worker_handle, &worker);
                         }
                         Trigger::Up => {
                             broadcast(&worker_handle, &worker);
                             let entry = worker.finish();
+                            animator.stop();
                             hide_overlay(&worker_handle);
                             broadcast(&worker_handle, &worker);
                             if let Some(e) = entry {
