@@ -5,14 +5,15 @@
 ### Turns voice into clean text
 
 Hold a key. Speak. Clean, punctuated text appears at your cursor — in any app,<br>
-on macOS and Windows, entirely on your own machine.
+entirely on your own machine. **macOS today; Windows is planned.**
 
 <br>
 
 [![CI](https://github.com/Gokulakrishnxn/Kivo/actions/workflows/ci.yml/badge.svg)](https://github.com/Gokulakrishnxn/Kivo/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/Gokulakrishnxn/Kivo/actions/workflows/codeql.yml/badge.svg)](https://github.com/Gokulakrishnxn/Kivo/actions/workflows/codeql.yml)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-0A0A0A.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-0A0A0A.svg)](#)
+[![Platform](https://img.shields.io/badge/platform-macOS-0A0A0A.svg)](#)
+[![Release](https://img.shields.io/github/v/release/Gokulakrishnxn/Kivo?include_prereleases&color=0A0A0A&label=release)](https://github.com/Gokulakrishnxn/Kivo/releases/latest)
 [![On-device](https://img.shields.io/badge/audio-never%20leaves%20your%20device-0A0A0A.svg)](SECURITY.md)
 
 **[Website](https://gokulakrishnxn.github.io/Kivo/)** ·
@@ -78,7 +79,7 @@ No editing pass.
 | 🎚️ **Modes** | Standard, message, email, notes, code — and raw, when you want exactly what you said. |
 | 🔒 **On-device** | Audio never leaves your machine and is never written to disk. |
 | 🚫 **No account** | Nothing to sign up for. No telemetry. No subscription. |
-| 🖥️ **macOS and Windows** | Native on both, with the same behaviour. |
+| 🖥️ **macOS** | Universal — Apple Silicon and Intel. Windows is planned, not started. |
 | 📖 **Open source** | MIT licensed. Read it, fork it, ship it. |
 
 ## How it works
