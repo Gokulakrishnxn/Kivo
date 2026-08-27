@@ -236,3 +236,14 @@ input[type="text"] { width: 100%; user-select: text; }
   line-height: 1.5;
   color: var(--kivo-body);
 }
+
+/* A conflict is not advice — it means the key will not work until something
+   changes, so it gets weight and a way to act on it. */
+.note--warn {
+  display: grid; gap: 8px; justify-items: start;
+  background: var(--kivo-honey);
+  box-shadow: none;
+  color: var(--kivo-badge-ink);
+}
+.note--warn strong { font-weight: 600; }
+.note--warn .btn { background: var(--kivo-badge-ink); color: #fff; }

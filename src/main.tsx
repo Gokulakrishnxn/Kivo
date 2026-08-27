@@ -129,9 +129,17 @@ function App() {
               {snap.hotkeys.map((h) => <option key={h.value} value={h.value}>{h.label}</option>)}
             </select>
           </div>
-          {hotkeyNote && (
+          {snap.conflict ? (
+            <div className="note note--warn">
+              <strong>{snap.conflict.taken_by}</strong>
+              <span>{snap.conflict.fix}</span>
+              <button className="btn" onClick={() => api.openPane(snap.conflict!.pane)}>
+                Open Keyboard settings
+              </button>
+            </div>
+          ) : hotkeyNote ? (
             <p className="note">{hotkeyNote}</p>
-          )}
+          ) : null}
           <div className="row">
             <div className="grow"><strong>Microphone</strong><span className="hint">Falls back to the system default if this one is unplugged.</span></div>
             <select value={config.input_device} onChange={(e) => update({ input_device: e.target.value })}>

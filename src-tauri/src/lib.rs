@@ -47,6 +47,8 @@ struct Snapshot {
     hotkeys: Vec<HotKeyOption>,
     modes: Vec<ModeOption>,
     onboarded: bool,
+    /// Set when macOS has already claimed the chosen key.
+    conflict: Option<hotkey::conflict::Conflict>,
 }
 
 #[derive(Serialize)]
@@ -79,6 +81,7 @@ fn snapshot(app: tauri::State<'_, Arc<Kivo>>, query: Option<String>) -> Snapshot
         network: app.network.lock().clone(),
         devices: audio::input_devices(),
         onboarded: Config::path().exists(),
+        conflict: hotkey::conflict::check(app.config.lock().hotkey),
         error: app.last_error.lock().clone(),
         hotkeys: HotKey::all()
             .iter()
@@ -173,6 +176,20 @@ fn finish_onboarding(app: tauri::State<'_, Arc<Kivo>>) -> Result<(), String> {
 
 /// Open the macOS pane where Accessibility permission is granted. Deep-linking
 /// beats telling someone to go and find it.
+/// Open an arbitrary System Settings pane by URL. Only ever called with a
+/// pane string Kivo itself produced.
+#[tauri::command]
+fn open_settings_pane(pane: String) {
+    #[cfg(target_os = "macos")]
+    {
+        if pane.starts_with("x-apple.systempreferences:") {
+            let _ = std::process::Command::new("open").arg(&pane).spawn();
+        }
+    }
+    #[cfg(not(target_os = "macos"))]
+    let _ = pane;
+}
+
 #[tauri::command]
 fn open_accessibility_settings() {
     #[cfg(target_os = "macos")]
@@ -245,6 +262,7 @@ pub fn run() {
             remove_model,
             finish_onboarding,
             open_accessibility_settings,
+            open_settings_pane,
             demo
         ])
         .setup(move |app| {

@@ -5,6 +5,8 @@
 //! keyboard. So the handler does exactly one thing — push an event onto a
 //! channel — and every decision is made on the far side of it.
 
+pub mod conflict;
+
 use crossbeam_channel::Sender;
 use serde::{Deserialize, Serialize};
 use std::time::{Duration, Instant};

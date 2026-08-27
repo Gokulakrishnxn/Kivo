@@ -42,6 +42,7 @@ export interface Snapshot {
   hotkeys: { value: string; label: string; note: string | null }[];
   modes: { value: Mode; label: string }[];
   onboarded: boolean;
+  conflict: { taken_by: string; fix: string; pane: string } | null;
 }
 
 export type ModelProgress =
@@ -60,6 +61,7 @@ export const api = {
   removeModel: () => invoke<void>("remove_model"),
   finishOnboarding: () => invoke<void>("finish_onboarding"),
   openAccessibility: () => invoke<void>("open_accessibility_settings"),
+  openPane: (pane: string) => invoke<void>("open_settings_pane", { pane }),
   demo: () => invoke<{ said: string; typed: string }>("demo"),
 };
 
