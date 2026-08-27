@@ -12,8 +12,11 @@ credentials, and no maintainer or agent should ever be handed them.
 No certificate, no Apple account, no annual fee. It is valid, it runs on the Mac
 that built it, and `codesign --verify --deep --strict` passes.
 
-It will **not** open on anyone else's Mac without them right-clicking → Open and
-accepting a warning. Gatekeeper rejects it by design:
+It will **not** open on anyone else's Mac without them explicitly overriding
+Gatekeeper. On **macOS 15 (Sequoia) and later** that means System Settings →
+Privacy & Security → *Open Anyway* — Apple removed the old Control-click → Open
+bypass, so any instructions telling users to Control-click are out of date.
+Gatekeeper rejects an ad-hoc build by design:
 
 ```
 src-tauri/target/release/bundle/macos/Kivo.app: rejected

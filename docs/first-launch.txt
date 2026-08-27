@@ -1,0 +1,65 @@
+Kivo — opening it the first time
+================================
+
+macOS will refuse to open Kivo and say:
+
+    "Kivo" Not Opened
+    Apple could not verify "Kivo" is free of malware that may harm your
+    Mac or compromise your privacy.
+
+Nothing is wrong with the download. Kivo is not signed with a paid Apple
+Developer ID, and that is the message macOS shows for any such app.
+
+
+ON macOS 15 (SEQUOIA) AND LATER  --  including macOS 26
+-------------------------------------------------------
+Control-clicking and choosing "Open" NO LONGER WORKS. Apple removed that
+bypass in macOS 15. Do this instead:
+
+  1. Drag Kivo into Applications.
+  2. Double-click it once and dismiss the warning.
+     This step matters -- it is what makes the button in step 4 appear.
+  3. Open System Settings > Privacy & Security.
+  4. Scroll down to Security. You will see
+     "Kivo was blocked to protect your Mac".
+     Click "Open Anyway", authenticate, and confirm.
+
+You only do this once.
+
+
+FASTER, IF YOU ARE COMFORTABLE IN TERMINAL
+------------------------------------------
+  xattr -dr com.apple.quarantine /Applications/Kivo.app
+
+That removes the download quarantine flag. Only run it on software you
+trust and have verified -- see the checksum note below.
+
+
+ON macOS 14 AND EARLIER
+-----------------------
+  Control-click Kivo in Applications > Open > Open.
+
+
+VERIFY WHAT YOU DOWNLOADED
+--------------------------
+The SHA-256 of this disk image is published on the release page it came
+from. Check it before removing any quarantine flag:
+
+  shasum -a 256 <the .dmg you downloaded>
+
+
+AFTER IT OPENS
+--------------
+Kivo lives in the menu bar. It has no Dock icon and no window until you
+choose Settings from the menu bar icon.
+
+It needs two permissions, and explains each before asking:
+
+  * Microphone     -- requested on your first dictation.
+  * Accessibility  -- System Settings > Privacy & Security > Accessibility.
+                      This is how Kivo sees your hotkey and inserts text.
+                      It reads nothing from your screen.
+
+Then hold Right Option, speak, and let go.
+
+Source: https://github.com/Gokulakrishnxn/Kivo

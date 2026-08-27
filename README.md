@@ -141,13 +141,23 @@ violation of any of these is a security vulnerability** — see [SECURITY.md](SE
 Universal — Apple Silicon and Intel, macOS 11 or later.
 
 > [!IMPORTANT]
-> Kivo is not signed with an Apple Developer ID, so after dragging it to
-> Applications you must **right-click → Open** the first time. macOS may say the
-> app is *"damaged"* — it is not. That is the message it shows for any app it
-> cannot trace to a paid developer account. You do this once.
+> **macOS will block the first launch**, saying *"Apple could not verify Kivo is
+> free of malware"*. Nothing is wrong with the download — Kivo is not signed with
+> a paid Apple Developer ID, and that is the message macOS shows for any such app.
 >
-> Verify the download first: the SHA-256 is on the
+> **On macOS 15 (Sequoia) and later, Control-click → Open no longer works.** Apple
+> removed that bypass. Instead:
+>
+> 1. Drag Kivo into Applications and double-click it once, dismissing the warning.
+> 2. Open **System Settings → Privacy & Security**, scroll to **Security**.
+> 3. Click **Open Anyway** next to "Kivo was blocked to protect your Mac".
+>
+> Or, equivalently: `xattr -dr com.apple.quarantine /Applications/Kivo.app`
+>
+> Verify the download before doing either — the SHA-256 is on the
 > [release page](https://github.com/Gokulakrishnxn/Kivo/releases/latest).
+>
+> On macOS 14 and earlier, Control-click → Open still works.
 
 Kivo then asks for two permissions, explaining each before it does:
 **Microphone**, and **Accessibility** (System Settings → Privacy & Security →
