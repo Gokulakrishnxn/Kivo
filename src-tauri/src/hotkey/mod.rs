@@ -22,59 +22,105 @@ const TAP: Duration = Duration::from_millis(280);
 /// Two taps inside this window latch recording on, for hands-free dictation.
 const DOUBLE_TAP: Duration = Duration::from_millis(550);
 
-/// Which physical key holds the microphone open.
+/// Which key holds the microphone open.
 ///
-/// A bare modifier is the ergonomic choice: it is reachable without a chord and
-/// it cannot collide with an application shortcut, because on its own it does
-/// nothing. Right-hand modifiers are preferred since they are rarely bound.
+/// Two shapes are offered, because neither suits everyone:
+///
+/// * **A bare modifier** (Fn, Right Option…) — one key, nothing to chord, and
+///   it cannot collide with an application shortcut because on its own it does
+///   nothing. This is the default.
+/// * **A chord ending in Space** — for people who want Space as the trigger.
+///
+/// Space *on its own* is deliberately not offered. Kivo observes the keyboard
+/// rather than intercepting it, so it cannot swallow the keystroke: a bare
+/// Space trigger would type a space into whatever you are working in every
+/// time you started dictating, and every space you typed would start a
+/// recording. A chord has neither problem.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "kebab-case")]
 pub enum HotKey {
+    /// The globe / Fn key. Ergonomically the best of these, but see `note()`.
+    Fn,
     #[default]
     RightOption,
     RightCommand,
     RightControl,
     RightShift,
-    F13,
+    OptionSpace,
+    ControlSpace,
+    ShiftSpace,
 }
 
 impl HotKey {
     pub fn label(&self) -> &'static str {
         match self {
+            HotKey::Fn => "Fn (globe)",
             HotKey::RightOption => "Right Option",
             HotKey::RightCommand => "Right Command",
             HotKey::RightControl => "Right Control",
             HotKey::RightShift => "Right Shift",
-            HotKey::F13 => "F13",
+            HotKey::OptionSpace => "Option + Space",
+            HotKey::ControlSpace => "Control + Space",
+            HotKey::ShiftSpace => "Shift + Space",
         }
     }
 
-    fn matches(&self, key: rdev::Key) -> bool {
+    /// A caveat worth showing next to the choice, or none.
+    pub fn note(&self) -> Option<&'static str> {
+        match self {
+            HotKey::Fn => Some(
+                "macOS may already use Fn for dictation or emoji. Set                  System Settings › Keyboard › “Press 🌐 key to” to “Do Nothing”.",
+            ),
+            HotKey::ControlSpace => Some(
+                "macOS often uses Control + Space to switch input sources.",
+            ),
+            _ => None,
+        }
+    }
+
+    /// The modifier that must be held, for chord bindings.
+    fn modifier(&self) -> Option<&'static [rdev::Key]> {
         use rdev::Key as K;
-        matches!(
-            (self, key),
-            (HotKey::RightOption, K::AltGr)
-                | (HotKey::RightCommand, K::MetaRight)
-                | (HotKey::RightControl, K::ControlRight)
-                | (HotKey::RightShift, K::ShiftRight)
-                | (HotKey::F13, K::Function)
-        )
+        match self {
+            HotKey::OptionSpace => Some(&[K::Alt, K::AltGr]),
+            HotKey::ControlSpace => Some(&[K::ControlLeft, K::ControlRight]),
+            HotKey::ShiftSpace => Some(&[K::ShiftLeft, K::ShiftRight]),
+            _ => None,
+        }
+    }
+
+    /// The key that actually starts and stops recording.
+    fn trigger(&self) -> rdev::Key {
+        use rdev::Key as K;
+        match self {
+            // rdev maps Key::Function to macOS keycode 63, which is the real
+            // Fn/globe key — not F13.
+            HotKey::Fn => K::Function,
+            HotKey::RightOption => K::AltGr,
+            HotKey::RightCommand => K::MetaRight,
+            HotKey::RightControl => K::ControlRight,
+            HotKey::RightShift => K::ShiftRight,
+            HotKey::OptionSpace | HotKey::ControlSpace | HotKey::ShiftSpace => K::Space,
+        }
     }
 
     pub fn all() -> &'static [HotKey] {
         &[
             HotKey::RightOption,
+            HotKey::Fn,
             HotKey::RightCommand,
             HotKey::RightControl,
             HotKey::RightShift,
-            HotKey::F13,
+            HotKey::OptionSpace,
+            HotKey::ControlSpace,
+            HotKey::ShiftSpace,
         ]
     }
 }
 
 /// Start listening. Blocks its own thread forever, so spawn it.
 ///
-/// Two gestures, both on the same key:
+/// Two gestures, on whichever binding is configured:
 ///   * **hold** — record while held, insert on release (push to talk)
 ///   * **tap twice** — latch recording on; a single tap stops it (hands free)
 ///
@@ -85,15 +131,56 @@ impl HotKey {
 /// instruction rather than a silent dead hotkey.
 pub fn listen(key: HotKey, tx: Sender<Trigger>) -> Result<(), String> {
     let mut state = Gesture::default();
+    let trigger = key.trigger();
+    let modifier = key.modifier();
+    // Which of the accepted modifier keys are currently down. A chord binding
+    // only fires while at least one of them is held.
+    let mut mods_held: Vec<rdev::Key> = Vec::new();
 
     rdev::listen(move |event| {
-        let out = match event.event_type {
-            // Modifier keys repeat while held; only edges are interesting.
-            rdev::EventType::KeyPress(k) if key.matches(k) => state.press(Instant::now()),
-            rdev::EventType::KeyRelease(k) if key.matches(k) => state.release(Instant::now()),
-            rdev::EventType::KeyPress(rdev::Key::Escape) => state.escape(),
-            _ => None,
-        };
+        let mut out = None;
+
+        match event.event_type {
+            rdev::EventType::KeyPress(k) => {
+                if let Some(accepted) = modifier {
+                    if accepted.contains(&k) && !mods_held.contains(&k) {
+                        mods_held.push(k);
+                    }
+                }
+                if k == trigger {
+                    let armed = modifier.is_none() || !mods_held.is_empty();
+                    if armed {
+                        out = state.press(Instant::now());
+                    }
+                }
+            }
+            rdev::EventType::KeyRelease(k) => {
+                if k == trigger {
+                    out = state.release(Instant::now());
+                }
+                if let Some(accepted) = modifier {
+                    if accepted.contains(&k) {
+                        mods_held.retain(|h| *h != k);
+                        // Letting go of the modifier ends the chord. Without
+                        // this, releasing Option before Space would leave the
+                        // microphone open with no obvious way to close it.
+                        if mods_held.is_empty() {
+                            if let Some(t) = state.break_chord() {
+                                out = Some(t);
+                            }
+                        }
+                    }
+                }
+            }
+            _ => {}
+        }
+
+        if let rdev::EventType::KeyPress(rdev::Key::Escape) = event.event_type {
+            if let Some(t) = state.escape() {
+                out = Some(t);
+            }
+        }
+
         if let Some(t) = out {
             let _ = tx.try_send(t);
         }
@@ -158,6 +245,17 @@ impl Gesture {
         Some(Trigger::Up)
     }
 
+    /// The modifier half of a chord was released.
+    fn break_chord(&mut self) -> Option<Trigger> {
+        if self.held || self.latched {
+            self.held = false;
+            self.latched = false;
+            self.last_tap = None;
+            return Some(Trigger::Up);
+        }
+        None
+    }
+
     fn escape(&mut self) -> Option<Trigger> {
         if self.held || self.latched {
             self.held = false;
@@ -172,27 +270,6 @@ impl Gesture {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn every_hotkey_maps_to_exactly_one_physical_key() {
-        use rdev::Key as K;
-        let keys = [
-            K::AltGr,
-            K::MetaRight,
-            K::ControlRight,
-            K::ShiftRight,
-            K::Function,
-        ];
-        for hk in HotKey::all() {
-            let hits = keys.iter().filter(|k| hk.matches(**k)).count();
-            assert_eq!(hits, 1, "{} matched {hits} keys", hk.label());
-        }
-    }
-
-    #[test]
-    fn an_unrelated_key_never_triggers() {
-        assert!(!HotKey::RightOption.matches(rdev::Key::KeyA));
-    }
 
     fn at(ms: u64) -> Instant {
         // A fixed origin plus an offset, so tests are deterministic.
