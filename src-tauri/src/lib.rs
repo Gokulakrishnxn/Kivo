@@ -49,6 +49,8 @@ struct Snapshot {
     onboarded: bool,
     /// Set when macOS has already claimed the chosen key.
     conflict: Option<hotkey::conflict::Conflict>,
+    /// False when macOS will not let Kivo see the keyboard at all.
+    accessibility: bool,
 }
 
 #[derive(Serialize)]
@@ -82,6 +84,7 @@ fn snapshot(app: tauri::State<'_, Arc<Kivo>>, query: Option<String>) -> Snapshot
         devices: audio::input_devices(),
         onboarded: Config::path().exists(),
         conflict: hotkey::conflict::check(app.config.lock().hotkey),
+        accessibility: hotkey::trust::is_trusted(),
         error: app.last_error.lock().clone(),
         hotkeys: HotKey::all()
             .iter()
@@ -190,6 +193,12 @@ fn open_settings_pane(pane: String) {
     let _ = pane;
 }
 
+/// Ask macOS for Accessibility permission from the interface.
+#[tauri::command]
+fn request_accessibility() -> bool {
+    hotkey::trust::request_trust()
+}
+
 #[tauri::command]
 fn open_accessibility_settings() {
     #[cfg(target_os = "macos")]
@@ -240,10 +249,41 @@ fn broadcast(app: &tauri::AppHandle, kivo: &Arc<Kivo>) {
 
 pub fn run() {
     // No telemetry, ever — logs stay on the machine and go nowhere.
-    tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::INFO)
-        .with_target(false)
-        .init();
+    // A menu bar app has no console, so stdout goes nowhere the user can see.
+    // Without a log on disk, "it doesn't work" is undiagnosable — which is
+    // exactly the hole this fell into. Logs stay on the machine and go nowhere.
+    //
+    // Levels are chosen so the default file never contains a transcript: text
+    // is logged only at debug, which requires RUST_LOG=debug deliberately.
+    let log_dir = dirs::home_dir()
+        .unwrap_or_default()
+        .join("Library/Logs/Kivo");
+    let _ = std::fs::create_dir_all(&log_dir);
+
+    let filter = tracing_subscriber::EnvFilter::try_from_default_env()
+        .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info"));
+
+    match std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(log_dir.join("kivo.log"))
+    {
+        Ok(file) => {
+            tracing_subscriber::fmt()
+                .with_env_filter(filter)
+                .with_target(false)
+                .with_ansi(false)
+                .with_writer(std::sync::Mutex::new(file))
+                .init();
+        }
+        Err(_) => {
+            tracing_subscriber::fmt()
+                .with_env_filter(filter)
+                .with_target(false)
+                .init();
+        }
+    }
+    tracing::info!("--- Kivo {} starting ---", env!("CARGO_PKG_VERSION"));
 
     let kivo = Kivo::new();
 
@@ -263,6 +303,7 @@ pub fn run() {
             finish_onboarding,
             open_accessibility_settings,
             open_settings_pane,
+            request_accessibility,
             demo
         ])
         .setup(move |app| {
@@ -296,6 +337,7 @@ pub fn run() {
                     _ => {}
                 })
                 .build(app)?;
+            tracing::info!("menu bar item created");
 
             // The hotkey hook gets its own thread and does nothing but forward
             // edges. Everything else happens on the worker below.
@@ -303,6 +345,23 @@ pub fn run() {
             let key = kivo.config.lock().hotkey;
             let listen_handle = handle.clone();
             std::thread::spawn(move || {
+                let trusted = hotkey::trust::is_trusted();
+                tracing::info!(
+                    "hotkey listener starting: key={} accessibility_trusted={}",
+                    key.label(),
+                    trusted
+                );
+                if !trusted {
+                    // Raises the system dialog and registers Kivo in the
+                    // Accessibility list, so there is a switch to flip.
+                    hotkey::trust::request_trust();
+                    let _ = listen_handle.emit(
+                        "kivo://permission",
+                        "Kivo does not have Accessibility permission, so it cannot see \
+                         your hotkey. Grant it in System Settings › Privacy & Security › \
+                         Accessibility, then quit and reopen Kivo.",
+                    );
+                }
                 if let Err(e) = hotkey::listen(key, tx) {
                     tracing::error!("hotkey listener stopped: {e}");
                     let _ = listen_handle.emit(
@@ -328,6 +387,7 @@ pub fn run() {
             let animator = tray::Animator::new();
             std::thread::spawn(move || {
                 for trigger in rx {
+                    tracing::info!("hotkey trigger: {trigger:?}");
                     match trigger {
                         Trigger::Down => {
                             worker.begin();

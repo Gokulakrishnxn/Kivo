@@ -116,8 +116,22 @@ impl Kivo {
             return;
         }
         let device = self.config.lock().input_device.clone();
+        tracing::info!(
+            "begin: opening input device {:?}",
+            if device.is_empty() {
+                "<system default>"
+            } else {
+                &device
+            }
+        );
         match Capture::start(&device) {
             Ok(c) => {
+                tracing::info!(
+                    "begin: device open — {} @ {} Hz, {} ch",
+                    c.device_name,
+                    c.device_rate,
+                    c.channels
+                );
                 *self.capture.lock() = Some(c);
                 *self.state.lock() = State::Recording;
             }
@@ -138,6 +152,11 @@ impl Kivo {
         let started = Instant::now();
 
         let samples = capture.stop();
+        tracing::info!(
+            "captured {} samples ({:.1}s at 16 kHz)",
+            samples.len(),
+            samples.len() as f32 / 16_000.0
+        );
         let speech = audio::trim_silence(&samples, audio::TARGET_RATE);
 
         if speech.len() < audio::TARGET_RATE as usize / 10 {
@@ -174,6 +193,14 @@ impl Kivo {
                 "Kivo could not insert text into this app, so it was left on your clipboard. {e}"
             ));
         }
+
+        tracing::info!(
+            "recognised {} chars, cleaned to {} chars",
+            raw.chars().count(),
+            text.chars().count()
+        );
+        tracing::debug!("raw: {raw:?}");
+        tracing::debug!("clean: {text:?}");
 
         let millis = started.elapsed().as_millis() as u64;
         let mode = cfg.mode.label().to_string();

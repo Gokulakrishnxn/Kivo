@@ -6,6 +6,7 @@
 //! channel — and every decision is made on the far side of it.
 
 pub mod conflict;
+pub mod trust;
 
 use crossbeam_channel::Sender;
 use serde::{Deserialize, Serialize};
@@ -141,6 +142,14 @@ pub fn listen(key: HotKey, tx: Sender<Trigger>) -> Result<(), String> {
 
     rdev::listen(move |event| {
         let mut out = None;
+
+        // At debug this prints every key the OS hands us, which is the only way
+        // to tell "the hook is dead" apart from "the binding never matches".
+        match event.event_type {
+            rdev::EventType::KeyPress(k) => tracing::debug!("key down: {k:?}"),
+            rdev::EventType::KeyRelease(k) => tracing::debug!("key up:   {k:?}"),
+            _ => {}
+        }
 
         match event.event_type {
             rdev::EventType::KeyPress(k) => {
