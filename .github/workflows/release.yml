@@ -51,7 +51,7 @@ jobs:
           key: sherpa-rs-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('src-tauri/Cargo.lock') }}
           restore-keys: sherpa-rs-${{ runner.os }}-${{ matrix.target }}-
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 9
 
