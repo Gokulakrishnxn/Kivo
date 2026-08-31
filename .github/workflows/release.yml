@@ -45,7 +45,7 @@ jobs:
           cache-targets: false
 
       - name: Cache sherpa-onnx prebuilts
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/Library/Caches/sherpa-rs
           key: sherpa-rs-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('src-tauri/Cargo.lock') }}
