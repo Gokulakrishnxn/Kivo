@@ -43,6 +43,8 @@ export interface Snapshot {
   modes: { value: Mode; label: string }[];
   onboarded: boolean;
   conflict: { taken_by: string; fix: string; pane: string } | null;
+  /** False when macOS will not let Kivo see the keyboard at all. */
+  accessibility: boolean;
 }
 
 export type ModelProgress =
@@ -62,6 +64,11 @@ export const api = {
   finishOnboarding: () => invoke<void>("finish_onboarding"),
   openAccessibility: () => invoke<void>("open_accessibility_settings"),
   openPane: (pane: string) => invoke<void>("open_settings_pane", { pane }),
+  /** Raises the native Accessibility prompt and registers Kivo in the list. */
+  requestAccessibility: () => invoke<boolean>("request_accessibility"),
+  /** Briefly opens the microphone, which is what makes macOS ask permission. */
+  requestMicrophone: () => invoke<boolean>("request_microphone"),
+  quitApp: () => invoke<void>("quit_app"),
   demo: () => invoke<{ said: string; typed: string }>("demo"),
 };
 

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { Mark } from "./lib/mark";
 import { Onboarding } from "./app/Onboarding";
+import { ErrorBoundary } from "./lib/ErrorBoundary";
 import { ago, api, type Config, type ModelProgress, type Snapshot } from "./lib/api";
 import "./styles.css";
 
@@ -16,6 +17,7 @@ const RULES: { key: keyof Config; title: string; hint: string }[] = [
 function App() {
   const [snap, setSnap] = useState<Snapshot | null>(null);
   const [showOnboarding, setShowOnboarding] = useState<boolean | null>(null);
+  const [bootError, setBootError] = useState<string | null>(null);
   const [permission, setPermission] = useState<string | null>(null);
   const [sample, setSample] = useState("");
   const [preview, setPreview] = useState("");
@@ -28,8 +30,14 @@ function App() {
   const refresh = useCallback(async (q = query) => setSnap(await api.snapshot(q)), [query]);
 
   useEffect(() => {
-    api.snapshot("").then((s) => { setSnap(s); setShowOnboarding(!s.onboarded); });
-    api.demo().then((d) => setSample(d.said));
+    // If this rejects — an IPC problem, or the Rust side wedged — the window
+    // must not sit on "Starting…" forever with no way to tell that apart from
+    // an app that is still genuinely loading.
+    api
+      .snapshot("")
+      .then((s) => { setSnap(s); setShowOnboarding(!s.onboarded); })
+      .catch((e) => setBootError(String(e)));
+    api.demo().then((d) => setSample(d.said)).catch(() => {});
     const subs = [
       listen("kivo://state", () => refresh()),
       listen("kivo://inserted", () => refresh()),
@@ -61,6 +69,23 @@ function App() {
     await api.saveConfig(next);
     refresh();
   }, [snap, refresh]);
+
+  if (bootError) {
+    return (
+      <div className="onboard" style={{ maxWidth: 480 }}>
+        <h1>Kivo could not start Settings.</h1>
+        <p>Dictation from the menu bar is unaffected — only this window failed to load.</p>
+        <p className="bad" style={{ userSelect: "text" }}>{bootError}</p>
+        <p>
+          The full detail is in{" "}
+          <code style={{ userSelect: "text" }}>~/Library/Logs/Kivo/kivo.log</code>.
+        </p>
+        <div className="onboard__action">
+          <button className="btn" onClick={() => location.reload()}>Try again</button>
+        </div>
+      </div>
+    );
+  }
 
   if (!snap || !config || showOnboarding === null) {
     return <div className="shell"><p className="empty">Starting…</p></div>;
@@ -273,9 +298,24 @@ function App() {
           <div className="row"><div className="grow"><strong>Telemetry</strong></div><span className="meta">not implemented</span></div>
           <div className="row"><div className="grow"><strong>Account</strong></div><span className="meta">none</span></div>
         </section>
+
+        {/* ── quit ─────────────────────────────────────────────────────── */}
+        <section className="card">
+          <div className="row" style={{ borderTop: 0 }}>
+            <div className="grow">
+              <strong>Quit Kivo</strong>
+              <span className="hint">Kivo otherwise stays in the menu bar. Find it there any time.</span>
+            </div>
+            <button className="btn sand" onClick={() => api.quitApp()}>Quit</button>
+          </div>
+        </section>
       </div>
     </>
   );
 }
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(
+  <ErrorBoundary>
+    <App />
+  </ErrorBoundary>,
+);
