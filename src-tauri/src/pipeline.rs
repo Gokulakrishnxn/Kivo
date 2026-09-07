@@ -45,32 +45,50 @@ impl Kivo {
     pub fn new() -> Arc<Self> {
         let config = Config::load();
         let dir = Parakeet::default_dir();
-
-        // A missing model must not stop the app from starting; the user needs
-        // the interface in order to fix it.
-        let recogniser: Box<dyn Recogniser> = if Parakeet::is_installed(&dir) {
-            match Parakeet::load_with_hotwords(&dir, num_threads(), &config.vocabulary) {
-                Ok(p) => Box::new(p),
-                Err(e) => {
-                    tracing::error!("could not load Parakeet: {e:#}");
-                    Box::new(Unavailable)
-                }
-            }
-        } else {
-            Box::new(Unavailable)
-        };
-
         let history = History::open(config.keep_history);
 
-        Arc::new(Self {
+        // Load the recogniser on a worker, never here. Parakeet's first load
+        // is several seconds (CoreML graph compile can be much longer) and
+        // this constructor runs on the AppKit main thread before the event
+        // loop exists. Doing it in place is what made macOS mark Kivo as
+        // "not responding" on launch.
+        let this = Arc::new(Self {
             config: Mutex::new(config),
-            recogniser: Mutex::new(recogniser),
+            recogniser: Mutex::new(Box::new(Unavailable) as Box<dyn Recogniser>),
             capture: Mutex::new(None),
             state: Mutex::new(State::Idle),
             history: Mutex::new(history),
             network: Mutex::new(Vec::new()),
             last_error: Mutex::new(None),
-        })
+        });
+
+        if Parakeet::is_installed(&dir) {
+            let loader = this.clone();
+            let vocab = loader.config.lock().vocabulary.clone();
+            std::thread::Builder::new()
+                .name("kivo-model-load".into())
+                .spawn(move || match Parakeet::load_with_hotwords(
+                    &dir,
+                    num_threads(),
+                    &vocab,
+                ) {
+                    Ok(p) => {
+                        tracing::info!("model ready: {}", p.describe());
+                        *loader.recogniser.lock() = Box::new(p);
+                    }
+                    Err(e) => {
+                        tracing::error!("could not load Parakeet: {e:#}");
+                        *loader.last_error.lock() = Some(format!(
+                            "The speech model is installed but Kivo could not load it. {e:#}"
+                        ));
+                    }
+                })
+                .expect("could not spawn the model loader");
+        } else {
+            tracing::info!("no speech model installed yet");
+        }
+
+        this
     }
 
     /// Apply a new configuration, reopening whatever it changes.
@@ -99,6 +117,10 @@ impl Kivo {
     /// Try to (re)load the model — after a download, or a vocabulary change.
     pub fn reload_model(&self) -> Result<String> {
         let dir = Parakeet::default_dir();
+        if !Parakeet::is_installed(&dir) {
+            *self.recogniser.lock() = Box::new(Unavailable);
+            return Ok("none installed".into());
+        }
         let vocab = self.config.lock().vocabulary.clone();
         let p = Parakeet::load_with_hotwords(&dir, num_threads(), &vocab)?;
         let desc = p.describe();

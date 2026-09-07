@@ -67,24 +67,34 @@ struct ModeOption {
     label: &'static str,
 }
 
-#[tauri::command]
-fn snapshot(app: tauri::State<'_, Arc<Kivo>>, query: Option<String>) -> Snapshot {
+fn build_snapshot(app: &Kivo, query: &str) -> Snapshot {
     let dir = asr::parakeet::Parakeet::default_dir();
-    let q = query.unwrap_or_default();
+
+    // Locked once, into an owned value, ahead of the struct literal below.
+    // A `MutexGuard` created *inside* a struct literal is a temporary whose
+    // scope runs to the end of that whole statement — so the second
+    // `app.config.lock()` this used to have further down (for `conflict`)
+    // was trying to re-acquire a lock this same call was already holding.
+    // `parking_lot::Mutex` is not reentrant, so that self-deadlocked
+    // whichever thread ran this function on every single call, which,
+    // for the very first `snapshot` invocation of every launch, is what
+    // "Settings never renders and macOS calls it not responding" was.
+    let config = app.config.lock().clone();
+
     Snapshot {
         state: *app.state.lock(),
-        config: app.config.lock().clone(),
         model: app.describe_model(),
         model_installed: asr::parakeet::Parakeet::is_installed(&dir),
         model_dir: dir.to_string_lossy().into_owned(),
         model_download_mb: crate::models::DOWNLOAD_MB,
-        history: app.recent_history(50, &q),
+        history: app.recent_history(50, query),
         history_enabled: app.history.lock().is_enabled(),
         network: app.network.lock().clone(),
         devices: audio::input_devices(),
         onboarded: Config::path().exists(),
-        conflict: hotkey::conflict::check(app.config.lock().hotkey),
+        conflict: hotkey::conflict::check(config.hotkey),
         accessibility: hotkey::trust::is_trusted(),
+        config,
         error: app.last_error.lock().clone(),
         hotkeys: HotKey::all()
             .iter()
@@ -111,11 +121,35 @@ fn snapshot(app: tauri::State<'_, Arc<Kivo>>, query: Option<String>) -> Snapshot
     }
 }
 
+/// Runs off the AppKit main thread. `input_devices`, `defaults read` and
+/// `AXIsProcessTrusted` are all cheap until they are not — and a sync Tauri
+/// command is scheduled on the main thread, which is how Settings froze as
+/// "not responding" with a blank window.
 #[tauri::command]
-fn save_config(app: tauri::State<'_, Arc<Kivo>>, config: Config) -> Result<(), String> {
-    config.save().map_err(|e| e.to_string())?;
-    app.apply_config(config);
-    Ok(())
+async fn snapshot(
+    app: tauri::State<'_, Arc<Kivo>>,
+    query: Option<String>,
+) -> Result<Snapshot, String> {
+    let kivo = app.inner().clone();
+    let q = query.unwrap_or_default();
+    tauri::async_runtime::spawn_blocking(move || build_snapshot(&kivo, &q))
+        .await
+        .map_err(|e| format!("snapshot failed: {e}"))
+}
+
+#[tauri::command]
+async fn save_config(
+    app: tauri::State<'_, Arc<Kivo>>,
+    config: Config,
+) -> Result<(), String> {
+    let kivo = app.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        config.save().map_err(|e| e.to_string())?;
+        kivo.apply_config(config);
+        Ok(())
+    })
+    .await
+    .map_err(|e| format!("{e}"))?
 }
 
 /// Download, verify and install the speech model. Runs off the UI thread and
@@ -163,10 +197,15 @@ fn install_model(app: tauri::AppHandle, kivo: tauri::State<'_, Arc<Kivo>>) {
 }
 
 #[tauri::command]
-fn remove_model(app: tauri::State<'_, Arc<Kivo>>) -> Result<(), String> {
-    crate::models::remove().map_err(|e| format!("{e:#}"))?;
-    let _ = app.reload_model();
-    Ok(())
+async fn remove_model(app: tauri::State<'_, Arc<Kivo>>) -> Result<(), String> {
+    let kivo = app.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        crate::models::remove().map_err(|e| format!("{e:#}"))?;
+        let _ = kivo.reload_model();
+        Ok(())
+    })
+    .await
+    .map_err(|e| format!("{e}"))?
 }
 
 /// Mark onboarding complete by writing settings for the first time.
@@ -192,9 +231,25 @@ fn open_settings_pane(pane: String) {
 }
 
 /// Ask macOS for Accessibility permission from the interface.
+///
+/// The prompt *must* be raised on the AppKit main thread. Calling
+/// `AXIsProcessTrustedWithOptions` from a worker (including Tauri's
+/// default command pool, and the hotkey listener thread) deadlocks:
+/// the prompt waits for the main run loop, the main run loop is busy
+/// waiting for the command, and the window paints nothing until Force
+/// Quit. That is the "Kivo (not responding)" state.
 #[tauri::command]
-fn request_accessibility() -> bool {
-    hotkey::trust::request_trust()
+async fn request_accessibility(app: tauri::AppHandle) -> bool {
+    let (tx, rx) = std::sync::mpsc::sync_channel(1);
+    if app
+        .run_on_main_thread(move || {
+            let _ = tx.send(hotkey::trust::request_trust());
+        })
+        .is_err()
+    {
+        return false;
+    }
+    rx.recv().unwrap_or(false)
 }
 
 /// Briefly open the microphone and immediately close it again.
@@ -211,8 +266,8 @@ fn request_accessibility() -> bool {
 /// `kivo://permission` banner remains the safety net if access turns out to
 /// have been refused.
 #[tauri::command]
-fn request_microphone() -> bool {
-    match audio::Capture::start("") {
+async fn request_microphone() -> bool {
+    tauri::async_runtime::spawn_blocking(|| match audio::Capture::start("") {
         Ok(c) => {
             std::thread::sleep(std::time::Duration::from_millis(120));
             let _ = c.stop();
@@ -222,7 +277,9 @@ fn request_microphone() -> bool {
             tracing::warn!("microphone probe failed: {e:#}");
             false
         }
-    }
+    })
+    .await
+    .unwrap_or(false)
 }
 
 /// Quit Kivo entirely. The tray menu already offers this; Settings does too,
@@ -274,8 +331,11 @@ fn dismiss_error(app: tauri::State<'_, Arc<Kivo>>) {
 }
 
 #[tauri::command]
-fn reload_model(app: tauri::State<'_, Arc<Kivo>>) -> Result<String, String> {
-    app.reload_model().map_err(|e| format!("{e:#}"))
+async fn reload_model(app: tauri::State<'_, Arc<Kivo>>) -> Result<String, String> {
+    let kivo = app.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || kivo.reload_model().map_err(|e| format!("{e:#}")))
+        .await
+        .map_err(|e| format!("{e}"))?
 }
 
 /// The worked example from the PRD, so onboarding can demonstrate the product
@@ -358,8 +418,9 @@ pub fn run() {
         .setup(move |app| {
             let handle = app.handle().clone();
 
-            // Kivo lives in the menu bar. Closing the settings window hides it
-            // rather than quitting — the hotkey must keep working.
+            // Menu-bar resident while idle. present_main_window flips this
+            // to Regular so Settings appears in the Dock, Cmd-Tab and Force
+            // Quit — Accessory is only correct when there is no window.
             #[cfg(target_os = "macos")]
             app.set_activation_policy(tauri::ActivationPolicy::Accessory);
 
@@ -393,23 +454,35 @@ pub fn run() {
             let key = kivo.config.lock().hotkey;
             let listen_handle = handle.clone();
             std::thread::spawn(move || {
-                let trusted = hotkey::trust::is_trusted();
-                tracing::info!(
-                    "hotkey listener starting: key={} accessibility_trusted={}",
-                    key.label(),
-                    trusted
-                );
-                if !trusted {
-                    // Raises the system dialog and registers Kivo in the
-                    // Accessibility list, so there is a switch to flip.
-                    hotkey::trust::request_trust();
-                    let _ = listen_handle.emit(
-                        "kivo://permission",
-                        "Kivo does not have Accessibility permission, so it cannot see \
-                         your hotkey. Grant it in System Settings › Privacy & Security › \
-                         Accessibility, then quit and reopen Kivo.",
-                    );
+                // Never call AXIsProcessTrustedWithOptions from this thread.
+                // The prompt has to run on the AppKit main thread; raising it
+                // here deadlocks the process (blank Settings, "not responding").
+                // Onboarding raises it from a button, on the main thread.
+                let mut announced = false;
+                loop {
+                    if hotkey::trust::is_trusted() {
+                        break;
+                    }
+                    if !announced {
+                        tracing::info!(
+                            "hotkey listener waiting: key={} accessibility_trusted=false",
+                            key.label()
+                        );
+                        let _ = listen_handle.emit(
+                            "kivo://permission",
+                            "Kivo does not have Accessibility permission, so it cannot see \
+                             your hotkey. Grant it in System Settings › Privacy & Security › \
+                             Accessibility.",
+                        );
+                        announced = true;
+                    }
+                    std::thread::sleep(std::time::Duration::from_secs(2));
                 }
+
+                tracing::info!(
+                    "hotkey listener starting: key={} accessibility_trusted=true",
+                    key.label()
+                );
                 if let Err(e) = hotkey::listen(key, tx) {
                     tracing::error!("hotkey listener stopped: {e}");
                     let _ = listen_handle.emit(

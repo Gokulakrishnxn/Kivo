@@ -28,6 +28,10 @@ pub fn is_trusted() -> bool {
 
 /// Ask macOS for Accessibility permission, showing the system dialog.
 ///
+/// Must be called on the AppKit main thread. Raised from a worker, the prompt
+/// waits for the main run loop while the main run loop waits for the worker,
+/// and the process is marked "not responding".
+///
 /// Worth doing rather than only linking to the settings pane: the prompt puts
 /// Kivo into the Accessibility list itself, so the user has something to switch
 /// on instead of hunting for an "add" button. Returns the trust state as it
