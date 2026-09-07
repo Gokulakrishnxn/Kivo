@@ -6,13 +6,19 @@
     <title>Kivo</title>
     <!--
       Painted before anything else loads, so the window is never a blank void
-      while the CSS bundle parses or if the page fails to boot at all. This is
-      the same cream canvas as --kivo-canvas in kivo-tokens.css; it cannot
-      import that file (no bundler has run yet), so the value is repeated here
-      deliberately.
+      while the CSS bundle parses or if the page fails to boot at all. These
+      are the same two --kivo-canvas values as kivo-tokens.css (light/dark);
+      it cannot import that file (no bundler has run yet), so the values are
+      repeated here deliberately. Only html/body are painted — #root is left
+      alone so it always shows body's colour through it rather than carrying
+      a second, separately-maintained background that the real stylesheet's
+      dark-mode query has no way to reach and override.
     -->
     <style>
-      html, body, #root { background: #FBFAF9; height: 100%; margin: 0; }
+      html, body { background: #FBFAF9; height: 100%; margin: 0; }
+      @media (prefers-color-scheme: dark) {
+        html, body { background: #121212; }
+      }
     </style>
   </head>
   <body>

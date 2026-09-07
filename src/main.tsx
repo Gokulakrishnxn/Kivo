@@ -33,8 +33,13 @@ function App() {
     // If this rejects — an IPC problem, or the Rust side wedged — the window
     // must not sit on "Starting…" forever with no way to tell that apart from
     // an app that is still genuinely loading.
-    api
-      .snapshot("")
+    const timeout = new Promise<never>((_, reject) => {
+      window.setTimeout(
+        () => reject(new Error("Settings took too long to load. Quit Kivo from the menu bar and reopen it.")),
+        8000,
+      );
+    });
+    Promise.race([api.snapshot(""), timeout])
       .then((s) => { setSnap(s); setShowOnboarding(!s.onboarded); })
       .catch((e) => setBootError(String(e)));
     api.demo().then((d) => setSample(d.said)).catch(() => {});
