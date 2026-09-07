@@ -125,40 +125,38 @@ fn install_model(app: tauri::AppHandle, kivo: tauri::State<'_, Arc<Kivo>>) {
     let kivo = kivo.inner().clone();
     std::thread::spawn(move || {
         let handle = app.clone();
-        let outcome = crate::models::install(move |p| {
+        // `install` reports its own progress, including Downloading{percent}
+        // and a terminal Done or Failed — the caller only needs to record what
+        // happened and, on success, load the result.
+        let ev = match crate::models::install(move |p| {
             let _ = handle.emit("kivo://model", p);
-        });
-        match outcome {
-            Ok(ev) => {
-                kivo.network.lock().push(ev);
-                match kivo.reload_model() {
-                    Ok(desc) => {
-                        let _ = app.emit("kivo://model", crate::models::Progress::Done);
-                        tracing::info!("model ready: {desc}");
-                    }
-                    Err(e) => {
-                        let _ = app.emit(
-                            "kivo://model",
-                            crate::models::Progress::Failed {
-                                message: format!("{e:#}"),
-                            },
-                        );
-                    }
-                }
-            }
+        }) {
+            Ok(ev) => ev,
             Err(e) => {
-                kivo.network.lock().push(crate::models::NetworkEvent {
-                    at: 0,
-                    url: crate::models::URL.into(),
-                    outcome: "rejected: checksum mismatch".into(),
-                    bytes: 0,
-                });
-                let _ = app.emit(
-                    "kivo://model",
-                    crate::models::Progress::Failed {
-                        message: format!("{e:#}"),
-                    },
-                );
+                // install() only returns Err for a bug in this glue, not for
+                // an ordinary download failure — those come back as Ok with a
+                // failed outcome, already reported through Progress::Failed.
+                tracing::error!("model install returned an unexpected error: {e:#}");
+                return;
+            }
+        };
+
+        let succeeded = !ev.outcome.starts_with("failed:");
+        kivo.network.lock().push(ev);
+
+        if succeeded {
+            match kivo.reload_model() {
+                Ok(desc) => tracing::info!("model ready: {desc}"),
+                Err(e) => {
+                    let _ = app.emit(
+                        "kivo://model",
+                        crate::models::Progress::Failed {
+                            message: format!(
+                                "The model installed, but Kivo could not load it: {e:#}"
+                            ),
+                        },
+                    );
+                }
             }
         }
     });
@@ -197,6 +195,55 @@ fn open_settings_pane(pane: String) {
 #[tauri::command]
 fn request_accessibility() -> bool {
     hotkey::trust::request_trust()
+}
+
+/// Briefly open the microphone and immediately close it again.
+///
+/// This is the API call that makes macOS show its microphone permission
+/// dialog, so onboarding can trigger that prompt on the step that explains it
+/// instead of waiting for it to appear, unexplained, during someone's first
+/// real dictation. Nothing captured here is kept: the samples are discarded
+/// and the ring buffer is zeroed by `Capture::stop`, exactly as in normal use.
+///
+/// This cannot report back a definitive granted/denied answer — that needs a
+/// native AVFoundation authorisation check this app does not otherwise need —
+/// so the interface treats the attempt itself as the signal, and the existing
+/// `kivo://permission` banner remains the safety net if access turns out to
+/// have been refused.
+#[tauri::command]
+fn request_microphone() -> bool {
+    match audio::Capture::start("") {
+        Ok(c) => {
+            std::thread::sleep(std::time::Duration::from_millis(120));
+            let _ = c.stop();
+            true
+        }
+        Err(e) => {
+            tracing::warn!("microphone probe failed: {e:#}");
+            false
+        }
+    }
+}
+
+/// Quit Kivo entirely. The tray menu already offers this; Settings does too,
+/// so someone who cannot find (or use) the menu bar is not stuck.
+#[tauri::command]
+fn quit_app(app: tauri::AppHandle) {
+    app.exit(0);
+}
+
+/// Show the settings window as a normal application: Dock icon, Cmd-Tab,
+/// Force Quit, all present. Kivo is only a quiet menu-bar accessory while
+/// there is no window for anyone to be looking at; the moment one is showing,
+/// hiding it from every place a person would look for a stuck or misbehaving
+/// app would be actively unhelpful.
+fn present_main_window(app: &tauri::AppHandle) {
+    #[cfg(target_os = "macos")]
+    let _ = app.set_activation_policy(tauri::ActivationPolicy::Regular);
+    if let Some(w) = app.get_webview_window("main") {
+        let _ = w.show();
+        let _ = w.set_focus();
+    }
 }
 
 #[tauri::command]
@@ -304,6 +351,8 @@ pub fn run() {
             open_accessibility_settings,
             open_settings_pane,
             request_accessibility,
+            request_microphone,
+            quit_app,
             demo
         ])
         .setup(move |app| {
@@ -319,20 +368,19 @@ pub fn run() {
             let sep = PredefinedMenuItem::separator(app)?;
             let menu = Menu::with_items(app, &[&open, &sep, &quit])?;
 
-            TrayIconBuilder::with_id("kivo")
-                .icon(tauri::image::Image::from_bytes(include_bytes!(
-                    "../icons/32x32.png"
-                ))?)
+            // The menu bar glyph must be the monochrome template image, not the
+            // colour app icon. macOS composites a template (black + alpha) into
+            // the light/dark/highlighted menu bar states itself; handing it a
+            // colour, opaque PNG instead produces a solid filled block, which
+            // is exactly the "white square" this used to render as.
+            TrayIconBuilder::with_id(tray::TRAY_ID)
+                .icon(tray::idle_image()?)
                 .icon_as_template(true)
+                .tooltip("Kivo — hold your key to dictate")
                 .menu(&menu)
                 .show_menu_on_left_click(true)
                 .on_menu_event(|app, event| match event.id.as_ref() {
-                    "open" => {
-                        if let Some(w) = app.get_webview_window("main") {
-                            let _ = w.show();
-                            let _ = w.set_focus();
-                        }
-                    }
+                    "open" => present_main_window(app),
                     "quit" => app.exit(0),
                     _ => {}
                 })
@@ -376,10 +424,7 @@ pub fn run() {
             // First run: show the window rather than leaving a new user staring
             // at a menu bar wondering whether anything installed.
             if !Config::path().exists() {
-                if let Some(w) = handle.get_webview_window("main") {
-                    let _ = w.show();
-                    let _ = w.set_focus();
-                }
+                present_main_window(&handle);
             }
 
             let worker = kivo.clone();
@@ -388,32 +433,50 @@ pub fn run() {
             std::thread::spawn(move || {
                 for trigger in rx {
                     tracing::info!("hotkey trigger: {trigger:?}");
-                    match trigger {
-                        Trigger::Down => {
-                            worker.begin();
-                            show_overlay(&worker_handle);
-                            animator.start(&worker_handle);
-                            broadcast(&worker_handle, &worker);
-                        }
-                        Trigger::Cancel => {
-                            worker.cancel();
-                            animator.stop();
-                            hide_overlay(&worker_handle);
-                            broadcast(&worker_handle, &worker);
-                        }
-                        Trigger::Up => {
-                            broadcast(&worker_handle, &worker);
-                            let entry = worker.finish();
-                            animator.stop();
-                            hide_overlay(&worker_handle);
-                            broadcast(&worker_handle, &worker);
-                            if let Some(e) = entry {
-                                let _ = worker_handle.emit("kivo://inserted", e);
+
+                    // The audio/recognition work below must never be skipped
+                    // because a UI call panicked — that would leave the
+                    // microphone open with no code path left to close it, and
+                    // it would kill this thread, silently ending dictation
+                    // until the app is restarted. `catch_unwind` keeps one bad
+                    // trigger from taking either of those down with it.
+                    let outcome = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                        match trigger {
+                            Trigger::Down => {
+                                worker.begin();
+                                show_overlay(&worker_handle);
+                                animator.start(&worker_handle);
+                                broadcast(&worker_handle, &worker);
                             }
-                            if let Some(err) = worker.last_error.lock().clone() {
-                                let _ = worker_handle.emit("kivo://error", err);
+                            Trigger::Cancel => {
+                                worker.cancel();
+                                animator.stop();
+                                hide_overlay(&worker_handle);
+                                broadcast(&worker_handle, &worker);
+                            }
+                            Trigger::Up => {
+                                broadcast(&worker_handle, &worker);
+                                let entry = worker.finish();
+                                animator.stop();
+                                hide_overlay(&worker_handle);
+                                broadcast(&worker_handle, &worker);
+                                if let Some(e) = entry {
+                                    let _ = worker_handle.emit("kivo://inserted", e);
+                                }
+                                if let Some(err) = worker.last_error.lock().clone() {
+                                    let _ = worker_handle.emit("kivo://error", err);
+                                }
                             }
                         }
+                    }));
+
+                    if let Err(panic) = outcome {
+                        tracing::error!("hotkey trigger handling panicked: {panic:?}");
+                        // Whatever failed, the microphone must not stay open.
+                        worker.cancel();
+                        animator.stop();
+                        hide_overlay(&worker_handle);
+                        broadcast(&worker_handle, &worker);
                     }
                 }
             });
@@ -426,6 +489,13 @@ pub fn run() {
                 if window.label() == "main" {
                     api.prevent_close();
                     let _ = window.hide();
+                    // Kivo is a menu-bar resident while idle: no Dock icon, not
+                    // in Cmd-Tab, not in Force Quit. That is only correct while
+                    // there is no window for the user to be looking at.
+                    #[cfg(target_os = "macos")]
+                    let _ = window
+                        .app_handle()
+                        .set_activation_policy(tauri::ActivationPolicy::Accessory);
                 }
             }
         })
@@ -435,48 +505,63 @@ pub fn run() {
 
 /// The overlay never takes focus and never accepts input. It exists so a dead
 /// microphone is visible in the first half-second rather than after a paragraph.
+///
+/// Called from the hotkey worker thread, so every window and cursor call here
+/// is dispatched to the main thread rather than run in place: AppKit's view
+/// and layer trees are not thread-safe, and a mutation from off the main
+/// thread does not reliably fail loudly — it can instead leave a window's
+/// compositor state corrupted. That is what produced Settings windows that
+/// opened solid black with nothing painted in them.
 fn show_overlay(app: &tauri::AppHandle) {
-    let Some(w) = app.get_webview_window("overlay") else {
-        return;
-    };
+    let for_main = app.clone();
+    let _ = app.run_on_main_thread(move || {
+        let app = for_main;
+        let Some(w) = app.get_webview_window("overlay") else {
+            return;
+        };
 
-    // Follow the pointer, which is where the user is looking. Fall back to the
-    // bottom centre of the primary display if the position is unavailable.
-    const W: f64 = 260.0;
-    const H: f64 = 96.0;
+        // Follow the pointer, which is where the user is looking. Fall back to
+        // the bottom centre of the primary display if the position is
+        // unavailable.
+        const W: f64 = 260.0;
+        const H: f64 = 96.0;
 
-    let placed = app.cursor_position().ok().and_then(|p| {
-        let monitor = w.monitor_from_point(p.x, p.y).ok().flatten()?;
-        let scale = monitor.scale_factor();
-        let area = monitor.size().to_logical::<f64>(scale);
-        let origin = monitor.position().to_logical::<f64>(scale);
-        let cursor = p.to_logical::<f64>(scale);
+        let placed = app.cursor_position().ok().and_then(|p| {
+            let monitor = w.monitor_from_point(p.x, p.y).ok().flatten()?;
+            let scale = monitor.scale_factor();
+            let area = monitor.size().to_logical::<f64>(scale);
+            let origin = monitor.position().to_logical::<f64>(scale);
+            let cursor = p.to_logical::<f64>(scale);
 
-        // Sit just below the pointer, clamped inside the display it is on.
-        let x = (cursor.x - W / 2.0).clamp(origin.x + 12.0, origin.x + area.width - W - 12.0);
-        let y = (cursor.y + 28.0).clamp(origin.y + 12.0, origin.y + area.height - H - 12.0);
-        Some(tauri::LogicalPosition::new(x, y))
+            // Sit just below the pointer, clamped inside the display it is on.
+            let x = (cursor.x - W / 2.0).clamp(origin.x + 12.0, origin.x + area.width - W - 12.0);
+            let y = (cursor.y + 28.0).clamp(origin.y + 12.0, origin.y + area.height - H - 12.0);
+            Some(tauri::LogicalPosition::new(x, y))
+        });
+
+        let position = placed.or_else(|| {
+            let monitor = w.primary_monitor().ok().flatten()?;
+            let scale = monitor.scale_factor();
+            let area = monitor.size().to_logical::<f64>(scale);
+            let origin = monitor.position().to_logical::<f64>(scale);
+            Some(tauri::LogicalPosition::new(
+                origin.x + (area.width - W) / 2.0,
+                origin.y + area.height - 160.0,
+            ))
+        });
+
+        if let Some(p) = position {
+            let _ = w.set_position(p);
+        }
+        let _ = w.show();
     });
-
-    let position = placed.or_else(|| {
-        let monitor = w.primary_monitor().ok().flatten()?;
-        let scale = monitor.scale_factor();
-        let area = monitor.size().to_logical::<f64>(scale);
-        let origin = monitor.position().to_logical::<f64>(scale);
-        Some(tauri::LogicalPosition::new(
-            origin.x + (area.width - W) / 2.0,
-            origin.y + area.height - 160.0,
-        ))
-    });
-
-    if let Some(p) = position {
-        let _ = w.set_position(p);
-    }
-    let _ = w.show();
 }
 
 fn hide_overlay(app: &tauri::AppHandle) {
-    if let Some(w) = app.get_webview_window("overlay") {
-        let _ = w.hide();
-    }
+    let for_main = app.clone();
+    let _ = app.run_on_main_thread(move || {
+        if let Some(w) = for_main.get_webview_window("overlay") {
+            let _ = w.hide();
+        }
+    });
 }

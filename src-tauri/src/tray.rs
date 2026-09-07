@@ -45,6 +45,15 @@ impl Animator {
     }
 
     /// Begin animating. Safe to call repeatedly; only one loop ever runs.
+    ///
+    /// The ticking itself lives on a background thread — nothing here can be
+    /// allowed to compete with the audio/recognition pipeline for CPU — but
+    /// every `NSStatusItem` icon update is handed to `run_on_main_thread`.
+    /// AppKit's view and layer trees are not thread-safe, and mutating them
+    /// from a background thread does not reliably fail loudly: it can instead
+    /// leave a window's compositor state corrupted, which is what a stray
+    /// off-main-thread call here or in the overlay looked like from the
+    /// outside — a settings window that painted solid black.
     pub fn start(&self, app: &AppHandle) {
         if self.running.swap(true, Ordering::SeqCst) {
             return;
@@ -55,11 +64,15 @@ impl Animator {
         std::thread::spawn(move || {
             let mut i = 0usize;
             while running.load(Ordering::SeqCst) {
-                if let Some(tray) = app.tray_by_id(TRAY_ID) {
-                    if let Ok(img) = Image::from_bytes(FRAMES[i % FRAMES.len()]) {
-                        let _ = tray.set_icon(Some(img));
+                let frame = FRAMES[i % FRAMES.len()];
+                let for_main = app.clone();
+                let _ = app.run_on_main_thread(move || {
+                    if let Some(tray) = for_main.tray_by_id(TRAY_ID) {
+                        if let Ok(img) = Image::from_bytes(frame) {
+                            let _ = tray.set_icon(Some(img));
+                        }
                     }
-                }
+                });
                 i = i.wrapping_add(1);
                 std::thread::sleep(Duration::from_millis(FRAME_MS));
             }
@@ -74,12 +87,17 @@ impl Animator {
     }
 }
 
+/// Restore the resting glyph. Safe to call from any thread — the actual
+/// `NSStatusItem` mutation is always dispatched to the main thread.
 pub fn set_idle(app: &AppHandle) {
-    if let Some(tray) = app.tray_by_id(TRAY_ID) {
-        if let Ok(img) = Image::from_bytes(IDLE) {
-            let _ = tray.set_icon(Some(img));
+    let for_main = app.clone();
+    let _ = app.run_on_main_thread(move || {
+        if let Some(tray) = for_main.tray_by_id(TRAY_ID) {
+            if let Ok(img) = Image::from_bytes(IDLE) {
+                let _ = tray.set_icon(Some(img));
+            }
         }
-    }
+    });
 }
 
 pub fn idle_image() -> tauri::Result<Image<'static>> {
