@@ -6,6 +6,8 @@
 //! channel — and every decision is made on the far side of it.
 
 pub mod conflict;
+#[cfg(target_os = "macos")]
+pub mod tap;
 pub mod trust;
 
 use crossbeam_channel::Sender;
@@ -29,9 +31,10 @@ const DOUBLE_TAP: Duration = Duration::from_millis(550);
 ///
 /// Two shapes are offered, because neither suits everyone:
 ///
-/// * **A bare modifier** (Fn, Right Option…) — one key, nothing to chord, and
-///   it cannot collide with an application shortcut because on its own it does
-///   nothing. This is the default.
+/// * **A bare modifier** (Fn, Option…) — one key, nothing to chord, and it
+///   cannot collide with an application shortcut because on its own it does
+///   nothing. This is the default. Either physical copy of the key works
+///   (left or right) — see `tap::HotKey::trigger_codes`.
 /// * **A chord ending in Space** — for people who want Space as the trigger.
 ///
 /// Space *on its own* is deliberately not offered. Kivo observes the keyboard
@@ -58,10 +61,10 @@ impl HotKey {
     pub fn label(&self) -> &'static str {
         match self {
             HotKey::Fn => "Fn (globe)",
-            HotKey::RightOption => "Right Option",
-            HotKey::RightCommand => "Right Command",
-            HotKey::RightControl => "Right Control",
-            HotKey::RightShift => "Right Shift",
+            HotKey::RightOption => "Option (⌥)",
+            HotKey::RightCommand => "Command (⌘)",
+            HotKey::RightControl => "Control (⌃)",
+            HotKey::RightShift => "Shift (⇧)",
             HotKey::OptionSpace => "Option + Space",
             HotKey::ControlSpace => "Control + Space",
             HotKey::ShiftSpace => "Shift + Space",
@@ -72,38 +75,12 @@ impl HotKey {
     pub fn note(&self) -> Option<&'static str> {
         match self {
             HotKey::Fn => Some(
-                "macOS may already use Fn for dictation or emoji. Set                  System Settings › Keyboard › “Press 🌐 key to” to “Do Nothing”.",
+                "macOS may already use Fn for dictation or emoji. Set System Settings › Keyboard › “Press 🌐 key to” to “Do Nothing”.",
             ),
             HotKey::ControlSpace => Some(
                 "macOS often uses Control + Space to switch input sources.",
             ),
             _ => None,
-        }
-    }
-
-    /// The modifier that must be held, for chord bindings.
-    fn modifier(&self) -> Option<&'static [rdev::Key]> {
-        use rdev::Key as K;
-        match self {
-            HotKey::OptionSpace => Some(&[K::Alt, K::AltGr]),
-            HotKey::ControlSpace => Some(&[K::ControlLeft, K::ControlRight]),
-            HotKey::ShiftSpace => Some(&[K::ShiftLeft, K::ShiftRight]),
-            _ => None,
-        }
-    }
-
-    /// The key that actually starts and stops recording.
-    fn trigger(&self) -> rdev::Key {
-        use rdev::Key as K;
-        match self {
-            // rdev maps Key::Function to macOS keycode 63, which is the real
-            // Fn/globe key — not F13.
-            HotKey::Fn => K::Function,
-            HotKey::RightOption => K::AltGr,
-            HotKey::RightCommand => K::MetaRight,
-            HotKey::RightControl => K::ControlRight,
-            HotKey::RightShift => K::ShiftRight,
-            HotKey::OptionSpace | HotKey::ControlSpace | HotKey::ShiftSpace => K::Space,
         }
     }
 
@@ -132,77 +109,15 @@ impl HotKey {
 /// Returns only if the OS refuses the hook — on macOS that means Accessibility
 /// permission has not been granted, which the caller surfaces as a real
 /// instruction rather than a silent dead hotkey.
+#[cfg(target_os = "macos")]
 pub fn listen(key: HotKey, tx: Sender<Trigger>) -> Result<(), String> {
-    let mut state = Gesture::default();
-    let trigger = key.trigger();
-    let modifier = key.modifier();
-    // Which of the accepted modifier keys are currently down. A chord binding
-    // only fires while at least one of them is held.
-    let mut mods_held: Vec<rdev::Key> = Vec::new();
-
-    rdev::listen(move |event| {
-        let mut out = None;
-
-        // At debug this prints every key the OS hands us, which is the only way
-        // to tell "the hook is dead" apart from "the binding never matches".
-        match event.event_type {
-            rdev::EventType::KeyPress(k) => tracing::debug!("key down: {k:?}"),
-            rdev::EventType::KeyRelease(k) => tracing::debug!("key up:   {k:?}"),
-            _ => {}
-        }
-
-        match event.event_type {
-            rdev::EventType::KeyPress(k) => {
-                if let Some(accepted) = modifier {
-                    if accepted.contains(&k) && !mods_held.contains(&k) {
-                        mods_held.push(k);
-                    }
-                }
-                if k == trigger {
-                    let armed = modifier.is_none() || !mods_held.is_empty();
-                    if armed {
-                        out = state.press(Instant::now());
-                    }
-                }
-            }
-            rdev::EventType::KeyRelease(k) => {
-                if k == trigger {
-                    out = state.release(Instant::now());
-                }
-                if let Some(accepted) = modifier {
-                    if accepted.contains(&k) {
-                        mods_held.retain(|h| *h != k);
-                        // Letting go of the modifier ends the chord. Without
-                        // this, releasing Option before Space would leave the
-                        // microphone open with no obvious way to close it.
-                        if mods_held.is_empty() {
-                            if let Some(t) = state.break_chord() {
-                                out = Some(t);
-                            }
-                        }
-                    }
-                }
-            }
-            _ => {}
-        }
-
-        if let rdev::EventType::KeyPress(rdev::Key::Escape) = event.event_type {
-            if let Some(t) = state.escape() {
-                out = Some(t);
-            }
-        }
-
-        if let Some(t) = out {
-            let _ = tx.try_send(t);
-        }
-    })
-    .map_err(|e| format!("{e:?}"))
+    tap::listen(key, tx)
 }
 
-/// The gesture state machine, separated from rdev so it can be tested without
-/// an OS hook or a real keyboard.
+/// The gesture state machine, kept separate from the OS hook so it can be
+/// tested without an event tap or a real keyboard.
 #[derive(Default)]
-struct Gesture {
+pub(crate) struct Gesture {
     held: bool,
     latched: bool,
     pressed_at: Option<Instant>,
@@ -210,7 +125,7 @@ struct Gesture {
 }
 
 impl Gesture {
-    fn press(&mut self, now: Instant) -> Option<Trigger> {
+    pub(crate) fn press(&mut self, now: Instant) -> Option<Trigger> {
         if self.held {
             return None; // key repeat
         }
@@ -226,7 +141,7 @@ impl Gesture {
         Some(Trigger::Down)
     }
 
-    fn release(&mut self, now: Instant) -> Option<Trigger> {
+    pub(crate) fn release(&mut self, now: Instant) -> Option<Trigger> {
         if !self.held {
             return None;
         }
@@ -257,7 +172,7 @@ impl Gesture {
     }
 
     /// The modifier half of a chord was released.
-    fn break_chord(&mut self) -> Option<Trigger> {
+    pub(crate) fn break_chord(&mut self) -> Option<Trigger> {
         if self.held || self.latched {
             self.held = false;
             self.latched = false;
@@ -267,7 +182,7 @@ impl Gesture {
         None
     }
 
-    fn escape(&mut self) -> Option<Trigger> {
+    pub(crate) fn escape(&mut self) -> Option<Trigger> {
         if self.held || self.latched {
             self.held = false;
             self.latched = false;
