@@ -23,7 +23,7 @@ pub struct Unavailable;
 
 impl Recogniser for Unavailable {
     fn transcribe(&mut self, _: &[f32], _: u32) -> Result<String> {
-        anyhow::bail!("no speech model installed — open Settings to download Parakeet")
+        anyhow::bail!("No speech model installed. Open Settings to download Parakeet.")
     }
     fn describe(&self) -> String {
         "none installed".into()

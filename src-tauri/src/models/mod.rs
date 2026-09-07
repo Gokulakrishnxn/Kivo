@@ -9,8 +9,10 @@
 
 use anyhow::{anyhow, bail, Context, Result};
 use serde::Serialize;
+use std::io::Read;
 use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::process::{Command, Stdio};
+use std::time::Duration;
 
 /// The mirror on Kivo's own releases, so the digest below can be pinned.
 /// Weights are NVIDIA's Parakeet TDT 0.6B v2 (CC-BY-4.0); the ONNX export is
@@ -44,18 +46,55 @@ fn model_dir() -> PathBuf {
     crate::asr::parakeet::Parakeet::default_dir()
 }
 
+/// How many attempts the whole download-verify-extract sequence gets before
+/// giving up. A truncated or corrupted transfer is the common transient
+/// failure here, and a plain retry clears most of them without bothering
+/// the user.
+const MAX_ATTEMPTS: u32 = 2;
+
 /// Download, verify and install. Long-running: call from a worker thread.
 ///
-/// `on` is invoked with progress. Nothing is installed unless the digest
-/// matches, and a failure leaves any existing model untouched.
+/// `on` is invoked with progress, including live percentage while the
+/// transfer is running. Nothing is installed unless the digest matches, and a
+/// failure leaves any existing model untouched.
 pub fn install(mut on: impl FnMut(Progress)) -> Result<NetworkEvent> {
     on(Progress::Started);
 
+    let mut last_message = String::new();
+    for attempt in 1..=MAX_ATTEMPTS {
+        match try_install(&mut on) {
+            Ok(ev) => return Ok(ev),
+            Err(e) => {
+                last_message = format!("{e:#}");
+                if attempt < MAX_ATTEMPTS {
+                    tracing::warn!("model install attempt {attempt} failed, retrying: {e:#}");
+                } else {
+                    tracing::error!("model install failed after {attempt} attempts: {e:#}");
+                }
+            }
+        }
+    }
+
+    on(Progress::Failed {
+        message: last_message.clone(),
+    });
+    Ok(NetworkEvent {
+        at: now(),
+        url: URL.into(),
+        outcome: format!("failed: {last_message}"),
+        bytes: 0,
+    })
+}
+
+/// One full download-verify-extract-install attempt.
+fn try_install(on: &mut impl FnMut(Progress)) -> Result<NetworkEvent> {
     let tmp = tempdir().context("could not create a temporary directory")?;
     let archive = tmp.join("model.tar.bz2");
 
-    // --- download ---------------------------------------------------------
-    let status = Command::new("curl")
+    // --- download, with a real percentage ----------------------------------
+    let total = head_content_length(URL);
+
+    let mut child = Command::new("curl")
         .args([
             "--fail",
             "--location",
@@ -68,21 +107,46 @@ pub fn install(mut on: impl FnMut(Progress)) -> Result<NetworkEvent> {
         ])
         .arg(&archive)
         .arg(URL)
-        .status()
+        .stdout(Stdio::null())
+        .stderr(Stdio::piped())
+        .spawn()
         .context("could not run curl")?;
 
-    if !status.success() {
-        let _ = std::fs::remove_dir_all(&tmp);
-        let ev = NetworkEvent {
-            at: now(),
-            url: URL.into(),
-            outcome: "download failed".into(),
-            bytes: 0,
-        };
-        on(Progress::Failed {
-            message: "The download did not complete.".into(),
-        });
-        return Ok(ev);
+    // Poll the file curl is writing rather than parsing its terminal
+    // progress meter, which is designed for a tty, not a pipe.
+    let mut last_percent = 0u8;
+    loop {
+        if let Some(status) = child.try_wait().context("could not poll curl")? {
+            if !status.success() {
+                let mut stderr = String::new();
+                if let Some(mut e) = child.stderr.take() {
+                    let _ = e.read_to_string(&mut stderr);
+                }
+                let _ = std::fs::remove_dir_all(&tmp);
+                let detail = stderr.trim();
+                bail!(
+                    "Could not download the model from {URL}.{}",
+                    if detail.is_empty() {
+                        String::new()
+                    } else {
+                        format!(" ({detail})")
+                    }
+                );
+            }
+            break;
+        }
+
+        if let Some(total) = total {
+            let done = std::fs::metadata(&archive).map(|m| m.len()).unwrap_or(0);
+            // Capped below 100: only the process actually exiting means done,
+            // since the last few percent are often buffered rather than synced.
+            let percent = ((done * 100 / total.max(1)) as u8).min(99);
+            if percent != last_percent {
+                on(Progress::Downloading { percent });
+                last_percent = percent;
+            }
+        }
+        std::thread::sleep(Duration::from_millis(200));
     }
     on(Progress::Downloading { percent: 100 });
 
@@ -92,10 +156,10 @@ pub fn install(mut on: impl FnMut(Progress)) -> Result<NetworkEvent> {
     let digest = sha256_file(&archive)?;
     if digest != SHA256 {
         let _ = std::fs::remove_dir_all(&tmp);
-        on(Progress::Failed {
-            message: "The downloaded model did not match its expected checksum, so nothing was installed.".into(),
-        });
-        bail!("sha-256 mismatch: expected {SHA256}, got {digest}");
+        bail!(
+            "The downloaded model did not match its expected checksum, so nothing was installed. \
+             (expected {SHA256}, got {digest})"
+        );
     }
 
     // --- install ----------------------------------------------------------
@@ -145,6 +209,16 @@ pub fn install(mut on: impl FnMut(Progress)) -> Result<NetworkEvent> {
     }
 
     let _ = std::fs::remove_dir_all(&tmp);
+
+    // Belt and braces: confirm what the pipeline will actually load is there,
+    // rather than trusting that four successful copies imply a usable model.
+    if !crate::asr::parakeet::Parakeet::is_installed(&dest) {
+        bail!(
+            "The model was downloaded and verified, but the installed files at {} are incomplete.",
+            dest.display()
+        );
+    }
+
     on(Progress::Done);
     Ok(NetworkEvent {
         at: now(),
@@ -152,6 +226,26 @@ pub fn install(mut on: impl FnMut(Progress)) -> Result<NetworkEvent> {
         outcome: "verified and installed".into(),
         bytes,
     })
+}
+
+/// `Content-Length` from a HEAD request, for real download percentages.
+/// `None` if the server does not say — progress then jumps straight to 100%
+/// rather than showing a wrong number.
+fn head_content_length(url: &str) -> Option<u64> {
+    let out = Command::new("curl")
+        .args(["--head", "--silent", "--location", url])
+        .output()
+        .ok()?;
+    String::from_utf8_lossy(&out.stdout)
+        .lines()
+        .rev() // a redirect chain repeats the header; the final response wins
+        .find_map(|line| {
+            let (name, value) = line.split_once(':')?;
+            name.trim()
+                .eq_ignore_ascii_case("content-length")
+                .then(|| value.trim().parse().ok())
+                .flatten()
+        })
 }
 
 /// Delete the installed model. Frees roughly 630 MB.
