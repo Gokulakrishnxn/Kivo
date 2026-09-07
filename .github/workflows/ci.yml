@@ -195,18 +195,18 @@ jobs:
       # The prebuilt native libraries, which is the slow part worth keeping.
       - name: Cache sherpa-onnx prebuilts
         if: steps.detect.outputs.present == 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/Library/Caches/sherpa-rs
           key: sherpa-rs-${{ runner.os }}-${{ hashFiles('src-tauri/Cargo.lock') }}
           restore-keys: sherpa-rs-${{ runner.os }}-
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         if: steps.detect.outputs.present == 'true'
         with:
           version: 9
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         if: steps.detect.outputs.present == 'true'
         with:
           node-version: 20
