@@ -39,18 +39,19 @@ drawing changes what the copy is allowed to say. See §7.
 
 ## 2. The mark
 
-**The cursor K.** A vertical cursor and two angled strokes form a K. It connects the
-product name to the place dictation lands: the text cursor. Rounded ends keep the
-geometry compatible with Kivo’s warm illustrated identity.
+**The voice bubble.** A bold speech silhouette contains three waveform apertures.
+The outer shape represents words; the negative space represents voice. Rounded
+corners and a short tail keep it compatible with Kivo’s illustrated identity.
 
-Updated at the owner’s request on 16 October 2026. This replaces the multicolour
-waveform mark. The existing drawn wordmark stays unchanged.
+Updated at the owner’s request on 16 October 2026. This replaces the cursor K
+proposal. The existing drawn wordmark stays unchanged.
 
 ### Construction and colour
 
-A 32-unit grid. The stem is 5 units wide, from (5, 5) to (10, 27), with 2.5-unit
-corner radii. The arms follow (25, 7), (15, 16), (25, 25), with a 5-unit stroke and
-round caps and joins. Preserve the open gap between the stem and arms.
+A 32-unit grid. The bubble spans x=3–29 and y=3–27, with a tail ending at (5, 31).
+Three 3-unit-wide rounded apertures are centred at x=10, 16 and 22. Their differing
+heights form the waveform. These are transparent cutouts, not white overlays.
+Preserve the silhouette and aperture spacing when scaling.
 
 Use ink `#121212` on light backgrounds and white on ink. The entire mark reverses
 together. No gradients, shadows, multicolour fills, rotation or distortion.
@@ -63,8 +64,8 @@ together. No gradients, shadows, multicolour fills, rotation or distortion.
 - `logo/kivo-lockup.svg`: adaptable mark and unchanged drawn wordmark.
 - `logo/kivo-lockup-colour.svg`: fixed ink lockup; legacy filename retained.
 - `logo/kivo-logotype.svg`: unchanged wordmark.
-- `logo/kivo-app-icon.svg`: cursor K on a paper squircle.
-- `logo/favicon.svg`: cursor K on paper.
+- `logo/kivo-app-icon.svg`: voice bubble on a paper squircle.
+- `logo/favicon.svg`: voice bubble on paper.
 
 Use the mark at 16 px or larger and the lockup at 120 px or larger. Leave at least
 5 grid units of clear space around the mark. Never recreate the wordmark with a font.

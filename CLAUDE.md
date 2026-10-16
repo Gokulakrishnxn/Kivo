@@ -95,9 +95,9 @@ characters carrying the personality. The parts most easily got wrong:
 - **The cast is allowed a face; the product is not.** Mascots may be playful. Copy about
   what Kivo does stays exact. Illustration strokes are `#343433`, never black.
 - **Sentence case** for all headings and buttons. The product name is always **Kivo**.
-- **Use the cursor K logo** defined in `brand/BRAND.md` §2. The owner requested this
+- **Use the voice bubble logo** defined in `brand/BRAND.md` §2. The owner requested this
   redesign on 16 October 2026. Use ink on light surfaces and white on ink; preserve
-  the open gap, rounded geometry, and existing drawn wordmark.
+  the waveform cutouts, rounded silhouette, and existing drawn wordmark.
 
 ## Writing rules
 
