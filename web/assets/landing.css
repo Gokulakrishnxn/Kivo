@@ -1,0 +1,38 @@
+/* Landing composition uses the canonical Kivo palette and spacing scale. */
+section[id] { scroll-margin-top: var(--kivo-space-9); }
+.nav { box-shadow: var(--kivo-hairline); }
+.nav__actions { margin-left: auto; }
+.hero { padding-block: var(--kivo-space-8); }
+.hero__text { gap: var(--kivo-space-5); }
+.hero-word { text-decoration: underline; text-decoration-color: var(--kivo-sun); text-decoration-thickness: var(--kivo-space-2); text-underline-offset: var(--kivo-space-2); }
+.release-link { text-decoration: underline; text-underline-offset: var(--kivo-space-1); }
+.demo-section { margin-bottom: var(--kivo-space-7); }
+.demo-heading, .demo-controls, .demo-toolbar { display: flex; justify-content: space-between; align-items: center; gap: var(--kivo-space-5); }
+.demo-heading { margin-bottom: var(--kivo-space-5); }
+.demo-heading h2 { margin-top: var(--kivo-space-2); }
+.demo-heading > .caption { max-width: calc(var(--kivo-space-9) * 2); text-align: right; }
+.demo-board { display: grid; grid-template-columns: 1fr 1fr; border-radius: var(--kivo-radius-card); background: var(--kivo-white); box-shadow: var(--kivo-hairline-warm); overflow: hidden; }
+.demo-input, .demo-output { padding: var(--kivo-space-7); display: flex; flex-direction: column; gap: var(--kivo-space-5); }
+.demo-input { background: var(--kivo-sand); }
+.demo-input > p, .demo-output > p { font-family: var(--kivo-font-display); font-size: var(--kivo-heading-size); line-height: var(--kivo-lh-body); min-height: var(--kivo-space-9); }
+.demo-output > p { color: var(--kivo-ink); }
+.demo-input img { height: var(--kivo-space-7); width: auto; align-self: flex-start; }
+.demo-output > .caption { margin-top: auto; }
+.demo-controls { margin-top: var(--kivo-space-5); }
+.example-buttons { display: flex; flex-wrap: wrap; gap: var(--kivo-space-2); }
+.example-button { font: inherit; font-size: var(--kivo-caption); color: var(--kivo-body); background: transparent; border: none; border-radius: var(--kivo-radius-pill); padding: var(--kivo-space-3) var(--kivo-space-4); cursor: pointer; box-shadow: var(--kivo-hairline-warm); }
+.example-button[aria-pressed="true"] { background: var(--kivo-ink); color: var(--kivo-white); box-shadow: none; }
+.example-button:hover { text-decoration: underline; text-underline-offset: var(--kivo-space-1); }
+.download-section { background: var(--kivo-sand); }
+.install-note { text-align: left; max-width: var(--kivo-prose); padding: var(--kivo-space-5); background: var(--kivo-canvas); border-radius: var(--kivo-radius-card); box-shadow: var(--kivo-hairline-warm); font-size: var(--kivo-caption); }
+.install-note summary { cursor: pointer; color: var(--kivo-ink); font-weight: var(--kivo-w-medium); }
+.install-note p { margin-top: var(--kivo-space-4); }
+.install-note a { margin-top: var(--kivo-space-3); }
+@media (max-width: 699px) {
+  .hero { padding-block: var(--kivo-space-7); }
+  .demo-board { grid-template-columns: 1fr; }
+  .demo-heading, .demo-controls { align-items: flex-start; flex-direction: column; gap: var(--kivo-space-3); }
+  .demo-heading > .caption { text-align: left; max-width: none; }
+  .demo-input, .demo-output { padding: var(--kivo-space-5); }
+  .demo-input > p, .demo-output > p { min-height: var(--kivo-space-8); }
+}

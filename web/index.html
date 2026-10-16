@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,500;12..96,75..100,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/kivo-tokens.css">
 <link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/landing.css">
 </head>
 <body>
 
@@ -88,27 +89,21 @@
     </div>
 
     <div class="hero__text">
-      <h1 class="display">Turns voice into clean text.</h1>
+      <span class="badge badge--stone">On-device dictation. Open source.</span>
+      <h1 class="display">Less typing.<br>More <span class="hero-word">you.</span></h1>
       <p class="subheading" style="max-width:46ch">
-        Hold a key, speak, let go. Punctuated, de-filled text appears right at your
-        cursor — in any app, without a single byte leaving your machine.
+        Your words, without the keyboard. Hold a key, speak, and let go.
+        Kivo turns your voice into clean text, right where you’re working.
       </p>
       <div class="hero__cta">
         <a class="btn btn--dark btn--lg" href="https://github.com/Gokulakrishnxn/Kivo/releases/latest">
           <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a.75.75 0 0 1 .75.75v7.19l2.72-2.72a.75.75 0 1 1 1.06 1.06l-4 4a.75.75 0 0 1-1.06 0l-4-4a.75.75 0 0 1 1.06-1.06l2.72 2.72V1.75A.75.75 0 0 1 8 1zM2.75 12.5a.75.75 0 0 1 .75.75v.25h9v-.25a.75.75 0 0 1 1.5 0v.5A1.25 1.25 0 0 1 12.75 15h-9.5A1.25 1.25 0 0 1 2 13.75v-.5a.75.75 0 0 1 .75-.75z"/></svg>
           Download for macOS
         </a>
-        <a class="btn btn--sand btn--lg" href="#how">See how it works</a>
+        <a class="btn btn--sand btn--lg" href="#demo">Try the example ↗</a>
       </div>
-      <p class="hero__note">
-        Version 0.1.0 · Universal — Apple Silicon and Intel · macOS 11+ · 24 MB
-      </p>
-      <p class="caption" style="max-width:56ch;margin-inline:auto;color:var(--kivo-muted)">
-        Kivo is not signed with an Apple Developer ID, so macOS blocks the first
-        launch. Open it once, dismiss the warning, then go to
-        <strong>System&nbsp;Settings → Privacy&nbsp;&amp;&nbsp;Security → Open&nbsp;Anyway</strong>.
-        <a class="demo-link" href="https://github.com/Gokulakrishnxn/Kivo/releases/latest">Full steps and the checksum</a>
-      </p>
+      <p class="hero__note">Free forever · No account · Your audio stays on your Mac</p>
+      <a class="micro release-link" href="#download">macOS preview · Read before installing ↓</a>
     </div>
 
     <div class="cast-row" aria-hidden="true">
@@ -130,41 +125,13 @@
   </div>
 </section>
 
-<!-- ═════════════════════════════════════════════════════ transcript ═══ -->
-<section class="section" style="padding-top:0">
-  <div class="wrap">
-    <div class="card" style="padding:var(--kivo-space-6)">
-      <div class="tag-surface" style="justify-content:space-between">
-        <span class="badge badge--mint">Recording</span>
-        <span class="caption" style="display:flex;align-items:center;gap:8px">
-          holding <span class="kbd">fn</span>
-        </span>
-      </div>
-      <div class="transcript" style="padding:var(--kivo-space-4) var(--kivo-space-2) 0">
-        <div class="transcript__row">
-          <span class="eyebrow">What you said</span>
-          <p class="transcript__said">
-            “<s>um</s> <s>so</s> i think we should <s>uh</s> push the release to
-            <s>friday — no wait,</s> thursday because the <s>uh the</s> QA cycle
-            needs two full days”
-          </p>
-        </div>
-        <div class="transcript__row">
-          <span class="eyebrow">What Kivo typed</span>
-          <p class="transcript__typed">
-            I think we should push the release to Thursday, because the QA cycle
-            needs two full days.
-          </p>
-        </div>
-      </div>
-      <div class="tag-surface" style="gap:var(--kivo-space-2)">
-        <span class="badge badge--stone">fillers removed</span>
-        <span class="badge badge--stone">stutter collapsed</span>
-        <span class="badge badge--stone">correction resolved</span>
-        <span class="badge badge--honey">284 ms</span>
-      </div>
-    </div>
+<section class="demo-section wrap" id="demo" aria-labelledby="demo-title">
+  <div class="demo-heading"><div><span class="eyebrow">From thought to text</span><h2 class="heading" id="demo-title">A little less “um”. A lot more done.</h2></div><span class="caption">Illustrative example · no microphone needed</span></div>
+  <div class="demo-board">
+    <div class="demo-input"><span class="eyebrow">01 / You say</span><p id="demo-input">“um can you send me the notes after the meeting”</p><img src="assets/illustration/mascot-wave.svg" alt="" width="96"></div>
+    <div class="demo-output"><div class="demo-toolbar"><span class="eyebrow">02 / Kivo types</span><span class="badge badge--stone" id="demo-mode">Message</span></div><p id="demo-output" aria-live="polite">Can you send me the notes after the meeting</p><span class="caption">Your words. Punctuated and ready to go.</span></div>
   </div>
+  <div class="demo-controls"><div class="example-buttons" role="group" aria-label="Choose an example"><button class="example-button" type="button" data-example="message" aria-pressed="true">A quick message</button><button class="example-button" type="button" data-example="standard" aria-pressed="false">A work update</button><button class="example-button" type="button" data-example="raw" aria-pressed="false">Keep it raw</button></div><span class="micro">Runs on your device. Lands at your cursor.</span></div>
 </section>
 
 <!-- ══════════════════════════════════════════════════════ features ═══ -->
@@ -172,7 +139,7 @@
   <div class="wrap">
     <div class="section__head section__head--center">
       <span class="eyebrow">What you get</span>
-      <h2 class="heading-lg">Everything you need, nothing you don't.</h2>
+      <h2 class="heading-lg">Small app. Room for your whole day.</h2>
       <p class="subheading">
         Kivo has a deliberately small surface. It is a key you press, not an
         assistant you talk to.
@@ -212,8 +179,8 @@
         <div class="card__icon" style="background:#FFF6DA">
           <img src="assets/illustration/confetti-star.svg" alt="" width="30" height="30">
         </div>
-        <h3 class="heading">Fast enough to trust</h3>
-        <p>Under 300&nbsp;ms from key-up to text, on the Neural Engine, CUDA, DirectML or plain CPU. Speaking beats typing only if you never wait.</p>
+        <h3 class="heading">Built for your Mac</h3>
+        <p>A universal app for Apple Silicon and Intel. This early preview is English-only; Windows support is planned.</p>
       </div>
       <div class="card">
         <div class="card__icon" style="background:#F1EAFF">
@@ -305,7 +272,7 @@
   <div class="wrap">
     <div class="section__head section__head--center">
       <span class="eyebrow">How it works</span>
-      <h2 class="heading-lg">Three moves, and none of them is waiting.</h2>
+      <h2 class="heading-lg">Hold. Speak. Carry on.</h2>
     </div>
     <div class="steps">
       <div class="card step">
@@ -360,8 +327,8 @@
         <li class="tag-surface" style="justify-content:space-between"><span class="caption">Model</span><span class="mono t-green">sha-256 verified</span></li>
       </ul>
       <p class="micro" style="margin-top:var(--kivo-space-3)">
-        Settings shows this live. Empty is the normal state — and the source is
-        public, so you can check that it is true.
+        These are Kivo’s privacy commitments, not a live network monitor.
+        The source is public so you can inspect how they are implemented.
       </p>
     </div>
   </div>
@@ -396,18 +363,19 @@
 </section>
 
 <!-- ═══════════════════════════════════════════════════════ closing ═══ -->
-<section class="section" style="padding-top:0">
+<section class="section download-section" id="download">
   <div class="wrap closing">
     <img src="assets/illustration/mascot-wave.svg" alt="" width="96" aria-hidden="true" class="bob">
     <h2 class="heading-lg" style="max-width:18ch">Stop typing what you could just say.</h2>
     <p class="subheading" style="max-width:44ch">
       Free, open source, and running entirely on your own machine.
-      Version 0.1.0 is out now.
+      The macOS preview is available now.
     </p>
     <div class="hero__cta">
       <a class="btn btn--dark btn--lg" href="https://github.com/Gokulakrishnxn/Kivo/releases/latest">Download for macOS</a>
       <a class="btn btn--sand btn--lg" href="https://github.com/Gokulakrishnxn/Kivo">View the source</a>
     </div>
+    <details class="install-note"><summary>Before you install the macOS preview</summary><p>Version 0.1.0 supports macOS 11+, Apple Silicon and Intel. It is English-only, unsigned, and slower than the project’s latency target. Windows is planned.</p><p>macOS may block the first launch. Open Kivo once, dismiss the warning, then go to <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>. Download the recognition model during setup; dictation then runs offline.</p><a class="demo-link" href="https://github.com/Gokulakrishnxn/Kivo/releases/latest">Release notes, checksums and installation steps</a></details>
   </div>
 </section>
 
@@ -500,5 +468,6 @@
   })();
 </script>
 
+<script src="assets/landing.js"></script>
 </body>
 </html>
