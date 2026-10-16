@@ -1,13 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Kivo">
-  <title>Kivo</title>
-  <rect width="512" height="512" rx="112" fill="#FBFAF9"/>
-  <rect x="4" y="4" width="504" height="504" rx="109" fill="none" stroke="#F2F0ED" stroke-width="8"/>
-  <g transform="translate(64 64) scale(12)">
-    <rect x="3.4"  y="10"   width="3.2" height="12" rx="1.6" fill="#64C6FF"/>
-    <rect x="8.6"  y="6"    width="3.2" height="20" rx="1.6" fill="#FFCD6C"/>
-    <rect x="13.8" y="8.5"  width="3.2" height="15" rx="1.6" fill="#FF3E00"/>
-    <rect x="21.4" y="9.4"  width="7.2" height="3.2" rx="1.6" fill="#343433"/>
-    <rect x="21.4" y="14.4" width="7.2" height="3.2" rx="1.6" fill="#343433"/>
-    <rect x="21.4" y="19.4" width="4.4" height="3.2" rx="1.6" fill="#343433"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Kivo"><title>Kivo — cursor K</title><rect width="512" height="512" rx="112" fill="#FBFAF9"/><rect x="4" y="4" width="504" height="504" rx="109" fill="none" stroke="#F2F0ED" stroke-width="8"/><g transform="translate(64 64) scale(12)"><rect x="5" y="5" width="5" height="22" rx="2.5" fill="#121212"/><path d="M25 7L15 16L25 25" fill="none" stroke="#121212" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>

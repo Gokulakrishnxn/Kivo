@@ -1,10 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Kivo">
-  <title>Kivo</title>
-  <rect width="32" height="32" rx="7" fill="#FBFAF9"/>
-  <g transform="translate(4.6 4.6) scale(0.71)">
-    <rect x="4"    y="9"    width="5" height="14" rx="2.5" fill="#64C6FF"/>
-    <rect x="11.5" y="5"    width="5" height="22" rx="2.5" fill="#FFCD6C"/>
-    <rect x="20"   y="9.5"  width="8" height="5"  rx="2.5" fill="#343433"/>
-    <rect x="20"   y="17.5" width="8" height="5"  rx="2.5" fill="#343433"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Kivo"><title>Kivo — cursor K</title><rect width="32" height="32" rx="7" fill="#FBFAF9"/><rect x="5" y="5" width="5" height="22" rx="2.5" fill="#121212"/><path d="M25 7L15 16L25 25" fill="none" stroke="#121212" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>

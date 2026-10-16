@@ -39,70 +39,35 @@ drawing changes what the copy is allowed to say. See §7.
 
 ## 2. The mark
 
-Three waveform bars — **sky, sun, ember** — resolving into three lines of set text in
-**charcoal**.
+**The cursor K.** A vertical cursor and two angled strokes form a K. It connects the
+product name to the place dictation lands: the text cursor. Rounded ends keep the
+geometry compatible with Kivo’s warm illustrated identity.
 
-The colour is the point. What you say arrives loud, bright and messy; what Kivo hands
-back is calm and settled. The mark is the product's whole thesis in six rectangles.
+Updated at the owner’s request on 16 October 2026. This replaces the multicolour
+waveform mark. The existing drawn wordmark stays unchanged.
 
-<p align="center">
-  <img src="logo/kivo-lockup-colour.svg" alt="The Kivo lockup: three coloured waveform bars resolving into three charcoal lines of text, beside the Kivo wordmark" width="300">
-</p>
+### Construction and colour
 
-### Construction
+A 32-unit grid. The stem is 5 units wide, from (5, 5) to (10, 27), with 2.5-unit
+corner radii. The arms follow (25, 7), (15, 16), (25, 25), with a 5-unit stroke and
+round caps and joins. Preserve the open gap between the stem and arms.
 
-Every element is one **3.2-unit stroke on a 32-unit grid** with fully rounded caps
-(`rx` = 1.6, exactly half the stroke). The vertical bars and the horizontal lines are
-the same stroke turned ninety degrees.
+Use ink `#121212` on light backgrounds and white on ink. The entire mark reverses
+together. No gradients, shadows, multicolour fills, rotation or distortion.
 
-The wide gap between the two groups is the only empty space in the mark, and it is where
-the transformation is implied. **Do not close it.**
+### Files and sizes
 
-### Colour behaviour
+- `logo/kivo-mark.svg`: adaptable `currentColor` mark.
+- `logo/kivo-mark-colour.svg`: fixed ink mark; legacy filename retained for compatibility.
+- `logo/kivo-mark-compact.svg`: the same silhouette for small placements.
+- `logo/kivo-lockup.svg`: adaptable mark and unchanged drawn wordmark.
+- `logo/kivo-lockup-colour.svg`: fixed ink lockup; legacy filename retained.
+- `logo/kivo-logotype.svg`: unchanged wordmark.
+- `logo/kivo-app-icon.svg`: cursor K on a paper squircle.
+- `logo/favicon.svg`: cursor K on paper.
 
-| Element | On canvas | On ink |
-|---|---|---|
-| Bar 1 | Sky `#64C6FF` | Sky `#64C6FF` — unchanged |
-| Bar 2 | Sun `#FFCD6C` | Sun `#FFCD6C` — unchanged |
-| Bar 3 | Ember `#FF3E00` | Ember `#FF3E00` — unchanged |
-| Text lines | Heading `#343433` | White `#FFFFFF` |
-| Wordmark | Ink `#121212` | White `#FFFFFF` |
-
-**The bars never change colour.** Only the text half flips. A single-colour version
-exists for embroidery, engraving and fax-grade reproduction — nothing else.
-
-### Variants
-
-| File | Use |
-|---|---|
-| [`kivo-lockup-colour.svg`](logo/kivo-lockup-colour.svg) | **The default logo.** Mark + wordmark. |
-| [`kivo-mark-colour.svg`](logo/kivo-mark-colour.svg) | The mark alone, in colour. |
-| [`kivo-mark.svg`](logo/kivo-mark.svg) | Single-colour mark, inherits `currentColor`. |
-| [`kivo-mark-compact.svg`](logo/kivo-mark-compact.svg) | Two bars, two lines, heavier stroke. **For 16–23 px.** |
-| [`kivo-logotype.svg`](logo/kivo-logotype.svg) | The drawn word alone. |
-| [`kivo-app-icon.svg`](logo/kivo-app-icon.svg) | Paper squircle, warm hairline, colour glyph. |
-| [`favicon.svg`](logo/favicon.svg) | Compact mark on paper. |
-
-### Minimum sizes
-
-Measured limits, not preferences. The full mark's three text lines merge into a smudge
-below 24 px.
-
-| Asset | Minimum | Below that |
-|---|---|---|
-| Full mark | 24 px | use the compact mark |
-| Compact mark | 16 px | use the word alone |
-| Lockup | 120 px wide | use the mark alone |
-| App icon | 32 px | — |
-
-### Clear space and misuse
-
-Clear space equals **one waveform bar height** (¼ of the mark's height) on all sides.
-
-Do not: recolour the bars, add a gradient, add a shadow, outline it, rotate it, stretch
-it non-uniformly, reorder the elements, close the central gap, place it on a busy image,
-or rebuild the wordmark in a typeface. **The logotype is drawn, not set** — no font
-produces it.
+Use the mark at 16 px or larger and the lockup at 120 px or larger. Leave at least
+5 grid units of clear space around the mark. Never recreate the wordmark with a font.
 
 ---
 
@@ -164,12 +129,12 @@ Every other colour is a marker on text or a fill in an illustration.
 |---|---|---|
 | `--kivo-stone-border` | `#E5D5C3` | Warm hairline on illustrations and the app icon. |
 | `--kivo-blue` | `#0086FC` | Inline links and list emphasis. **Never a button fill.** |
-| `--kivo-sky` | `#64C6FF` | Illustration fill. The first waveform bar. |
+| `--kivo-sky` | `#64C6FF` | Illustration fill. |
 | `--kivo-alt-blue` | `#00B2FF` | Secondary illustration fill, icon accents. |
 | `--kivo-green` | `#00C978` | Accent text, tags, short emphasised phrases. |
 | `--kivo-mint` | `#00CA48` | Wash behind content. Positive status pills. |
-| `--kivo-ember` | `#FF3E00` | **The signature link colour.** The third waveform bar. |
-| `--kivo-sun` | `#FFCD6C` | Illustration fill. The second waveform bar. |
+| `--kivo-ember` | `#FF3E00` | **The signature link colour.** |
+| `--kivo-sun` | `#FFCD6C` | Illustration fill. |
 | `--kivo-gold` | `#D48F00` | Yellow accent text, where honey is too light to read. |
 | `--kivo-honey` | `#FFBB26` | Wash behind content. Pending status pills. |
 | `--kivo-pink` | `#FF58AE` | Badge fill and illustration accent. |
@@ -190,7 +155,7 @@ Every other colour is a marker on text or a fill in an illustration.
 **The bright accents are fills, not text.** Every one of them fails WCAG AA as small
 text on canvas — green is 2.09:1, gold 2.61:1, pink 2.78:1, ember 3.39:1, blue 3.46:1.
 That is a property of the palette, not a mistake to design around: those hues exist for
-illustration fills, washes, badge grounds and the logo bars.
+illustration fills, washes and badge grounds.
 
 When an accent has to carry **words**, use the matching `-ink` tint. Each is the same
 hue darkened to the lightest value that clears 4.5:1 on canvas.
@@ -325,9 +290,9 @@ brand/
 ├── BRAND.md                      this document
 ├── logo/
 │   ├── kivo-lockup-colour.svg    THE default logo
-│   ├── kivo-mark-colour.svg      the mark, in colour
+│   ├── kivo-mark-colour.svg      the mark, fixed ink
 │   ├── kivo-mark.svg             single-colour · currentColor
-│   ├── kivo-mark-compact.svg     16–23 px variant
+│   ├── kivo-mark-compact.svg     small-size mark
 │   ├── kivo-logotype.svg         the drawn word
 │   ├── kivo-app-icon.svg         paper squircle
 │   └── favicon.svg

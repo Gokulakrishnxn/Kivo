@@ -36,3 +36,5 @@ section[id] { scroll-margin-top: var(--kivo-space-9); }
   .demo-input, .demo-output { padding: var(--kivo-space-5); }
   .demo-input > p, .demo-output > p { min-height: var(--kivo-space-8); }
 }
+
+.nav__logo svg { width: var(--kivo-space-9); height: auto; }
